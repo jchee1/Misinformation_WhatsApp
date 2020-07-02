@@ -1,0 +1,32 @@
+#Filename: mymain.kv
+
+<MyGrid>:
+
+    #Global variable  references the id
+    name: name 
+    phone: phone 
+
+    GridLayout:
+        cols:1
+        size: root.width - 200, root.height - 200
+        pos: 100, 100
+    
+        GridLayout:
+            cols:2
+
+            Label:
+                text: "Name: "
+            TextInput:
+                id: name
+                multiline:False
+            
+            Label:
+                text: "Phone: "
+            TextInput:
+                id: phone
+                multiline:False
+        Button:
+            text:"Submit"
+            on_press:root.btn()
+        
+        
