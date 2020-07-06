@@ -1,6 +1,6 @@
 import re
 
-with open('/Users/Jason/Downloads/_chat.txt', 'r') as fp:
+with open('/Users/Jason/Desktop/Misinformation_WhatsApp/getURL.txt', 'r') as fp:
     line = fp.readline()
     msgs = []
     while line:
@@ -17,7 +17,7 @@ with open('/Users/Jason/Downloads/_chat.txt', 'r') as fp:
             #get url with findall fct
             urls = re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', msg)
 
-            if not urls:
+            if urls:
                 msgs.append({"date":date, "time":time, "sender":sender, "URL":urls})
             #else:
                 #msgs.append({"date":date, "time":time, "sender":sender, "text":msg})
@@ -30,7 +30,7 @@ with open('/Users/Jason/Downloads/_chat.txt', 'r') as fp:
             sender = msgs[l-1]["sender"]
 
             urls = re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', msg)
-            if not urls:
+            if urls:
                 msgs.append({"date":date, "time":time, "sender":sender, "URL":urls})
             #else:
                #msgs.append({"date":date, "time":time, "sender":sender, "text":msg})
