@@ -114,7 +114,7 @@ with open('/Users/Jason/Downloads/_chat.txt', 'r') as fp:
     end_date = date
     print("Number of total messages:", total_num)
     print("Number of messages in 2020:", num_2020)
-    print("number of messages before 2020:", num_before_2020)
+    print("Number of messages before 2020:", num_before_2020)
     print("Start-date to End-date:", start_date, " -> ", end_date)
     print("Number of contacts:", len(contacts))
 
