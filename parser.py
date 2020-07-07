@@ -25,9 +25,6 @@ with open('/Users/Jason/Downloads/_chat.txt', 'r') as fp:
     dtsplit = split[0][1:].split(", ")
     start_date = dtsplit[0]
 
-    #anom_num = 0
-    #anom_sender = "User" + str(anom_num+1)
-
     while line:
         line = line.replace('\u200e', "")
         split = line.split("] ")
@@ -123,7 +120,8 @@ with open('/Users/Jason/Downloads/_chat.txt', 'r') as fp:
 
     #print number of messages sent by each person + num of messages per day
     for key in list(contacts.keys()):
-        print("Number of messages from", key, ":", contacts[key])
+        user_id = list(contacts.keys()).index(key)
+        print("Number of messages from User" + str(user_id+1), ":", contacts[key])
 
     for key in list(Dates.keys()):
         print("Number of messages on",key, ":", Dates[key])
