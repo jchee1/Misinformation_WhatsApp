@@ -55,12 +55,12 @@ with open('/Users/Jason/Downloads/_chat.txt', 'r') as fp:
             #same logic as Dates
             if sender in contacts:
                 contacts[sender] += 1
-                anom_num = list(contacts.keys()).index(sender)
-                sender = "User" + str(anom_num+1)
+                user_id = list(contacts.keys()).index(sender)
+                sender = "User" + str(user_id+1)
             else:
                 contacts[sender] = 1
-                anom_num = list(contacts.keys()).index(sender)
-                sender = "User" + str(anom_num+1)
+                user_id = list(contacts.keys()).index(sender)
+                sender = "User" + str(user_id+1)
 
             msg = msgsplit[1].rstrip("\n")
 
@@ -95,12 +95,12 @@ with open('/Users/Jason/Downloads/_chat.txt', 'r') as fp:
 
             if sender in contacts:
                 contacts[sender] += 1
-                anom_num = list(contacts.keys()).index(sender)
-                sender = "User" + str(anom_num+1)
+                user_id = list(contacts.keys()).index(sender)
+                sender = "User" + str(user_id+1)
             else:
                 contacts[sender] = 1
-                anom_num = list(contacts.keys()).index(sender)
-                sender = "User" + str(anom_num+1)
+                user_id = list(contacts.keys()).index(sender)
+                sender = "User" + str(user_id+1)
 
             urls = re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', msg)
             #msgs.append({"date":date, "time":time, "sender":sender, "message":msg})
