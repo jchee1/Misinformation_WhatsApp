@@ -1,5 +1,35 @@
 import re
 
+
+
+#first go through file count no. of contacts
+with open('/Users/Jason/Downloads/chat.txt', 'r+') as fin:
+    line = fin.readline()
+    senders = dict()
+    while line:
+        split = re.split("] |:", line)
+        name = split[3]
+        if name in senders:
+            senders[name] += 1    
+        else:
+            senders[name] = 1
+        line = fin.readline()
+    num_contacts = len(senders)
+
+#replace names with mturk        
+for n in range(num_contacts):
+    name = input("Enter WhatsApp Username:")
+    mturk = input("Enter MTurk ID:")
+    fin = open('/Users/Jason/Downloads/chat.txt', 'rt') 
+    data = fin.read()
+    data = data.replace(name, mturk)
+    fin.close()
+    fin = open('/Users/Jason/Downloads/chat.txt', 'wt') 
+    fin.write(data)
+    fin.close()
+
+
+
 with open('/Users/Jason/Downloads/chat.txt', 'r') as fp:
     line = fp.readline()
     msgs = []
@@ -33,7 +63,7 @@ with open('/Users/Jason/Downloads/chat.txt', 'r') as fp:
     split = line.split("] ")  
     dtsplit = split[0][1:].split(", ")
     start_date = dtsplit[0]
-
+    
     while line:
         line = line.replace('\u200e', "")
         split = line.split("] ")
@@ -64,12 +94,9 @@ with open('/Users/Jason/Downloads/chat.txt', 'r') as fp:
             #same logic as Dates
             if sender in contacts:
                 contacts[sender] += 1
-                user_id = list(contacts.keys()).index(sender)
-                sender = "User" + str(user_id+1)
+                
             else:
                 contacts[sender] = 1
-                user_id = list(contacts.keys()).index(sender)
-                sender = "User" + str(user_id+1)
 
             #num of msgs per user per day
             if date in d:
@@ -88,7 +115,6 @@ with open('/Users/Jason/Downloads/chat.txt', 'r') as fp:
 
             #get url with findall fct
             urls = re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', msg)
-            #msgs.append({"date":date, "time":time, "sender":sender, "message":msg})
 
             #get img file from line if available
             imgsplit = re.split("<attached: |>", msg)
@@ -100,7 +126,6 @@ with open('/Users/Jason/Downloads/chat.txt', 'r') as fp:
                     source['URL'][sender] += 1
                 else:
                     source['URL'][sender] = 1
-
             if len(imgsplit[0]) == 0:
                 classification = 'image'
                 num_img += 1
@@ -116,7 +141,7 @@ with open('/Users/Jason/Downloads/chat.txt', 'r') as fp:
                 else:
                     source['TXT'][sender] = 1
             if int(year) == 20:
-                msgs.append({"date":date, "time":time, "sender":sender, "class":classification, "message":urls})
+                msgs.append({"date":date, "time":time, "sender":sender, "type":classification, "message":urls})
         
             
         else:
@@ -142,12 +167,8 @@ with open('/Users/Jason/Downloads/chat.txt', 'r') as fp:
 
             if sender in contacts:
                 contacts[sender] += 1
-                user_id = list(contacts.keys()).index(sender)
-                sender = "User" + str(user_id+1)
             else:
                 contacts[sender] = 1
-                user_id = list(contacts.keys()).index(sender)
-                sender = "User" + str(user_id+1)
 
             if date in d:
                 if sender in d[date]:
@@ -162,7 +183,6 @@ with open('/Users/Jason/Downloads/chat.txt', 'r') as fp:
                     d[date][sender] = 1 
 
             urls = re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', msg)
-            #msgs.append({"date":date, "time":time, "sender":sender, "message":msg})
             
             imgsplit = re.split("<attached: |>", msg)
 
@@ -173,7 +193,6 @@ with open('/Users/Jason/Downloads/chat.txt', 'r') as fp:
                     source['URL'][sender] += 1
                 else:
                     source['URL'][sender] = 1
-
             if len(imgsplit[0]) == 0:
                 classification = 'image'
                 num_img += 1
@@ -189,7 +208,7 @@ with open('/Users/Jason/Downloads/chat.txt', 'r') as fp:
                 else:
                     source['TXT'][sender] = 1
             if int(year) == 20:
-                msgs.append({"date":date, "time":time, "sender":sender, "class":classification, "message":urls})
+                msgs.append({"date":date, "time":time, "sender":sender, "type":classification, "message":urls})
             
 
         total_num += 1
@@ -200,31 +219,28 @@ with open('/Users/Jason/Downloads/chat.txt', 'r') as fp:
     print("Number of messages in 2020:", num_2020)
     print("Number of messages before 2020:", num_before_2020)
     print("Start-date to End-date:", start_date, " -> ", end_date)
-    print("Number of contacts:", len(contacts))
+    print("Number of contacts:", num_contacts)
+    
 
     #print number of messages sent by each person + num of messages per day
     for key in list(contacts.keys()):
-        user_id = list(contacts.keys()).index(key)
-        print("Number of messages from User" + str(user_id+1), ":", contacts[key])
+        print("Number of messages from",key, ":", contacts[key])
 
     for key in list(Dates.keys()):
         print("Number of messages on",key, ":", Dates[key])
 
     #num of msg per user per day
     for dat, user in d.items():
-        print("Date:", dat)
-
         for key in user:
-            print(key + ":", user[key])
+            print("Number of messages on",dat, "from", key, ":", user[key])
     
-    print("URLS:", num_urls)
-    print("IMGS:", num_img)
-    print("TXT:", num_txt)
+    print("Total urls:", num_urls)
+    print("Total images:", num_img)
+    print("Total texts:", num_txt)
 
     #print each source message sent from each user
     for sources, participant in source.items():
-        print(sources + ":")
         for key in participant:
-            print(key + ":", participant[key])
+            print("Number of", sources,"messages from", key + ":", participant[key])
     print("\n")
     print(msgs)
