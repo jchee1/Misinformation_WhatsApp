@@ -93,10 +93,8 @@ with open('/Users/Jason/Downloads/chat.txt', 'r') as fp:
             #get img file from line if available
             imgsplit = re.split("<attached: |>", msg)
                 
-
-            if urls and int(year) == 20:
-                msgs.append({"date":date, "time":time, "sender":sender, "URL":urls})
             if urls:
+                classification = "url" 
                 num_urls += 1
                 if sender in source['URL']:
                     source['URL'][sender] += 1
@@ -104,17 +102,21 @@ with open('/Users/Jason/Downloads/chat.txt', 'r') as fp:
                     source['URL'][sender] = 1
 
             if len(imgsplit[0]) == 0:
+                classification = 'image'
                 num_img += 1
                 if sender in source['IMG']:
                     source['IMG'][sender] += 1
                 else:
                     source['IMG'][sender] = 1
             if not urls and len(imgsplit[0]) != 0:
+                classification = 'text'
                 num_txt += 1
                 if sender in source['TXT']:
                     source['TXT'][sender] += 1
                 else:
                     source['TXT'][sender] = 1
+            if int(year) == 20:
+                msgs.append({"date":date, "time":time, "sender":sender, "class":classification, "message":urls})
         
             
         else:
@@ -164,10 +166,8 @@ with open('/Users/Jason/Downloads/chat.txt', 'r') as fp:
             
             imgsplit = re.split("<attached: |>", msg)
 
-
-            if urls and int(year) == 20:
-                msgs.append({"date":date, "time":time, "sender":sender, "URL":urls})
             if urls:
+                classification = "url" 
                 num_urls += 1
                 if sender in source['URL']:
                     source['URL'][sender] += 1
@@ -175,23 +175,26 @@ with open('/Users/Jason/Downloads/chat.txt', 'r') as fp:
                     source['URL'][sender] = 1
 
             if len(imgsplit[0]) == 0:
+                classification = 'image'
                 num_img += 1
                 if sender in source['IMG']:
                     source['IMG'][sender] += 1
                 else:
                     source['IMG'][sender] = 1
             if not urls and len(imgsplit[0]) != 0:
+                classification = 'text'
                 num_txt += 1
                 if sender in source['TXT']:
                     source['TXT'][sender] += 1
                 else:
                     source['TXT'][sender] = 1
+            if int(year) == 20:
+                msgs.append({"date":date, "time":time, "sender":sender, "class":classification, "message":urls})
             
 
         total_num += 1
         line = fp.readline()
 
-    print(imgsplit)
     end_date = date
     print("Number of total messages:", total_num)
     print("Number of messages in 2020:", num_2020)
@@ -214,9 +217,6 @@ with open('/Users/Jason/Downloads/chat.txt', 'r') as fp:
         for key in user:
             print(key + ":", user[key])
     
-        
-
-    print(msgs)
     print("URLS:", num_urls)
     print("IMGS:", num_img)
     print("TXT:", num_txt)
@@ -226,3 +226,5 @@ with open('/Users/Jason/Downloads/chat.txt', 'r') as fp:
         print(sources + ":")
         for key in participant:
             print(key + ":", participant[key])
+    print("\n")
+    print(msgs)
