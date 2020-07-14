@@ -1,20 +1,18 @@
 import re
 
-
-
 #first go through file count no. of contacts
-with open('/Users/Jason/Downloads/chat.txt', 'r+') as fin:
+with open('/Users/Jason/Downloads/chat.txt', 'r') as fin:
     line = fin.readline()
-    senders = dict()
+    contacts = dict()
     while line:
         split = re.split("] |:", line)
         name = split[3]
-        if name in senders:
-            senders[name] += 1    
+        if name in contacts:
+            contacts[name] += 1    
         else:
-            senders[name] = 1
+            contacts[name] = 1
         line = fin.readline()
-    num_contacts = len(senders)
+    num_contacts = len(contacts)
 
 #replace names with mturk        
 for n in range(num_contacts):
@@ -38,9 +36,6 @@ with open('/Users/Jason/Downloads/chat.txt', 'r') as fp:
     num_urls = 0
     num_img = 0
     num_txt = 0
-
-    #create dictionary for contacts
-    contacts = dict()
 
     #create dictionary for dates
     Dates = dict()
@@ -90,14 +85,7 @@ with open('/Users/Jason/Downloads/chat.txt', 'r') as fp:
 
             msgsplit = split[1].split(": ", 1)
             sender = msgsplit[0]
-
-            #same logic as Dates
-            if sender in contacts:
-                contacts[sender] += 1
-                
-            else:
-                contacts[sender] = 1
-
+           
             #num of msgs per user per day
             if date in d:
                 if sender in d[date]:
@@ -141,8 +129,7 @@ with open('/Users/Jason/Downloads/chat.txt', 'r') as fp:
                 else:
                     source['TXT'][sender] = 1
             if int(year) == 20:
-                msgs.append({"date":date, "time":time, "sender":sender, "type":classification, "message":urls})
-        
+                msgs.append({"date":date, "time":time, "sender":sender, "type":classification, "message":urls})        
             
         else:
             msg = split[0].rstrip("\n")
@@ -164,12 +151,7 @@ with open('/Users/Jason/Downloads/chat.txt', 'r') as fp:
 
             time = msgs[l-1]["time"]
             sender = msgs[l-1]["sender"]
-
-            if sender in contacts:
-                contacts[sender] += 1
-            else:
-                contacts[sender] = 1
-
+          
             if date in d:
                 if sender in d[date]:
                     d[date][sender] += 1
@@ -208,8 +190,7 @@ with open('/Users/Jason/Downloads/chat.txt', 'r') as fp:
                 else:
                     source['TXT'][sender] = 1
             if int(year) == 20:
-                msgs.append({"date":date, "time":time, "sender":sender, "type":classification, "message":urls})
-            
+                msgs.append({"date":date, "time":time, "sender":sender, "type":classification, "message":urls})            
 
         total_num += 1
         line = fp.readline()
