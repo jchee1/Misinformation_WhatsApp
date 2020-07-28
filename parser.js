@@ -1,16 +1,39 @@
 const fs = require("fs");
 const readline = require("readline");
 
+var msgs = [];
+
+var total_num = 0;
+var num_2020 = 0;
+var num_before_2020 = 0;
+
+var num_urls = 0;
+var num_img = 0;
+var num_txt = 0;
+var end_date;
+
+var contacts = {};
+var user_per_day = {};
+var source = {};
+
+function isUrl(s) {
+  var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+  return regexp.test(s);
+}
+
+/*
+first_line = first_line.split("[");
+let spl = first_line[1].split("]");
+let dt = spl[0].split(",");
+const start_date = dt[0];
+*/
 async function getContacts() {
-  const fileStream = fs.createReadStream("./getURL.txt");
+  const fileStream = fs.createReadStream("./chat.txt");
 
   const rl = readline.createInterface({
     input: fileStream,
     crlfDelay: Infinity,
   });
-  // Note: we use the crlfDelay option to recognize all instances of CR LF
-  // ('\r\n') in input.txt as a single line break.
-  var contacts = {};
 
   for await (const line of rl) {
     // Each line in input.txt will be successively available here as `line`.
@@ -22,7 +45,6 @@ async function getContacts() {
     } else {
       contacts[name] = 1;
     }
-    //console.log(`${line}`);
   }
   const num_contacts = Object.keys(contacts).length;
   console.log(num_contacts);
@@ -31,59 +53,137 @@ async function getContacts() {
   }
 }
 
-let msgs = [];
-
-let total_num = 0;
-let num_2020 = 0;
-let num_before_2020 = 0;
-
-let num_urls = 0;
-let num_img = 0;
-let num_txt = 0;
-
 async function readUrl() {
-  const fileStream = fs.createReadStream("./getURL.txt");
+  const fileStream = fs.createReadStream("./chat.txt");
 
   const rl = readline.createInterface({
     input: fileStream,
     crlfDelay: Infinity,
   });
-  // Note: we use the crlfDelay option to recognize all instances of CR LF
-  // ('\r\n') in input.txt as a single line break.
 
-  var d = {};
-
-  var source = { URL: {}, IMG: {}, TXT: {} };
+  let date;
 
   for await (let line of rl) {
     // Each line in input.txt will be successively available here as `line`.
     line = line.split("[");
     let split = line[1].split("]");
     let dtsplit = split[0].split(",");
-    let date = dtsplit[0];
+    date = dtsplit[0];
     let time = dtsplit[1];
     //console.log(date);
     let yrsplit = date.split("/");
     let year = yrsplit[2];
 
-    if (year === 20) {
+    if (parseInt(year) === 20) {
       num_2020++;
-    } else if (year < 20) {
+    } else if (parseInt(year) < 20) {
       num_before_2020++;
     }
 
-    let nmsplit = split[1].split(": ", 2);
+    let nmsplit = split[1].split(/: /);
+    //console.log(nmsplit);
     let name = nmsplit[0];
     let msg = nmsplit[1];
+    let classification;
 
-    msgs.push({ date: date, time: time, sender: name, message: msg });
-    console.log(msgs);
+    if (date in user_per_day) {
+      if (name in user_per_day[date]) {
+        user_per_day[date][name]++;
+      } else {
+        user_per_day[date][name] = 1;
+      }
+    } else {
+      user_per_day[date] = {};
+      if (name in user_per_day[date]) {
+        user_per_day[date][name]++;
+      } else {
+        user_per_day[date][name] = 1;
+      }
+    }
+
+    let url;
+    if (isUrl(msg)) {
+      classification = "url";
+      url = msg;
+      num_urls++;
+    }
+    if (msg === "<attached") {
+      classification = "image";
+      num_img++;
+    }
+    if (isUrl(msg) === false && msg != "<attached") {
+      classification = "text";
+      num_txt++;
+    }
+
+    if (classification in source) {
+      if (name in source[classification]) {
+        source[classification][name]++;
+      } else {
+        source[classification][name] = 1;
+      }
+    } else {
+      source[classification] = {};
+      if (name in source[classification]) {
+        source[classification][name]++;
+      } else {
+        source[classification][name] = 1;
+      }
+    }
+
+    if (parseInt(year) === 20) {
+      msgs.push({
+        date: date,
+        time: time,
+        sender: name,
+        classification: classification,
+        message: url,
+      });
+    }
+
+    total_num++;
 
     //console.log(`${line}`);
   }
+
+  console.log(msgs);
+
+  end_date = date;
+  //console.log(end_date);
+  console.log("Total number of msgs: " + total_num);
+  console.log("Msgs on 2020: " + num_2020);
+  console.log("Msgs before 2020: " + num_before_2020);
+  console.log("Number of urls: " + num_urls);
+  console.log("Number of images: " + num_img);
+  console.log("Number of text: " + num_txt);
+
+  for (var dat in user_per_day) {
+    for (var key in user_per_day[dat]) {
+      console.log(
+        "Number of messages on",
+        dat,
+        "from",
+        key,
+        ":",
+        user_per_day[dat][key]
+      );
+    }
+  }
+
+  for (var src in source) {
+    for (var user in source[src]) {
+      console.log(
+        "Number of",
+        src,
+        "messages from",
+        user,
+        ":",
+        source[src][user]
+      );
+    }
+  }
 }
 
-getContacts();
 readUrl();
 
-//console.log(msgs);
+getContacts();
