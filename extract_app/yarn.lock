@@ -5495,6 +5495,11 @@ react-is@^16.12.0, react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.6:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
+react-native-share-menu@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-share-menu/-/react-native-share-menu-5.0.0.tgz#f633fa9630cf5b33cc3d44a00e0bcd7e07f005db"
+  integrity sha512-DKthY2/0X3iF5QanNM2lL9aTJT1qJTDSwf3xoY2jKklo38dwElocWJPfyCmJiFwjbW9GKSnw9Pi20WeEqvPVCQ==
+
 react-native@0.63.2:
   version "0.63.2"
   resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.63.2.tgz#eaebf3430577b37fbd66ef228a86b3408259ef8e"
