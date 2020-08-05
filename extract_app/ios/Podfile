@@ -8,7 +8,6 @@ target 'extract_app' do
 
   use_react_native!(:path => config["reactNativePath"])
 
-  pod 'RNFS', :path => '../node_modules/react-native-fs'
 
   target 'extract_appTests' do
     inherit! :complete
@@ -33,6 +32,5 @@ end
 target 'ShareExtension' do
   use_react_native!
 
-  pod 'RNShareMenu', :path => '../node_modules/react-native-share-menu'
   # Manually link packages here to keep your extension bundle size minimal
 end
