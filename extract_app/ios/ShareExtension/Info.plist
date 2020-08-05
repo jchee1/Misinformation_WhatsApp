@@ -23,7 +23,7 @@
 	<key>HostAppBundleIdentifier</key>
 	<string>org.reactjs.native.example.extract-app</string>
 	<key>HostAppURLScheme</key>
-	<string>ExtractorApp</string>
+	<string>ExtractorApp://</string>
 	<key>NSExtension</key>
 	<dict>
 		<key>NSExtensionAttributes</key>
@@ -34,7 +34,7 @@
 				<integer>1</integer>
 				<key>NSExtensionActivationSupportsText</key>
 				<true/>
-				<key>NSExtensionActivationSupportsWebURLWithMaxCount</key>
+				<key>NSExtensionActivationSupportsImageWithMaxCount</key>
 				<integer>1</integer>
 			</dict>
 		</dict>
