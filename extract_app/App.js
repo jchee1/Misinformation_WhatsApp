@@ -10,7 +10,7 @@
  import {StyleSheet, Text, View, Image} from 'react-native';
  import ShareMenu from 'react-native-share-menu';
  import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
- import { MainBundlePath, DocumentDirectoryPath, readFile, readDir } from 'react-native-fs'
+ import { MainBundlePath, DocumentDirectoryPath, TemporaryDirectoryPath, readFile, readDir, stat, copyFile } from 'react-native-fs'
 
  type SharedItem = {
    mimeType: string,
@@ -47,11 +47,17 @@
    }, []);
 
    if (sharedMimeType.startsWith('application/zip')){
-     const sourcePath = sharedData
+     const sourcePath = sharedData;
+     console.log(sourcePath);
+     const tempPath = `${TemporaryDirectoryPath}/tester.zip`;
+     copyFile(sourcePath, tempPath)
+     .catch((error) => {
+       console.error(error)
+     });
+     console.log(tempPath);
      const targetPath = DocumentDirectoryPath
      const charset = 'UTF-8'
-
-     unzip(sourcePath, targetPath, charset)
+     unzip(tempPath, targetPath, charset)
       .then((path) => {
         console.log(`unzip completed at ${path}`)
         readDir(DocumentDirectoryPath)
