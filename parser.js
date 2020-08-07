@@ -27,8 +27,8 @@ let spl = first_line[1].split("]");
 let dt = spl[0].split(",");
 const start_date = dt[0];
 */
-async function getContacts() {
-  const fileStream = fs.createReadStream("./chat.txt");
+async function getContacts(file) {
+  const fileStream = fs.createReadStream(file);
 
   const rl = readline.createInterface({
     input: fileStream,
@@ -53,8 +53,8 @@ async function getContacts() {
   }
 }
 
-async function readUrl() {
-  const fileStream = fs.createReadStream("./chat.txt");
+async function readUrl(file) {
+  const fileStream = fs.createReadStream(file);
 
   const rl = readline.createInterface({
     input: fileStream,
@@ -184,6 +184,6 @@ async function readUrl() {
   }
 }
 
-readUrl();
-
-getContacts();
+//jason test file
+readUrl("./chat.txt");
+getContacts("./chat.txt");
