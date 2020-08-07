@@ -47,7 +47,7 @@ async function getContacts(file) {
     }
   }
   const num_contacts = Object.keys(contacts).length;
-  console.log(num_contacts);
+  console.log("Number of contacts:", num_contacts);
   for (var key in contacts) {
     console.log(key + " : " + contacts[key]);
   }
