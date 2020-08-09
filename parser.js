@@ -1,6 +1,8 @@
 const fs = require("fs");
 const readline = require("readline");
 
+//all variables to store info
+
 var msgs = [];
 
 var total_num = 0;
@@ -10,23 +12,20 @@ var num_before_2020 = 0;
 var num_urls = 0;
 var num_img = 0;
 var num_txt = 0;
+var start_date;
 var end_date;
 
 var contacts = {};
 var user_per_day = {};
 var source = {};
 
-function isUrl(s) {
+//function to see if string is url
+function isUrl(string) {
   var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-  return regexp.test(s);
+  return regexp.test(string);
 }
 
-/*
-first_line = first_line.split("[");
-let spl = first_line[1].split("]");
-let dt = spl[0].split(",");
-const start_date = dt[0];
-*/
+//function to get num of contacts + contacts
 async function getContacts(file) {
   const fileStream = fs.createReadStream(file);
 
@@ -53,6 +52,7 @@ async function getContacts(file) {
   }
 }
 
+
 async function readUrl(file) {
   const fileStream = fs.createReadStream(file);
 
@@ -69,6 +69,11 @@ async function readUrl(file) {
     let split = line[1].split("]");
     let dtsplit = split[0].split(",");
     date = dtsplit[0];
+    
+    if (total_num === 0) {
+      start_date = date;
+    }
+
     let time = dtsplit[1];
     //console.log(date);
     let yrsplit = date.split("/");
@@ -116,6 +121,7 @@ async function readUrl(file) {
       num_txt++;
     }
 
+    //source dictionary
     if (classification in source) {
       if (name in source[classification]) {
         source[classification][name]++;
@@ -143,13 +149,15 @@ async function readUrl(file) {
 
     total_num++;
 
-    //console.log(`${line}`);
   }
 
+  //console log everything but later maybe would want to create object
+  //that would have each variables as an attribute
   console.log(msgs);
 
   end_date = date;
-  //console.log(end_date);
+
+  console.log(start_date, "->", end_date);
   console.log("Total number of msgs: " + total_num);
   console.log("Msgs on 2020: " + num_2020);
   console.log("Msgs before 2020: " + num_before_2020);
