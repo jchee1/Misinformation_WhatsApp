@@ -1,24 +1,6 @@
 const fs = require("fs");
 const readline = require("readline");
 
-//all variables to store info
-
-var msgs = [];
-
-var total_num = 0;
-var num_2020 = 0;
-var num_before_2020 = 0;
-
-var num_urls = 0;
-var num_img = 0;
-var num_txt = 0;
-var start_date;
-var end_date;
-
-var contacts = {};
-var user_per_day = {};
-var source = {};
-
 //function to see if string is url
 function isUrl(string) {
   var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
@@ -54,6 +36,24 @@ async function getContacts(file) {
 
 
 async function readUrl(file) {
+  
+  //all variables to store info
+  var msgs = [];
+  var total_num = 0;
+  var num_2020 = 0;
+  var num_before_2020 = 0;
+  var num_contacts = 0;
+
+  var num_urls = 0;
+  var num_img = 0;
+  var num_txt = 0;
+  var start_date;
+  var end_date;
+
+  var contacts = {};
+  var user_per_day = {};
+  var source = {};
+  
   const fileStream = fs.createReadStream(file);
 
   const rl = readline.createInterface({
@@ -88,6 +88,13 @@ async function readUrl(file) {
     let nmsplit = split[1].split(/: /);
     //console.log(nmsplit);
     let name = nmsplit[0];
+    
+    if (name in contacts) {
+      contacts[name] += 1;
+    } else {
+      contacts[name] = 1;
+    }
+
     let msg = nmsplit[1];
     let classification;
 
@@ -150,12 +157,31 @@ async function readUrl(file) {
     total_num++;
 
   }
-
+  end_date = date;
   //console log everything but later maybe would want to create object
   //that would have each variables as an attribute
-  console.log(msgs);
 
-  end_date = date;
+  //add everything to parse object
+  var info = {
+    startdate: start_date,
+    enddate: end_date,
+    Total_messages: total_num,
+    Msgs2020: num_2020,
+    Before_2020: num_before_2020,
+    URLs: num_urls,
+    Images: num_img,
+    Text: num_txt,
+  };
+
+  var parse = [];
+  parse.push(info);
+  parse.push(user_per_day);
+  parse.push(source);
+  parse.push(msgs);
+
+
+  /*
+  console.log(msgs);
 
   console.log(start_date, "->", end_date);
   console.log("Total number of msgs: " + total_num);
@@ -190,8 +216,15 @@ async function readUrl(file) {
       );
     }
   }
+  */
+
+
+return parse;
 }
 
 //jason test file
-readUrl("./chat.txt");
-getContacts("./chat.txt");
+readUrl("./chat.txt")
+  .then(function(result) {
+    console.log(result);
+  });
+//getContacts("./chat.txt");
