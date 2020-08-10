@@ -157,6 +157,7 @@ async function readUrl(file) {
     total_num++;
 
   }
+  num_contacts = Object.keys(contacts).length;
   end_date = date;
   //console log everything but later maybe would want to create object
   //that would have each variables as an attribute
@@ -166,6 +167,7 @@ async function readUrl(file) {
     startdate: start_date,
     enddate: end_date,
     Total_messages: total_num,
+    Contacts: num_contacts,
     Msgs2020: num_2020,
     Before_2020: num_before_2020,
     URLs: num_urls,
