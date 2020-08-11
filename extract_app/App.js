@@ -7,7 +7,7 @@
  */
 
  import React, {useState, useEffect, useCallback} from 'react';
- import {StyleSheet, Text, View, Image} from 'react-native';
+ import {StyleSheet, Text, View, Image, Platform } from 'react-native';
  import ShareMenu from 'react-native-share-menu';
  import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
  import { MainBundlePath, DocumentDirectoryPath, TemporaryDirectoryPath, readFile, readDir, stat, copyFile, unlink } from 'react-native-fs'
@@ -51,13 +51,21 @@
    if (sharedMimeType.startsWith('application/zip')){
      const sourcePath = sharedData;
      console.log(sourcePath);
-     var n = Math.floor(Math.random() * 20);
+     //var n = Math.floor(Math.random() * 20);
      //const tempPath = `${TemporaryDirectoryPath}/tester${n}.zip`;
-     const tempPath = `${TemporaryDirectoryPath}/tester1.zip`;
-     copyFile(sourcePath, tempPath)
-     .catch((error) => {
+    
+     var tempPath;
+     if (Platform.OS === "android") {
+       tempPath = `${TemporaryDirectoryPath}/tester1.zip`;
+       copyFile(sourcePath, tempPath)
+       .catch((error) => {
        console.error(error)
-     });
+       });
+     }
+     else if (Platform.OS === "ios") {
+       tempPath = sourcePath;
+     }
+    
      console.log("tempPath:", tempPath);
      const targetPath = DocumentDirectoryPath
      const charset = 'UTF-8'
@@ -86,7 +94,7 @@
         })
       })
       .catch((error) => {
-        console.error(error)
+        console.error("ERROR!", error)
       })
    }
 
