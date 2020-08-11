@@ -10,7 +10,7 @@
  import {StyleSheet, Text, View, Image} from 'react-native';
  import ShareMenu from 'react-native-share-menu';
  import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
- import { MainBundlePath, DocumentDirectoryPath, TemporaryDirectoryPath, readFile, readDir, stat, copyFile } from 'react-native-fs'
+ import { MainBundlePath, DocumentDirectoryPath, TemporaryDirectoryPath, readFile, readDir, stat, copyFile, unlink } from 'react-native-fs'
  import {readUrl} from "./parser.js";
 
  type SharedItem = {
@@ -47,20 +47,25 @@
      };
    }, []);
 
+   var file_data;
    if (sharedMimeType.startsWith('application/zip')){
      const sourcePath = sharedData;
      console.log(sourcePath);
-     const tempPath = `${TemporaryDirectoryPath}/tester.zip`;
+     var n = Math.random();
+     const tempPath = `${TemporaryDirectoryPath}/tester${n}.zip`;
      copyFile(sourcePath, tempPath)
      .catch((error) => {
        console.error(error)
      });
-     console.log(tempPath);
+     console.log("tempPath:", tempPath);
      const targetPath = DocumentDirectoryPath
      const charset = 'UTF-8'
      unzip(tempPath, targetPath, charset)
       .then((path) => {
         console.log(`unzip completed at ${path}`)
+
+        unlink(tempPath);
+
         readDir(DocumentDirectoryPath)
         .then((result) => {
           console.log('test readdir', result);
@@ -68,7 +73,7 @@
           while(result[i]["name"]!="_chat.txt"){
             i = i+1;
           }
-          console.log(result[i]["path"]);
+          console.log("result:" , result[i]["path"]);
           return readFile(result[i]["path"]);
         })
         .then((contents) => {
@@ -82,10 +87,11 @@
         console.error(error)
       })
    }
+   
 
    return (
      <View style={styles.container}>
-       <Text style={styles.welcome}>React Native Share Menu</Text>
+       <Text style={styles.welcome}>WhatsApp Extract</Text>
        <Text style={styles.instructions}>Shared type: {sharedMimeType}</Text>
        <Text style={styles.instructions}>
          Shared text: {sharedMimeType === 'text/plain' ? sharedData : ''}
@@ -100,7 +106,7 @@
        )}
        <Text style={styles.instructions}>
          Shared file:{' '}
-         {sharedMimeType !== 'text/plain' && !sharedMimeType.startsWith('image/')
+         {sharedMimeType === 'application/zip'
            ? sharedData
            : ''}
        </Text>
@@ -135,112 +141,3 @@
  });
 
  export default App;
-
-/*
-import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
-
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-const App: () => React$Node = () => {
-  return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  );
-};
-
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
-
-export default App;
-*/
