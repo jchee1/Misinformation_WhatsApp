@@ -51,8 +51,9 @@
    if (sharedMimeType.startsWith('application/zip')){
      const sourcePath = sharedData;
      console.log(sourcePath);
-     var n = Math.random();
-     const tempPath = `${TemporaryDirectoryPath}/tester${n}.zip`;
+     var n = Math.floor(Math.random() * 20);
+     //const tempPath = `${TemporaryDirectoryPath}/tester${n}.zip`;
+     const tempPath = `${TemporaryDirectoryPath}/tester1.zip`;
      copyFile(sourcePath, tempPath)
      .catch((error) => {
        console.error(error)
