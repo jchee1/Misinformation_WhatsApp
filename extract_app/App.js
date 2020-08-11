@@ -11,6 +11,7 @@
  import ShareMenu from 'react-native-share-menu';
  import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
  import { MainBundlePath, DocumentDirectoryPath, TemporaryDirectoryPath, readFile, readDir, stat, copyFile } from 'react-native-fs'
+ import {readUrl} from "./parser.js";
 
  type SharedItem = {
    mimeType: string,
@@ -72,7 +73,9 @@
         })
         .then((contents) => {
           // log the file contents
-          console.log(contents);
+          //console.log(JSON.stringify(contents));
+          //console.log(contents);
+          readUrl(contents);
         })
       })
       .catch((error) => {
