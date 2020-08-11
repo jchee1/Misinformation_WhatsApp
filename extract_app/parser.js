@@ -41,6 +41,7 @@ export function readUrl(file) {
   var total_num = 0;
   var num_2020 = 0;
   var num_before_2020 = 0;
+  var num_contacts = 0;
 
   var num_urls = 0;
   var num_img = 0;
@@ -48,6 +49,7 @@ export function readUrl(file) {
   var start_date;
   var end_date;
 
+  var contacts = {};
   var user_per_day = {};
   var source = {};
 
@@ -87,6 +89,13 @@ export function readUrl(file) {
     let nmsplit = split[1].split(/: /);
     //console.log(nmsplit);
     let name = nmsplit[0];
+
+    if (name in contacts) {
+      contacts[name] += 1;
+    } else {
+      contacts[name] = 1;
+    }
+
     let msg = nmsplit[1];
     let classification;
 
@@ -149,44 +158,29 @@ export function readUrl(file) {
     total_num++;
 
   }
+  num_contacts = Object.keys(contacts).length;
+  end_date = date;
 
   //console log everything but later maybe would want to create object
   //that would have each variables as an attribute
-  console.log(msgs);
+  //add everything to parse object
+  var info = {
+    startdate: start_date,
+    enddate: end_date,
+    Total_messages: total_num,
+    Contacts: num_contacts,
+    Msgs2020: num_2020,
+    Before_2020: num_before_2020,
+    URLs: num_urls,
+    Images: num_img,
+    Text: num_txt,
+  };
 
-  end_date = date;
+  var parse = [];
+  parse.push(info);
+  parse.push(user_per_day);
+  parse.push(source);
+  parse.push(msgs);
 
-  console.log(start_date, "->", end_date);
-  console.log("Total number of msgs: " + total_num);
-  console.log("Msgs on 2020: " + num_2020);
-  console.log("Msgs before 2020: " + num_before_2020);
-  console.log("Number of urls: " + num_urls);
-  console.log("Number of images: " + num_img);
-  console.log("Number of text: " + num_txt);
-
-  for (var dat in user_per_day) {
-    for (var key in user_per_day[dat]) {
-      console.log(
-        "Number of messages on",
-        dat,
-        "from",
-        key,
-        ":",
-        user_per_day[dat][key]
-      );
-    }
-  }
-
-  for (var src in source) {
-    for (var user in source[src]) {
-      console.log(
-        "Number of",
-        src,
-        "messages from",
-        user,
-        ":",
-        source[src][user]
-      );
-    }
-  }
+  return parse;
 }
