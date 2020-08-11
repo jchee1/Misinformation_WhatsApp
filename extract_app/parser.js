@@ -54,6 +54,9 @@ export function readUrl(file) {
   var source = {};
 
   let date;
+  let time;
+  let name;
+  let nmsplit;
 
   var lines = file.split(/\n|\r/);
   lines=lines.filter(function (el) {
@@ -66,16 +69,28 @@ export function readUrl(file) {
     // Each line in input.txt will be successively available here as `line`.
     line=lines[i];
     //console.log(line);
-    line = line.split("[");
-    let split = line[1].split("]");
-    let dtsplit = split[0].split(",");
-    date = dtsplit[0];
+    //line = line.split("[");
+    let split = line.split("]");
+    if(split.length<2){
+      date = msgs[msgs.length-1].date
+      time = msgs[msgs.length-1].time
+      nmsplit = split[0].split(/: /);
+      //console.log(nmsplit);
+      name = nmsplit[0];
+    }
+    else{
+      let dtsplit = split[0].split(",");
+      date = dtsplit[0].replace('[', '');
+      time = dtsplit[1];
+      nmsplit = split[1].split(/: /);
+      name = nmsplit[0];
+    }
+
 
     if (total_num === 0) {
       start_date = date;
     }
 
-    let time = dtsplit[1];
     //console.log(date);
     let yrsplit = date.split("/");
     let year = yrsplit[2];
@@ -85,10 +100,6 @@ export function readUrl(file) {
     } else if (parseInt(year) < 20) {
       num_before_2020++;
     }
-
-    let nmsplit = split[1].split(/: /);
-    //console.log(nmsplit);
-    let name = nmsplit[0];
 
     if (name in contacts) {
       contacts[name] += 1;
