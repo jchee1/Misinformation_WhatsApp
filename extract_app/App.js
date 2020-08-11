@@ -46,6 +46,7 @@
      };
    }, []);
 
+   var file_data;
    if (sharedMimeType.startsWith('application/zip')){
      const sourcePath = sharedData;
      console.log(sourcePath);
@@ -76,17 +77,21 @@
         })
         .then((contents) => {
           // log the file contents
+          //file_data = contents; 
+          //console.log("File-data", file_data);
           console.log(contents);
+          
         })
       })
       .catch((error) => {
         console.error(error)
       })
    }
+   
 
    return (
      <View style={styles.container}>
-       <Text style={styles.welcome}>React Native Share Menu</Text>
+       <Text style={styles.welcome}>WhatsApp Extract</Text>
        <Text style={styles.instructions}>Shared type: {sharedMimeType}</Text>
        <Text style={styles.instructions}>
          Shared text: {sharedMimeType === 'text/plain' ? sharedData : ''}
@@ -101,7 +106,7 @@
        )}
        <Text style={styles.instructions}>
          Shared file:{' '}
-         {sharedMimeType !== 'text/plain' && !sharedMimeType.startsWith('image/')
+         {sharedMimeType === 'application/zip'
            ? sharedData
            : ''}
        </Text>
