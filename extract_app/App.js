@@ -7,7 +7,7 @@
  */
 
  import React, {useState, useEffect, useCallback} from 'react';
- import {StyleSheet, Text, View, Image, Platform } from 'react-native';
+ import {StyleSheet, Text, View, Image, Platform, ScrollView, Dimensions } from 'react-native';
  import ShareMenu from 'react-native-share-menu';
  import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
  import { MainBundlePath, DocumentDirectoryPath, TemporaryDirectoryPath, readFile, readDir, stat, copyFile, unlink } from 'react-native-fs'
@@ -100,41 +100,42 @@
 
 
    return (
-     <View style={styles.container}>
-       <Text style={styles.welcome}>WhatsApp Extract</Text>
-       <Text style={styles.instructions}>Shared type: {sharedMimeType}</Text>
-       <Text style={styles.instructions}>
-         Shared text: {sharedMimeType === 'text/plain' ? sharedData : ''}
-       </Text>
-       <Text style={styles.instructions}>Shared image:</Text>
-       {sharedMimeType.startsWith('image/') && (
-         <Image
-           style={styles.image}
-           source={{uri: sharedData}}
-           resizeMode="contain"
-         />
-       )}
-       <Text style={styles.instructions}>
-         Shared file:{' '}
-         {sharedMimeType === 'application/zip'
-           ? sharedData
-           : ''}
-       </Text>
-       <Text style={styles.instructions}>
-         Extra data: {sharedExtraData ? JSON.stringify(sharedExtraData) : ''}
-       </Text>
-       <Text>
-          File data: {JSON.stringify(fileData)}
-       </Text>
-     </View>
+     <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.welcome}>WhatsApp Extract</Text>
+      <Text style={styles.instructions}>Shared type: {sharedMimeType}</Text>
+      <Text style={styles.instructions}>
+        Shared text: {sharedMimeType === 'text/plain' ? sharedData : ''}
+      </Text>
+      <Text style={styles.instructions}>Shared image:</Text>
+      {sharedMimeType.startsWith('image/') && (
+        <Image
+          style={styles.image}
+          source={{uri: sharedData}}
+          resizeMode="contain"
+        />
+      )}
+      <Text style={styles.instructions}>
+        Shared file:{' '}
+        {sharedMimeType === 'application/zip'
+          ? sharedData
+          : ''}
+      </Text>
+      <Text style={styles.instructions}>
+        Extra data: {sharedExtraData ? JSON.stringify(sharedExtraData) : ''}
+      </Text>
+      <Text>
+          File data: {JSON.stringify(fileData, null, 2)}
+      </Text>
+     </ScrollView>
    );
  };
 
  const styles = StyleSheet.create({
    container: {
-     flex: 1,
+     flexGrow: 1,
      justifyContent: 'center',
      alignItems: 'center',
+     //height: Dimensions.get('window').height,
      backgroundColor: '#F5FCFF',
    },
    welcome: {
