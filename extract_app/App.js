@@ -47,7 +47,7 @@
      };
    }, []);
 
-   var file_data;
+   const [fileData, setFileData] = useState([]);
    if (sharedMimeType.startsWith('application/zip')){
      const sourcePath = sharedData;
      console.log(sourcePath);
@@ -80,14 +80,15 @@
           // log the file contents
           //console.log(JSON.stringify(contents));
           //console.log(contents);
-          readUrl(contents);
+          setFileData(readUrl(contents));
+          console.log(fileData)
         })
       })
       .catch((error) => {
         console.error(error)
       })
    }
-   
+
 
    return (
      <View style={styles.container}>
@@ -112,6 +113,9 @@
        </Text>
        <Text style={styles.instructions}>
          Extra data: {sharedExtraData ? JSON.stringify(sharedExtraData) : ''}
+       </Text>
+       <Text>
+          File data: {JSON.stringify(fileData)}
        </Text>
      </View>
    );
