@@ -7,7 +7,7 @@
  */
 
  import React, {useState, useEffect, useCallback} from 'react';
- import {StyleSheet, Text, View, Image, Platform, ScrollView } from 'react-native';
+ import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert } from 'react-native';
  import ShareMenu from 'react-native-share-menu';
  import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
  import { MainBundlePath, DocumentDirectoryPath, TemporaryDirectoryPath, readFile, readDir, stat, copyFile, unlink } from 'react-native-fs'
@@ -22,6 +22,7 @@
    const [sharedData, setSharedData] = useState('');
    const [sharedMimeType, setSharedMimeType] = useState('');
    const [sharedExtraData, setSharedExtraData] = useState(null);
+
 
    const handleShare = useCallback((item: ?SharedItem) => {
      if (!item) {
@@ -48,12 +49,13 @@
    }, []);
 
    const [fileData, setFileData] = useState([]);
+   const [editData, setEditData] = useState([]);
    if (sharedMimeType.startsWith('application/zip')){
      const sourcePath = sharedData;
      console.log(sourcePath);
      //var n = Math.floor(Math.random() * 20);
      //const tempPath = `${TemporaryDirectoryPath}/tester${n}.zip`;
-    
+
      var tempPath;
      if (Platform.OS === "android") {
        tempPath = `${TemporaryDirectoryPath}/tester1.zip`;
@@ -65,7 +67,7 @@
      else if (Platform.OS === "ios") {
        tempPath = sourcePath;
      }
-    
+
      console.log("tempPath:", tempPath);
      const targetPath = DocumentDirectoryPath
      const charset = 'UTF-8'
@@ -97,60 +99,62 @@
         console.error("ERROR!", error)
       })
    }
+   const [urls, setUrls] = useState([{msg: "https"}, {msg: "url2"}, {msg: "url3"}, {msg: "url4"}, {msg: "url5"}, {msg: "url6"}, {msg: "url7"}, {msg: "url8"}, {msg: "url9"}, {msg: "url10"}, {msg: "url1"}, {msg: "url2"}, {msg: "url3"}, {msg: "url4"}, {msg: "url5"}, {msg: "url6"}, {msg: "url7"}, {msg: "url8"}, {msg: "url9"}, {msg: "url10"}]);
 
+   function deleter (vals){
+     let temp=urls;
+     for(let i=0; i<vals.length; i++){
+       temp=temp.filter(function (j){
+         return j.msg!=vals[i];
+         });
+     }
+     setUrls(temp);
+     console.log(vals);
+     console.log(urls);
+   }
 
    return (
-     <ScrollView contentContainerStyle={styles.container}>
-       <Text style={styles.welcome}>WhatsApp Extract</Text>
-       <Text style={styles.instructions}>Shared type: {sharedMimeType}</Text>
-       <Text style={styles.instructions}>
-         Shared text: {sharedMimeType === 'text/plain' ? sharedData : ''}
-       </Text>
-       <Text style={styles.instructions}>Shared image:</Text>
-       {sharedMimeType.startsWith('image/') && (
-         <Image
-           style={styles.image}
-           source={{uri: sharedData}}
-           resizeMode="contain"
-         />
-       )}
-       <Text style={styles.instructions}>
-         Shared file:{' '}
-         {sharedMimeType === 'application/zip'
-           ? sharedData
-           : ''}
-       </Text>
-       <Text style={styles.instructions}>
-         Extra data: {sharedExtraData ? JSON.stringify(sharedExtraData) : ''}
-       </Text>
-       <Text>
-          File data: {JSON.stringify(fileData, null, 2)}
-       </Text>
-     </ScrollView>
+     <View style={styles.container}>
+      <Text style={styles.header}>React Native Share Menu</Text>
+      <Button title="Delete selected" onPress={() => deleter(editData)}/>
+      <Text> {JSON.stringify(editData)} </Text>
+      <Text>
+         File data:
+      </Text>
+      <View>
+      <FlatList data={urls}
+      renderItem={({item}) =>
+      <View style={styles.item}>
+      <Button title={item.msg} onPress={() => setEditData(editData.concat(item.msg))}/>
+      </View>}
+      />
+      </View>
+    </View>
    );
  };
 
  const styles = StyleSheet.create({
    container: {
      flexGrow: 1,
-     justifyContent: 'center',
-     alignItems: 'center',
+     paddingTop: 50,
      backgroundColor: '#F5FCFF',
    },
-   welcome: {
+   header: {
+     height: 60,
+     backgroundColor: 'orange',
+     alignItems: 'center',
+     justifyContent: 'center',
+   },
+   text: {
+     marginVertical: 30,
      fontSize: 20,
-     textAlign: 'center',
-     margin: 10,
+     fontWeight: 'bold',
+     marginLeft: 10
    },
-   instructions: {
-     textAlign: 'center',
-     color: '#333333',
-     marginBottom: 5,
-   },
-   image: {
-     width: '100%',
-     height: 200,
-   },
+   item: {
+     flexDirection: 'row',
+     alignItems: 'center',
+   }
  });
 
  export default App;
