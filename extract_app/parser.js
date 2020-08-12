@@ -58,6 +58,8 @@ export function readData(file) {
   let name;
   let nmsplit;
 
+  var url_list = [];
+
   var lines = file.split(/\n|\r/);
   lines=lines.filter(function (el) {
     return el != "";
@@ -131,6 +133,7 @@ export function readData(file) {
       var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
       url = msg.match(regexp)[0];
       num_urls++;
+      url_list.push(url);
     }
     if (msg === "<attached") {
       classification = "image";
@@ -194,5 +197,7 @@ export function readData(file) {
   parse.push(source);
   parse.push(msgs);
 
-  return parse;
+  
+
+  return url_list;
 }
