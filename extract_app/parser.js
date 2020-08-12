@@ -196,8 +196,9 @@ export function readData(file) {
   parse.push(user_per_day);
   parse.push(source);
   parse.push(msgs);
+  parse.push(url_list);
 
-  
 
-  return url_list;
+
+  return parse;
 }
