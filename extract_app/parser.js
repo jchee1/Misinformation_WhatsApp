@@ -35,7 +35,7 @@ export function getContacts(file) {
 }
 
 
-export function readUrl(file) {
+export function readData(file) {
   var msgs = [];
 
   var total_num = 0;
@@ -128,7 +128,8 @@ export function readUrl(file) {
     let url;
     if (isUrl(msg)) {
       classification = "url";
-      url = msg;
+      var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+      url = msg.match(regexp)[0];
       num_urls++;
     }
     if (msg === "<attached") {
