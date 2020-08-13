@@ -191,14 +191,23 @@ export function readData(file) {
     Text: num_txt,
   };
 
-  var parse = [];
-  parse.push(info);
-  parse.push(user_per_day);
-  parse.push(source);
-  parse.push(msgs);
-  parse.push(url_list);
+  var parse = {};
+  parse.info=info;
+  parse.user_per_day=user_per_day;
+  parse.source=source;
+  parse.msgs=msgs;
+  parse.url_list=url_list;
 
 
 
   return parse;
+}
+
+export function returner(i, file){
+  if(i===0){
+    return readData(file)
+  }
+  else{
+    return readData(file).url_list
+  }
 }

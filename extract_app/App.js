@@ -11,7 +11,7 @@
  import ShareMenu from 'react-native-share-menu';
  import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
  import { MainBundlePath, DocumentDirectoryPath, TemporaryDirectoryPath, readFile, readDir, stat, copyFile, unlink } from 'react-native-fs'
- import {readData} from "./parser.js";
+ import {returner} from "./parser.js";
 
  type SharedItem = {
    mimeType: string,
@@ -22,7 +22,9 @@
    const [sharedData, setSharedData] = useState('');
    const [sharedMimeType, setSharedMimeType] = useState('');
    const [sharedExtraData, setSharedExtraData] = useState(null);
-
+   const [fileData, setFileData] = useState({});
+   const [editData, setEditData] = useState([]);
+   const [urls, setUrls] = useState([]);
 
    const handleShare = useCallback((item: ?SharedItem) => {
      if (!item) {
@@ -48,11 +50,9 @@
      };
    }, []);
 
-   const [fileData, setFileData] = useState([]);
-   const [editData, setEditData] = useState([]);
+
    if (sharedMimeType.startsWith('application/zip')){
      const sourcePath = sharedData;
-     console.log(sourcePath);
      //var n = Math.floor(Math.random() * 20);
      //const tempPath = `${TemporaryDirectoryPath}/tester${n}.zip`;
 
@@ -67,19 +67,15 @@
      else if (Platform.OS === "ios") {
        tempPath = sourcePath;
      }
-
-     console.log("tempPath:", tempPath);
      const targetPath = DocumentDirectoryPath
      const charset = 'UTF-8'
      unzip(tempPath, targetPath, charset)
       .then((path) => {
-        console.log(`unzip completed at ${path}`)
 
         unlink(tempPath);
 
         readDir(DocumentDirectoryPath)
         .then((result) => {
-          console.log('test readdir', result);
           var i = 0;
           while(result[i]["name"]!="_chat.txt"){
             i = i+1;
@@ -91,26 +87,25 @@
           // log the file contents
           //console.log(JSON.stringify(contents));
           //console.log(contents);
-          setFileData(readData(contents));
-          console.log(fileData)
+          console.log(contents);
+          setFileData(returner(0, contents));
+          console.log(fileData);
+          setUrls(returner(1, contents));
         })
       })
       .catch((error) => {
         console.error("ERROR!", error)
       })
    }
-   const [urls, setUrls] = useState([{msg: "https"}, {msg: "url2"}, {msg: "url3"}, {msg: "url4"}, {msg: "url5"}, {msg: "url6"}, {msg: "url7"}, {msg: "url8"}, {msg: "url9"}, {msg: "url10"}, {msg: "url1"}, {msg: "url2"}, {msg: "url3"}, {msg: "url4"}, {msg: "url5"}, {msg: "url6"}, {msg: "url7"}, {msg: "url8"}, {msg: "url9"}, {msg: "url10"}]);
 
    function deleter (vals){
      let temp=urls;
      for(let i=0; i<vals.length; i++){
        temp=temp.filter(function (j){
-         return j.msg!=vals[i];
+         return j!=vals[i];
          });
      }
      setUrls(temp);
-     console.log(vals);
-     console.log(urls);
    }
 
    return (
@@ -125,7 +120,7 @@
       <FlatList data={urls}
       renderItem={({item}) =>
       <View style={styles.item}>
-      <Button title={item.msg} onPress={() => setEditData(editData.concat(item.msg))}/>
+      <Button title={item} onPress={() => setEditData(editData.concat(item))}/>
       </View>}
       />
       </View>
