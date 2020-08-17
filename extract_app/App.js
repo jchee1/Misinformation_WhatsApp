@@ -12,13 +12,27 @@
  import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
  import { MainBundlePath, DocumentDirectoryPath, TemporaryDirectoryPath, readFile, readDir, exists, stat, copyFile, unlink } from 'react-native-fs'
  import {returner} from "./parser.js";
+ import 'react-native-gesture-handler';
+ import { NavigationContainer } from '@react-navigation/native';
+ import { createStackNavigator } from '@react-navigation/stack';
+ import 'react-native-gesture-handler';
+
+
+ function DetailsScreen() {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Details Screen</Text>
+    </View>
+  );
+}
+
 
  type SharedItem = {
    mimeType: string,
    data: string,
  };
 
- const App: () => React$Node = () => {
+ function Screen1({ navigation }) {
    const [sharedData, setSharedData] = useState('');
    const [sharedMimeType, setSharedMimeType] = useState('');
    const [sharedExtraData, setSharedExtraData] = useState(null);
@@ -157,6 +171,12 @@
       </View>}
       />
       </View>
+      <View style={styles.nav}>
+        <Button
+          title="Transition"
+          onPress={() => navigation.navigate('Details')}
+        />
+      </View>
     </View>
    );
  };
@@ -182,7 +202,25 @@
    item: {
      flexDirection: 'row',
      alignItems: 'center',
-   }
+   },
+   nav: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    marginBottom: 36
+  }
  });
+
+ const Stack = createStackNavigator();
+
+ function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Screen1" component={Screen1} />
+        <Stack.Screen name="Details" component={DetailsScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 
  export default App;
