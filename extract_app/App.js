@@ -7,7 +7,7 @@
  */
 
  import React, {useState, useEffect, useCallback} from 'react';
- import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert } from 'react-native';
+ import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity } from 'react-native';
  import ShareMenu from 'react-native-share-menu';
  import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
  import { MainBundlePath, DocumentDirectoryPath, TemporaryDirectoryPath, readFile, readDir, exists, stat, copyFile, unlink } from 'react-native-fs'
@@ -36,6 +36,8 @@
      setSharedData(data);
      setSharedExtraData(extraData);
      setSharedMimeType(mimeType);
+     setFileData({});
+     setEditData([]);
 
      if (mimeType.startsWith('application/zip')){
        const sourcePath = data;
@@ -141,19 +143,34 @@
      setUrls(temp);
    }
 
+   function itemPress (data){
+     if(editData.includes(data)){
+       let temp=editData;
+       temp=temp.filter(function (i){
+         return i!=data;
+         });
+       setEditData(temp);
+     }
+     else{
+       setEditData(editData.concat(data))
+     }
+   }
+
    return (
      <View style={styles.container}>
       <Text style={styles.header}>WhatsApp Extractor</Text>
       <Button title="Delete selected" onPress={() => deleter(editData)}/>
-      <Text> {JSON.stringify(editData)} </Text>
-      <Text>
-         File data:
+      <Text style={styles.title}>
+         URLs Extracted:
       </Text>
       <View>
       <FlatList data={urls}
       renderItem={({item}) =>
       <View style={styles.item}>
-      <Button title={item} onPress={() => setEditData(editData.concat(item))}/>
+      <TouchableOpacity style={{backgroundColor: editData.includes(item) ? "grey" : "blue", padding: 10, margin: 5}}
+      onPress={() => itemPress(item)}>
+        <Text style={styles.text}>{item}</Text>
+      </TouchableOpacity>
       </View>}
       />
       </View>
@@ -163,7 +180,6 @@
 
  const styles = StyleSheet.create({
    container: {
-     flexGrow: 1,
      paddingTop: 50,
      backgroundColor: '#F5FCFF',
    },
@@ -174,13 +190,17 @@
      justifyContent: 'center',
    },
    text: {
-     marginVertical: 30,
+     fontSize: 15,
+     fontWeight: 'bold',
+     color:"white"
+   },
+   title: {
      fontSize: 20,
      fontWeight: 'bold',
-     marginLeft: 10
    },
    item: {
      flexDirection: 'row',
+     justifyContent: 'center',
      alignItems: 'center',
    }
  });
