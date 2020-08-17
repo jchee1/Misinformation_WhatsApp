@@ -7,7 +7,7 @@
  */
 
  import React, {useState, useEffect, useCallback} from 'react';
- import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert } from 'react-native';
+ import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity, AsyncStorage } from 'react-native';
  import ShareMenu from 'react-native-share-menu';
  import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
  import { MainBundlePath, DocumentDirectoryPath, TemporaryDirectoryPath, readFile, readDir, exists, stat, copyFile, unlink } from 'react-native-fs'
@@ -19,9 +19,20 @@
 
 
  function DetailsScreen() {
+  const [filedat, setFile] = useState({});
+
+  AsyncStorage.getItem("filedata")
+  .then((file) => {
+    console.log("async", file);
+    setFile(file);
+  })
+  .catch((error) => {
+    console.error("get async", error)
+  });
+  console.log("value:", filedat);
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Details Screen</Text>
+      <Text>{JSON.stringify(filedat)}</Text>
     </View>
   );
 }
@@ -120,7 +131,15 @@
               //console.log(contents);
               //console.log(contents);
               setFileData(returner(0, contents));
-              //console.log(fileData);
+              let item = returner(0, contents);
+              console.log("item:", item);
+              AsyncStorage.setItem("filedata", JSON.stringify(item))
+              .then((save)=>{
+                console.log("async saved:", save)
+                })
+                .catch((error)=>{
+                  console.error("set async", error)
+                })
               setUrls(returner(1, contents));
             })
           })
