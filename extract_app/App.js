@@ -207,8 +207,8 @@
       </View>}
       />
       </View>
-      <View style={styles.nav}>
-        <Button
+      <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 36}}>
+        <Button style={styles.nav}
           title="Transition"
           onPress={() => navigation.navigate('Details')}
         />
@@ -221,6 +221,8 @@
    container: {
      paddingTop: 50,
      backgroundColor: '#F5FCFF',
+     height: '100%',
+     
    },
    header: {
      height: 60,
@@ -243,9 +245,11 @@
      alignItems: 'center',
    },
    nav: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    marginBottom: 36
+    //flex: 1,
+    //marginBottom: 36,
+    //justifyContent: 'space-between',
+    position: 'absolute',
+    bottom: 0,
   }
  });
 
