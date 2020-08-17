@@ -10,7 +10,7 @@
  import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert } from 'react-native';
  import ShareMenu from 'react-native-share-menu';
  import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
- import { MainBundlePath, DocumentDirectoryPath, TemporaryDirectoryPath, readFile, readDir, stat, copyFile, unlink } from 'react-native-fs'
+ import { MainBundlePath, DocumentDirectoryPath, TemporaryDirectoryPath, readFile, readDir, exists, stat, copyFile, unlink } from 'react-native-fs'
  import {returner} from "./parser.js";
 
  type SharedItem = {
@@ -41,47 +41,79 @@
        const sourcePath = data;
        //var n = Math.floor(Math.random() * 20);
        //const tempPath = `${TemporaryDirectoryPath}/tester${n}.zip`;
-
+       console.log(sourcePath);
        var tempPath;
        if (Platform.OS === "android") {
-         tempPath = `${TemporaryDirectoryPath}/tester1.zip`;
+         tempPath = `${DocumentDirectoryPath}/tester1.zip`;
          copyFile(sourcePath, tempPath)
+         .then(() => {
+           const targetPath = DocumentDirectoryPath
+           const charset = 'UTF-8'
+           unzip(tempPath, targetPath, charset)
+            .then((path) => {
+
+              unlink(tempPath);
+
+              readDir(DocumentDirectoryPath)
+              .then((result) => {
+                var i = 0;
+                while(result[i]["name"]!="_chat.txt"){
+                  i = i+1;
+                }
+                console.log("result:" , result[i]["path"]);
+                return readFile(result[i]["path"]);
+              })
+              .then((contents) => {
+                // log the file contents
+                //console.log(JSON.stringify(contents));
+                //console.log(contents);
+                //console.log(contents);
+                setFileData(returner(0, contents));
+                //console.log(fileData);
+                setUrls(returner(1, contents));
+              })
+            })
+            .catch((error) => {
+              console.error("ERROR!", error)
+            })
+           })
          .catch((error) => {
          console.error(error)
          });
+
        }
        else if (Platform.OS === "ios") {
          tempPath = sourcePath;
+         const targetPath = DocumentDirectoryPath
+         const charset = 'UTF-8'
+         unzip(tempPath, targetPath, charset)
+          .then((path) => {
+
+            unlink(tempPath);
+
+            readDir(DocumentDirectoryPath)
+            .then((result) => {
+              var i = 0;
+              while(result[i]["name"]!="_chat.txt"){
+                i = i+1;
+              }
+              console.log("result:" , result[i]["path"]);
+              return readFile(result[i]["path"]);
+            })
+            .then((contents) => {
+              // log the file contents
+              //console.log(JSON.stringify(contents));
+              //console.log(contents);
+              //console.log(contents);
+              setFileData(returner(0, contents));
+              //console.log(fileData);
+              setUrls(returner(1, contents));
+            })
+          })
+          .catch((error) => {
+            console.error("ERROR!", error)
+          })
        }
-       const targetPath = DocumentDirectoryPath
-       const charset = 'UTF-8'
-       unzip(tempPath, targetPath, charset)
-        .then((path) => {
-
-          unlink(tempPath);
-
-          readDir(DocumentDirectoryPath)
-          .then((result) => {
-            var i = 0;
-            while(result[i]["name"]!="_chat.txt"){
-              i = i+1;
-            }
-            console.log("result:" , result[i]["path"]);
-            return readFile(result[i]["path"]);
-          })
-          .then((contents) => {
-            // log the file contents
-            //console.log(JSON.stringify(contents));
-            //console.log(contents);
-            console.log(contents);
-            setFileData(returner(0, contents));
-            console.log(fileData);
-            setUrls(returner(1, contents));
-          })
-        })
-        .catch((error) => {
-          console.error("ERROR!", error)
-        })
      }
    }, []);
 
@@ -111,7 +143,7 @@
 
    return (
      <View style={styles.container}>
-      <Text style={styles.header}>React Native Share Menu</Text>
+      <Text style={styles.header}>WhatsApp Extractor</Text>
       <Button title="Delete selected" onPress={() => deleter(editData)}/>
       <Text> {JSON.stringify(editData)} </Text>
       <Text>
