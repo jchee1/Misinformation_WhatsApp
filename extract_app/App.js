@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect, useCallback, Component} from 'react';
 import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity, AsyncStorage } from 'react-native';
 import ShareMenu from 'react-native-share-menu';
 import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
@@ -16,8 +16,87 @@ import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import 'react-native-gesture-handler';
+import Accordion from 'react-native-collapsible/Accordion';
 
+
+//global variables
 global.count = 0;
+
+const SECTIONS = [
+    {
+      title: 'Chat1',
+      content: 'Test1',
+    },
+    {
+      title: 'Chat2',
+      content: 'Test2',
+    },
+    {
+      title: 'Chat3',
+      content: 'Test3',
+    },
+    {
+      title: 'Chat4',
+      content: 'Test4',
+    },
+    {
+      title: 'Chat5',
+      content: 'Test5',
+    },
+  ];
+
+class AccordionView extends Component {
+  
+  
+  state = {
+    activeSections: [],
+  };
+
+  _renderHeader = section => {
+    return (
+      <View style={styles.header}>
+        <Text style={styles.headerText}>{section.title}</Text>
+      </View>
+    );
+  };
+
+  _renderContent = section => {
+    //console.log("section",SECTIONS[0].content);
+    
+    for (let i = 0; i < global.count; i++) {
+      AsyncStorage.getItem(`filedata${i}`)
+      .then((file) => {
+        //console.log("async", file);
+        SECTIONS[i].content = file;
+      })
+      .catch((error) => {
+        console.error("get async", error)
+      });
+    }
+    
+    return (
+      <View style={styles.content}>
+        <Text>{section.content}</Text>
+      </View>
+    );
+  };
+
+  _updateSections = activeSections => {
+    this.setState({ activeSections });
+  };
+
+  render() {
+    return (
+      <Accordion
+        sections={SECTIONS}
+        activeSections={this.state.activeSections}
+        renderHeader={this._renderHeader}
+        renderContent={this._renderContent}
+        onChange={this._updateSections}
+      />
+    );
+  }
+}
 
 
 function DetailsScreen() {
@@ -30,7 +109,7 @@ function DetailsScreen() {
  for (let i = 0; i < global.count; i++) {
    AsyncStorage.getItem(`filedata${i}`)
    .then((file) => {
-     console.log("async", file);
+     //console.log("async", file);
      if (i === 0) {
        setFile1(file);
      }
@@ -121,13 +200,13 @@ function Screen1({ navigation }) {
                let item = returner(0, contents);
                setFileData(item);
 
-               console.log("item:", item);
+               //console.log("item:", item);
 
 
                AsyncStorage.setItem("filedata", JSON.stringify(item))
                .then((save)=>{
                  
-                 console.log("async saved:", save);
+                 //console.log("async saved:", save);
                })
                .catch((error)=>{
                  console.error("set async", error)
@@ -167,16 +246,15 @@ function Screen1({ navigation }) {
              // log the file contents
              //console.log(JSON.stringify(contents));
              //console.log(contents);
-             //console.log(contents);
              let item = returner(0, contents);
              setFileData(item);
 
-             console.log("item:", item);
+             //console.log("item:", item);
              AsyncStorage.setItem(`filedata${global.count}`, JSON.stringify(item))
              .then((save)=>{
                global.count++;
                console.log(global.count);
-               console.log("async saved:", save);
+               //console.log("async saved:", save);
                })
                .catch((error)=>{
                  console.error("set async", error)
@@ -248,8 +326,8 @@ function Screen1({ navigation }) {
      </View>
      <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 36}}>
        <Button style={styles.nav}
-         title="Transition"
-         onPress={() => navigation.navigate('Details')}
+         title="Continue to Send Screen"
+         onPress={() => navigation.navigate('AccordianView')}
        />
      </View>
    </View>
@@ -299,7 +377,7 @@ function App() {
    <NavigationContainer>
      <Stack.Navigator initialRouteName="Home">
        <Stack.Screen name="Screen1" component={Screen1} />
-       <Stack.Screen name="Details" component={DetailsScreen} />
+       <Stack.Screen name="AccordianView" component={AccordionView} />
      </Stack.Navigator>
    </NavigationContainer>
  );
