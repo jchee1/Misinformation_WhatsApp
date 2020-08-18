@@ -7,7 +7,7 @@
  */
 
  import React, {useState, useEffect, useCallback} from 'react';
- import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity, AsyncStorage } from 'react-native';
+ import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity} from 'react-native';
  import ShareMenu from 'react-native-share-menu';
  import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
  import { MainBundlePath, DocumentDirectoryPath, TemporaryDirectoryPath, readFile, readDir, exists, stat, copyFile, unlink } from 'react-native-fs'
@@ -16,14 +16,15 @@
  import { NavigationContainer } from '@react-navigation/native';
  import { createStackNavigator } from '@react-navigation/stack';
  import 'react-native-gesture-handler';
+ import  AsyncStorage  from '@react-native-community/async-storage';
 
 
  function DetailsScreen() {
-  const [filedat, setFile] = useState({});
+  const [filedat, setFile] = useState("");
 
   AsyncStorage.getItem("filedata")
   .then((file) => {
-    console.log("async", file);
+    //console.log("async", file);
     setFile(file);
   })
   .catch((error) => {
@@ -32,7 +33,7 @@
   console.log("value:", filedat);
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>{JSON.stringify(filedat)}</Text>
+      <Text>{filedat}</Text>
     </View>
   );
 }
@@ -132,16 +133,9 @@
               //console.log(JSON.stringify(contents));
               //console.log(contents);
               //console.log(contents);
-              setFileData(returner(0, contents));
               let item = returner(0, contents);
+              setFileData(item);
               console.log("item:", item);
-              AsyncStorage.setItem("filedata", JSON.stringify(item))
-              .then((save)=>{
-                console.log("async saved:", save)
-                })
-                .catch((error)=>{
-                  console.error("set async", error)
-                })
               setUrls(returner(1, contents));
             })
           })
@@ -189,15 +183,29 @@
      }
    }
 
+   function sender (){
+     let temp=fileData;
+     temp.url_list=urls;
+     AsyncStorage.setItem("filedata", JSON.stringify(temp))
+     .then((save)=>{
+       //console.log("async saved:", save)
+       })
+       .catch((error)=>{
+         console.error("set async", error)
+       })
+   }
+
    return (
      <View style={styles.container}>
-      <Text style={styles.header}>WhatsApp Extractor</Text>
+      <View style={styles.header}>
       <Button title="Delete selected" onPress={() => deleter(editData)}/>
+      <Button title="Add to Send" onPress={() => sender()}/>
+      </View>
       <Text style={styles.title}>
-         URLs Extracted:
+         URLs Extracted: {urls.length===0 ? "(Share a Zipped WhatsApp Chat File)" : ""}
       </Text>
-      <View>
-      <FlatList data={urls}
+      <View style={{flex:10}}>
+      <FlatList data={urls} style={styles.list}
       renderItem={({item}) =>
       <View style={styles.item}>
       <TouchableOpacity style={{backgroundColor: editData.includes(item) ? "grey" : "blue", padding: 10, margin: 5}}
@@ -207,9 +215,9 @@
       </View>}
       />
       </View>
-      <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 36}}>
+      <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 0}}>
         <Button style={styles.nav}
-          title="Transition"
+          title="Continue to Send Screen"
           onPress={() => navigation.navigate('Details')}
         />
       </View>
@@ -219,16 +227,13 @@
 
  const styles = StyleSheet.create({
    container: {
-     paddingTop: 50,
      backgroundColor: '#F5FCFF',
      height: '100%',
-     
+     justifyContent: 'flex-start'
    },
    header: {
-     height: 60,
-     backgroundColor: 'orange',
-     alignItems: 'center',
-     justifyContent: 'center',
+     flexDirection: 'row',
+     justifyContent: 'space-between'
    },
    text: {
      fontSize: 15,
@@ -238,11 +243,15 @@
    title: {
      fontSize: 20,
      fontWeight: 'bold',
+     marginTop:15
    },
    item: {
      flexDirection: 'row',
      justifyContent: 'center',
      alignItems: 'center',
+   },
+   list: {
+
    },
    nav: {
     //flex: 1,
@@ -259,7 +268,7 @@
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Screen1" component={Screen1} />
+        <Stack.Screen name="WhatsApp Extractor" component={Screen1} />
         <Stack.Screen name="Details" component={DetailsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
