@@ -17,22 +17,45 @@
  import { createStackNavigator } from '@react-navigation/stack';
  import 'react-native-gesture-handler';
 
+ global.count = 0;
+
 
  function DetailsScreen() {
-  const [filedat, setFile] = useState({});
+  const [filedat1, setFile1] = useState({});
+  const [filedat2, setFile2] = useState({});
+  const [filedat3, setFile3] = useState({});
+  const [filedat4, setFile4] = useState({});
+  const [filedat5, setFile5] = useState({});
 
-  AsyncStorage.getItem("filedata")
-  .then((file) => {
-    console.log("async", file);
-    setFile(file);
-  })
-  .catch((error) => {
-    console.error("get async", error)
-  });
-  console.log("value:", filedat);
+  for (let i = 0; i < global.count; i++) {
+    AsyncStorage.getItem(`filedata${i}`)
+    .then((file) => {
+      console.log("async", file);
+      if (i === 0) {
+        setFile1(file);
+      }
+      else if (i === 1) {
+        setFile2(file);
+      }
+      else if (i === 2) {
+        setFile3(file);
+      }
+      else if (i === 3) {
+        setFile4(file);
+      }
+      else if (i === 4) {
+        setFile5(file);
+      }
+    })
+    .catch((error) => {
+      console.error("get async", error)
+    });
+    //console.log("value:", filedat);
+  }
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>{JSON.stringify(filedat)}</Text>
+      <Text>{JSON.stringify(filedat1)}</Text>
+      <Text>{JSON.stringify(filedat2)}</Text>
     </View>
   );
 }
@@ -95,7 +118,20 @@
                 //console.log(JSON.stringify(contents));
                 //console.log(contents);
                 //console.log(contents);
-                setFileData(returner(0, contents));
+                let item = returner(0, contents);
+                setFileData(item);
+
+                console.log("item:", item);
+
+
+                AsyncStorage.setItem("filedata", JSON.stringify(item))
+                .then((save)=>{
+                  
+                  console.log("async saved:", save);
+                })
+                .catch((error)=>{
+                  console.error("set async", error)
+                })
                 //console.log(fileData);
                 setUrls(returner(1, contents));
               })
@@ -132,12 +168,15 @@
               //console.log(JSON.stringify(contents));
               //console.log(contents);
               //console.log(contents);
-              setFileData(returner(0, contents));
               let item = returner(0, contents);
+              setFileData(item);
+
               console.log("item:", item);
-              AsyncStorage.setItem("filedata", JSON.stringify(item))
+              AsyncStorage.setItem(`filedata${global.count}`, JSON.stringify(item))
               .then((save)=>{
-                console.log("async saved:", save)
+                global.count++;
+                console.log(global.count);
+                console.log("async saved:", save);
                 })
                 .catch((error)=>{
                   console.error("set async", error)
