@@ -46,8 +46,6 @@ const SECTIONS = [
   ];
 
 class AccordionView extends Component {
-  
-  
   state = {
     activeSections: [],
   };
@@ -97,7 +95,6 @@ class AccordionView extends Component {
     );
   }
 }
-
 
 
 
@@ -164,9 +161,9 @@ function Screen1({ navigation }) {
                //console.log("item:", item);
 
 
-               AsyncStorage.setItem("filedata", JSON.stringify(item))
+               AsyncStorage.setItem(`filedata${global.count}`, JSON.stringify(item))
                .then((save)=>{
-                 
+                global.count++;
                  //console.log("async saved:", save);
                })
                .catch((error)=>{
@@ -214,7 +211,7 @@ function Screen1({ navigation }) {
              AsyncStorage.setItem(`filedata${global.count}`, JSON.stringify(item))
              .then((save)=>{
                global.count++;
-               console.log(global.count);
+               //console.log(global.count);
                //console.log("async saved:", save);
                })
                .catch((error)=>{
