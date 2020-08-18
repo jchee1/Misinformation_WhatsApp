@@ -99,45 +99,6 @@ class AccordionView extends Component {
 }
 
 
-function DetailsScreen() {
- const [filedat1, setFile1] = useState({});
- const [filedat2, setFile2] = useState({});
- const [filedat3, setFile3] = useState({});
- const [filedat4, setFile4] = useState({});
- const [filedat5, setFile5] = useState({});
-
- for (let i = 0; i < global.count; i++) {
-   AsyncStorage.getItem(`filedata${i}`)
-   .then((file) => {
-     //console.log("async", file);
-     if (i === 0) {
-       setFile1(file);
-     }
-     else if (i === 1) {
-       setFile2(file);
-     }
-     else if (i === 2) {
-       setFile3(file);
-     }
-     else if (i === 3) {
-       setFile4(file);
-     }
-     else if (i === 4) {
-       setFile5(file);
-     }
-   })
-   .catch((error) => {
-     console.error("get async", error)
-   });
-   //console.log("value:", filedat);
- }
- return (
-   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-     <Text>{JSON.stringify(filedat1)}</Text>
-     <Text>{JSON.stringify(filedat2)}</Text>
-   </View>
- );
-}
 
 
 type SharedItem = {
