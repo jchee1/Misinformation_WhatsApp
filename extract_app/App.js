@@ -160,15 +160,6 @@ function Screen1({ navigation }) {
 
                //console.log("item:", item);
 
-
-               AsyncStorage.setItem(`filedata${global.count}`, JSON.stringify(item))
-               .then((save)=>{
-                global.count++;
-                 //console.log("async saved:", save);
-               })
-               .catch((error)=>{
-                 console.error("set async", error)
-               })
                //console.log(fileData);
                setUrls(returner(1, contents));
              })
@@ -208,15 +199,7 @@ function Screen1({ navigation }) {
              setFileData(item);
 
              //console.log("item:", item);
-             AsyncStorage.setItem(`filedata${global.count}`, JSON.stringify(item))
-             .then((save)=>{
-               global.count++;
-               //console.log(global.count);
-               //console.log("async saved:", save);
-               })
-               .catch((error)=>{
-                 console.error("set async", error)
-               })
+             
              setUrls(returner(1, contents));
            })
          })
@@ -264,24 +247,38 @@ function Screen1({ navigation }) {
     }
   }
 
+  function sender (){
+    let temp=fileData;
+    temp.url_list=urls;
+    AsyncStorage.setItem(`filedata${global.count}`, JSON.stringify(temp))
+     .then((save)=>{
+        global.count++;
+     })
+      .catch((error)=>{
+        console.error("set async", error)
+      })
+  }
+
   return (
     <View style={styles.container}>
-     <Text style={styles.header}>WhatsApp Extractor</Text>
-     <Button title="Delete selected" onPress={() => deleter(editData)}/>
-     <Text style={styles.title}>
-        URLs Extracted:
-     </Text>
-     <View>
-     <FlatList data={urls}
-     renderItem={({item}) =>
-     <View style={styles.item}>
-     <TouchableOpacity style={{backgroundColor: editData.includes(item) ? "grey" : "blue", padding: 10, margin: 5}}
-     onPress={() => itemPress(item)}>
-       <Text style={styles.text}>{item}</Text>
-     </TouchableOpacity>
-     </View>}
-     />
-     </View>
+      <View style={styles.header}>
+      <Button title="Delete selected" onPress={() => deleter(editData)}/>
+      <Button title="Add to Send" onPress={() => sender()}/>
+      </View>
+      <Text style={styles.title}>
+         URLs Extracted: {urls.length===0 ? "(Share a Zipped WhatsApp Chat File)" : ""}
+      </Text>
+      <View style={{flex:10}}>
+      <FlatList data={urls} style={styles.list}
+      renderItem={({item}) =>
+      <View style={styles.item}>
+      <TouchableOpacity style={{backgroundColor: editData.includes(item) ? "grey" : "blue", padding: 10, margin: 5}}
+      onPress={() => itemPress(item)}>
+        <Text style={styles.text}>{item}</Text>
+      </TouchableOpacity>
+      </View>}
+      />
+      </View>
      <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 36}}>
        <Button style={styles.nav}
          title="Continue to Send Screen"
@@ -294,16 +291,13 @@ function Screen1({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 50,
     backgroundColor: '#F5FCFF',
     height: '100%',
-    
+    justifyContent: 'flex-start'
   },
   header: {
-    height: 60,
-    backgroundColor: 'orange',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
   text: {
     fontSize: 15,
@@ -313,11 +307,15 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
+    marginTop:15
   },
   item: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  list: {
+
   },
   nav: {
    //flex: 1,
