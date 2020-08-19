@@ -7,7 +7,7 @@
  */
 
 import React, {useState, useEffect, useCallback, Component} from 'react';
-import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity, AsyncStorage } from 'react-native';
+import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity, ScrollView} from 'react-native';
 import ShareMenu from 'react-native-share-menu';
 import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
 import { MainBundlePath, DocumentDirectoryPath, TemporaryDirectoryPath, readFile, readDir, exists, stat, copyFile, unlink } from 'react-native-fs'
@@ -17,6 +17,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import 'react-native-gesture-handler';
 import Accordion from 'react-native-collapsible/Accordion';
+import AsyncStorage from '@react-native-community/async-storage';
 
 
 //global variables
@@ -60,7 +61,7 @@ class AccordionView extends Component {
 
   _renderContent = section => {
     //console.log("section",SECTIONS[0].content);
-    
+
     for (let i = 0; i < global.count; i++) {
       AsyncStorage.getItem(`filedata${i}`)
       .then((file) => {
@@ -71,7 +72,7 @@ class AccordionView extends Component {
         console.error("get async", error)
       });
     }
-    
+
     return (
       <View style={styles.content}>
         <Text>{section.content}</Text>
@@ -110,6 +111,8 @@ function Screen1({ navigation }) {
   const [fileData, setFileData] = useState({});
   const [editData, setEditData] = useState([]);
   const [urls, setUrls] = useState([]);
+  const [sent, setSent] = useState(false);
+  const [editing, setEditing] = useState(false);
 
   const handleShare = useCallback((item: ?SharedItem) => {
     if (!item) {
@@ -123,6 +126,7 @@ function Screen1({ navigation }) {
     setSharedMimeType(mimeType);
     setFileData({});
     setEditData([]);
+    setSent(false);
 
     if (mimeType.startsWith('application/zip')){
       const sourcePath = data;
@@ -199,7 +203,7 @@ function Screen1({ navigation }) {
              setFileData(item);
 
              //console.log("item:", item);
-             
+
              setUrls(returner(1, contents));
            })
          })
@@ -232,6 +236,7 @@ function Screen1({ navigation }) {
         });
     }
     setUrls(temp);
+    setEditing(false);
   }
 
   function itemPress (data){
@@ -248,27 +253,35 @@ function Screen1({ navigation }) {
   }
 
   function sender (){
-    let temp=fileData;
-    temp.url_list=urls;
-    AsyncStorage.setItem(`filedata${global.count}`, JSON.stringify(temp))
-     .then((save)=>{
-        global.count++;
-     })
-      .catch((error)=>{
-        console.error("set async", error)
-      })
+    if(sent){
+      Alert.alert("URLs already sent");
+    }
+    else{
+      let temp=fileData;
+      temp.url_list=urls;
+      AsyncStorage.setItem(`filedata${global.count}`, JSON.stringify(temp))
+       .then((save)=>{
+          global.count++;
+       })
+       .catch((error)=>{
+          console.error("set async", error)
+       })
+       setSent(true);
+    }
   }
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-      <Button title="Delete selected" onPress={() => deleter(editData)}/>
+      {editing ? <Button title="Delete selected/Done" onPress={() => deleter(editData)}/> :
+      <Button title="Edit URLs" onPress={() => setEditing(true)}/>}
       <Button title="Add to Send" onPress={() => sender()}/>
       </View>
       <Text style={styles.title}>
          URLs Extracted: {urls.length===0 ? "(Share a Zipped WhatsApp Chat File)" : ""}
       </Text>
       <View style={{flex:10}}>
+      {editing ?
       <FlatList data={urls} style={styles.list}
       renderItem={({item}) =>
       <View style={styles.item}>
@@ -277,9 +290,15 @@ function Screen1({ navigation }) {
         <Text style={styles.text}>{item}</Text>
       </TouchableOpacity>
       </View>}
-      />
+      /> :
+      <FlatList data={urls} style={styles.list}
+      renderItem={({item}) =>
+      <View style={styles.item}>
+        <Text style={{padding:10}}>{item}</Text>
+      </View>}
+      />}
       </View>
-     <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 36}}>
+     <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 0}}>
        <Button style={styles.nav}
          title="Continue to Send Screen"
          onPress={() => navigation.navigate('AccordianView')}
@@ -302,7 +321,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 15,
     fontWeight: 'bold',
-    color:"white"
   },
   title: {
     fontSize: 20,
@@ -310,7 +328,6 @@ const styles = StyleSheet.create({
     marginTop:15
   },
   item: {
-    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -332,7 +349,7 @@ function App() {
  return (
    <NavigationContainer>
      <Stack.Navigator initialRouteName="Home">
-       <Stack.Screen name="Screen1" component={Screen1} />
+       <Stack.Screen name="WhatsApp Extractor" component={Screen1} />
        <Stack.Screen name="AccordianView" component={AccordionView} />
      </Stack.Navigator>
    </NavigationContainer>
