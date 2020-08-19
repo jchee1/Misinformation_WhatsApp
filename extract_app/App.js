@@ -23,17 +23,34 @@ import Mailer from 'react-native-mail';
 
 class SendScreen extends Component {
 
+  writeTo = () => {
+    /*put stuff in file*/
+    var path = DocumentDirectoryPath + '/test.doc';
+    // write the file
+    writeFile(path, JSON.stringify(SECTIONS), 'utf8')
+      .then((success) => {
+        console.log('FILE WRITTEN!');
+        //console.log(success);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  }
+  
+  
   handleEmail = () => {
+    //var Mailer = require('NativeModules').RNMail;
+    //this.writeTo;
     Mailer.mail({
       subject: 'need help',
-      recipients: ['support@example.com'],
-      ccRecipients: ['supportCC@example.com'],
-      bccRecipients: ['supportBCC@example.com'],
+      recipients: ['brohna@uchicago.edu'],
+      ccRecipients: [],
+      bccRecipients: [],
       body: '<b>A Bold Body</b>',
       isHTML: true,
       attachments: [{
-        path: '',  // The absolute path of the file from which to read data.
-        type: '',   // Mime Type: jpg, png, doc, ppt, html, pdf, csv
+        path: DocumentDirectoryPath + '/test1.doc',  // The absolute path of the file from which to read data.
+        type: 'doc',   // Mime Type: jpg, png, doc, ppt, html, pdf, csv
         // mimeType - use only if you want to use custom type
         name: '',   // Optional: Custom filename for attachment
       }]
@@ -96,6 +113,22 @@ class AccordionView extends Component {
     activeSections: [],
   };
 
+  _writeTo = () => {
+    
+    var path = DocumentDirectoryPath + '/test1.doc';
+    // write the file
+    writeFile(path, JSON.stringify(SECTIONS), 'utf8')
+      .then((success) => {
+        console.log('FILE WRITTEN!');
+        console.log(JSON.stringify(SECTIONS));
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+      
+    console.log("hello");
+  }
+
   _renderHeader = section => {
     return (
       <View style={styles.header}>
@@ -143,7 +176,7 @@ class AccordionView extends Component {
         <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 36}}>
           <Button style={styles.nav}
           title="Continue to Send Chats"
-          onPress={() => this.props.navigation.navigate('SendScreen')}
+          onPress={() => {this._writeTo(); this.props.navigation.navigate('SendScreen');}}
           />
         </View>
       </View>
