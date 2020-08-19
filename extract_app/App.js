@@ -110,7 +110,7 @@ function SendScreen() {
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Send Screen</Text>
     </View>
-  );
+  ); 
 }
 
 type SharedItem = {
