@@ -8,7 +8,8 @@
 5. npm i @react-navigation/stack
 6. npm i react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view
 7. npm i react-native-collapsible
-8. cd ios && pod install
+8. yarn add @react-native-community/async-storage
+9. cd ios && pod install
 
 ## To run app:
 * ios: "yarn react-native run-ios"
