@@ -10,7 +10,7 @@ import React, {useState, useEffect, useCallback, Component} from 'react';
 import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity, ScrollView} from 'react-native';
 import ShareMenu from 'react-native-share-menu';
 import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
-import { MainBundlePath, DocumentDirectoryPath, TemporaryDirectoryPath, readFile, readDir, exists, stat, copyFile, unlink } from 'react-native-fs'
+import { MainBundlePath, DocumentDirectoryPath, DownloadDirectoryPath, TemporaryDirectoryPath, readFile, readDir, exists, stat, copyFile, unlink, writeFile } from 'react-native-fs'
 import {returner} from "./parser.js";
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
@@ -18,12 +18,57 @@ import { createStackNavigator } from '@react-navigation/stack';
 import 'react-native-gesture-handler';
 import Accordion from 'react-native-collapsible/Accordion';
 import AsyncStorage from '@react-native-community/async-storage';
+import Mailer from 'react-native-mail';
+
+
+class SendScreen extends Component {
+
+  handleEmail = () => {
+    Mailer.mail({
+      subject: 'need help',
+      recipients: ['support@example.com'],
+      ccRecipients: ['supportCC@example.com'],
+      bccRecipients: ['supportBCC@example.com'],
+      body: '<b>A Bold Body</b>',
+      isHTML: true,
+      attachments: [{
+        path: '',  // The absolute path of the file from which to read data.
+        type: '',   // Mime Type: jpg, png, doc, ppt, html, pdf, csv
+        // mimeType - use only if you want to use custom type
+        name: '',   // Optional: Custom filename for attachment
+      }]
+    }, (error, event) => {
+      Alert.alert(
+        error,
+        event,
+        [
+          {text: 'Ok', onPress: () => console.log('OK: Email Error Response')},
+          {text: 'Cancel', onPress: () => console.log('CANCEL: Email Error Response')}
+        ],
+        { cancelable: true }
+      )
+    });
+  }
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <Button
+          onPress={this.handleEmail}
+          title="Email Me"
+          color="#841584"
+          accessabilityLabel="Purple Email Me Button"
+        />
+      </View>
+    );
+  }
+}
 
 
 //global variables
 global.count = 0;
 
-const SECTIONS = [
+var SECTIONS = [
     {
       title: 'Chat1',
       content: 'Test1',
@@ -94,7 +139,7 @@ class AccordionView extends Component {
           renderContent={this._renderContent}
           onChange={this._updateSections}
         />
-        
+
         <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 36}}>
           <Button style={styles.nav}
           title="Continue to Send Chats"
@@ -104,14 +149,25 @@ class AccordionView extends Component {
       </View>
     );
   }
-} 
+}
 
-function SendScreen() {
+function SendScreen1() {
+  /*put stuff in file*/
+  var path = DocumentDirectoryPath + '/test.txt';
+  // write the file
+  writeFile(path, JSON.stringify(SECTIONS), 'utf8')
+    .then((success) => {
+      console.log('FILE WRITTEN!');
+      //console.log(success);
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Send Screen</Text>
     </View>
-  ); 
+  );
 }
 
 type SharedItem = {
