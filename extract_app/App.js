@@ -86,18 +86,33 @@ class AccordionView extends Component {
 
   render() {
     return (
-      <Accordion
-        sections={SECTIONS}
-        activeSections={this.state.activeSections}
-        renderHeader={this._renderHeader}
-        renderContent={this._renderContent}
-        onChange={this._updateSections}
-      />
+      <View style={styles.container}>
+        <Accordion
+          sections={SECTIONS}
+          activeSections={this.state.activeSections}
+          renderHeader={this._renderHeader}
+          renderContent={this._renderContent}
+          onChange={this._updateSections}
+        />
+        
+        <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 36}}>
+          <Button style={styles.nav}
+          title="Continue to Send Chats"
+          onPress={() => this.props.navigation.navigate('SendScreen')}
+          />
+        </View>
+      </View>
     );
   }
+} 
+
+function SendScreen() {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Send Screen</Text>
+    </View>
+  ); 
 }
-
-
 
 type SharedItem = {
   mimeType: string,
@@ -300,7 +315,7 @@ function Screen1({ navigation }) {
       </View>
      <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 0}}>
        <Button style={styles.nav}
-         title="Continue to Send Screen"
+         title="Continue to See Chat Info"
          onPress={() => navigation.navigate('AccordianView')}
        />
      </View>
@@ -351,6 +366,7 @@ function App() {
      <Stack.Navigator initialRouteName="Home">
        <Stack.Screen name="WhatsApp Extractor" component={Screen1} />
        <Stack.Screen name="AccordianView" component={AccordionView} />
+       <Stack.Screen name="SendScreen" component={SendScreen} />
      </Stack.Navigator>
    </NavigationContainer>
  );
