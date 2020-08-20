@@ -21,7 +21,7 @@
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>HostAppBundleIdentifier</key>
-	<string>com.extract1.extract-app</string>
+	<string>com.uchicago.extract-app</string>
 	<key>HostAppURLScheme</key>
 	<string>ExtractorApp://</string>
 	<key>NSExtension</key>

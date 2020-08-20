@@ -19,6 +19,7 @@ import 'react-native-gesture-handler';
 import Accordion from 'react-native-collapsible/Accordion';
 import AsyncStorage from '@react-native-community/async-storage';
 import Mailer from 'react-native-mail';
+import EntypoIcon from 'react-native-vector-icons/Entypo'
 
 
 class SendScreen extends Component {
@@ -36,8 +37,8 @@ class SendScreen extends Component {
         console.log(err.message);
       });
   }
-  
-  
+
+
   handleEmail = () => {
     //var Mailer = require('NativeModules').RNMail;
     //this.writeTo;
@@ -114,7 +115,7 @@ class AccordionView extends Component {
   };
 
   _writeTo = () => {
-    
+
     var path = DocumentDirectoryPath + '/test1.doc';
     // write the file
     writeFile(path, JSON.stringify(SECTIONS), 'utf8')
@@ -125,7 +126,7 @@ class AccordionView extends Component {
       .catch((err) => {
         console.log(err.message);
       });
-      
+
     console.log("hello");
   }
 
@@ -332,29 +333,15 @@ function Screen1({ navigation }) {
 
 
 
-  function deleter (vals){
+  function deleter (val){
     let temp=urls;
-    for(let i=0; i<vals.length; i++){
-      temp=temp.filter(function (j){
-        return j!=vals[i];
-        });
-    }
+    temp=temp.filter(function (j){
+      return j!=val;
+      });
+
     setUrls(temp);
-    setEditing(false);
   }
 
-  function itemPress (data){
-    if(editData.includes(data)){
-      let temp=editData;
-      temp=temp.filter(function (i){
-        return i!=data;
-        });
-      setEditData(temp);
-    }
-    else{
-      setEditData(editData.concat(data))
-    }
-  }
 
   function sender (){
     if(sent){
@@ -377,8 +364,8 @@ function Screen1({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-      {editing ? <Button title="Delete selected/Done" onPress={() => deleter(editData)}/> :
-      <Button title="Edit URLs" onPress={() => setEditing(true)}/>}
+      {editing ? <Button title="Done" onPress={() => setEditing(false)}/> :
+      <EntypoIcon.Button name="pencil" onPress={() => setEditing(true)}>Edit URLs</EntypoIcon.Button>}
       <Button title="Add to Send" onPress={() => sender()}/>
       </View>
       <Text style={styles.title}>
@@ -388,16 +375,17 @@ function Screen1({ navigation }) {
       {editing ?
       <FlatList data={urls} style={styles.list}
       renderItem={({item}) =>
-      <View style={styles.item}>
-      <TouchableOpacity style={{backgroundColor: editData.includes(item) ? "grey" : "blue", padding: 10, margin: 5}}
-      onPress={() => itemPress(item)}>
-        <Text style={styles.text}>{item}</Text>
+      <View>
+      <TouchableOpacity style={styles.item}
+      onPress={() => deleter(item)}>
+        <Text style={styles.text}>{item.length>45 ? item.substr(0,42)+"..." : item}</Text>
+        <EntypoIcon name="cross" size={30} color="red"/>
       </TouchableOpacity>
       </View>}
       /> :
       <FlatList data={urls} style={styles.list}
       renderItem={({item}) =>
-      <View style={styles.item}>
+      <View>
         <Text style={{padding:10}}>{item}</Text>
       </View>}
       />}
@@ -432,8 +420,10 @@ const styles = StyleSheet.create({
     marginTop:15
   },
   item: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection:'row',
+    justifyContent:'space-between',
+    padding: 10,
+    alignItems: 'center'
   },
   list: {
 

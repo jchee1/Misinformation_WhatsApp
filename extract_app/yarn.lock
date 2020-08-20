@@ -5673,6 +5673,15 @@ react-native-share-menu@^5.0.0:
   resolved "https://registry.yarnpkg.com/react-native-share-menu/-/react-native-share-menu-5.0.0.tgz#f633fa9630cf5b33cc3d44a00e0bcd7e07f005db"
   integrity sha512-DKthY2/0X3iF5QanNM2lL9aTJT1qJTDSwf3xoY2jKklo38dwElocWJPfyCmJiFwjbW9GKSnw9Pi20WeEqvPVCQ==
 
+react-native-vector-icons@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-vector-icons/-/react-native-vector-icons-7.0.0.tgz#5b92ed363c867645daad48c559e1f99efcfbb813"
+  integrity sha512-Ku8+dTUAnR9pexRPQqsUcQEZlxEpFZsIy8iOFqVL/3mrUyncZJHtqJyx2cUOmltZIC6W2GI4IkD3EYzPerXV5g==
+  dependencies:
+    lodash "^4.17.15"
+    prop-types "^15.7.2"
+    yargs "^15.0.2"
+
 react-native-zip-archive@^5.0.4:
   version "5.0.4"
   resolved "https://registry.yarnpkg.com/react-native-zip-archive/-/react-native-zip-archive-5.0.4.tgz#7978df0a436e32ea4dcac80e54181764cadd3ba4"
@@ -7189,7 +7198,7 @@ yargs@^14.2.0:
     y18n "^4.0.0"
     yargs-parser "^15.0.1"
 
-yargs@^15.1.0, yargs@^15.3.1:
+yargs@^15.0.2, yargs@^15.1.0, yargs@^15.3.1:
   version "15.4.1"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-15.4.1.tgz#0d87a16de01aee9d8bec2bfbf74f67851730f4f8"
   integrity sha512-aePbxDmcYW++PaqBsJ+HYUFwCdv4LVvdnhBy78E57PIor8/OVvhMrADFFEDh8DHDFRv/O9i3lPhsENjO7QX0+A==
