@@ -7,7 +7,7 @@
  */
 
 import React, {useState, useEffect, useCallback, Component} from 'react';
-import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity, ScrollView} from 'react-native';
+import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity, Linking} from 'react-native';
 import ShareMenu from 'react-native-share-menu';
 import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
 import { MainBundlePath, DocumentDirectoryPath, DownloadDirectoryPath, TemporaryDirectoryPath, readFile, readDir, exists, stat, copyFile, unlink, writeFile } from 'react-native-fs'
@@ -132,8 +132,8 @@ class AccordionView extends Component {
 
   _renderHeader = section => {
     return (
-      <View style={styles.header}>
-        <Text style={styles.headerText}>{section.title}</Text>
+      <View style={styles.chatHeader}>
+        <Text style={styles.text}>{section.title}</Text>
       </View>
     );
   };
@@ -145,7 +145,7 @@ class AccordionView extends Component {
       AsyncStorage.getItem(`filedata${i}`)
       .then((file) => {
         //console.log("async", file);
-        SECTIONS[i].content = file;
+        SECTIONS[i].content = JSON.parse(file);
       })
       .catch((error) => {
         console.error("get async", error)
@@ -154,7 +154,12 @@ class AccordionView extends Component {
 
     return (
       <View style={styles.content}>
-        <Text>{section.content}</Text>
+      <FlatList data={section.content.url_list}
+      renderItem={({item}) =>
+      <View>
+        <Text style={{padding:5}}>{item}</Text>
+      </View>}
+      />
       </View>
     );
   };
@@ -214,7 +219,6 @@ function Screen1({ navigation }) {
   const [sharedMimeType, setSharedMimeType] = useState('');
   const [sharedExtraData, setSharedExtraData] = useState(null);
   const [fileData, setFileData] = useState({});
-  const [editData, setEditData] = useState([]);
   const [urls, setUrls] = useState([]);
   const [sent, setSent] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -230,7 +234,6 @@ function Screen1({ navigation }) {
     setSharedExtraData(extraData);
     setSharedMimeType(mimeType);
     setFileData({});
-    setEditData([]);
     setSent(false);
 
     if (mimeType.startsWith('application/zip')){
@@ -375,18 +378,21 @@ function Screen1({ navigation }) {
       {editing ?
       <FlatList data={urls} style={styles.list}
       renderItem={({item}) =>
-      <View>
-      <TouchableOpacity style={styles.item}
-      onPress={() => deleter(item)}>
-        <Text style={styles.text}>{item.length>45 ? item.substr(0,42)+"..." : item}</Text>
-        <EntypoIcon name="cross" size={30} color="red"/>
+      <View style={styles.item}>
+      <TouchableOpacity
+      onPress={() => Linking.openURL(item)}>
+        <Text style={{textDecorationLine: 'underline'}}>{item.length>45 ? item.substr(0,42)+"..." : item}</Text>
       </TouchableOpacity>
+      <EntypoIcon name="cross" size={30} color="red" onPress={() => deleter(item)}/>
       </View>}
       /> :
       <FlatList data={urls} style={styles.list}
       renderItem={({item}) =>
       <View>
-        <Text style={{padding:10}}>{item}</Text>
+        <TouchableOpacity style={{padding:10}}
+        onPress={() => Linking.openURL(item)}>
+        <Text style={{textDecorationLine: 'underline'}}>{item}</Text>
+        </TouchableOpacity>
       </View>}
       />}
       </View>
@@ -409,6 +415,12 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between'
+  },
+  chatHeader: {
+    backgroundColor:'lime',
+    margin:5,
+    padding:5,
+    borderRadius:15
   },
   text: {
     fontSize: 15,
