@@ -1,6 +1,6 @@
 # Misinformation_WhatsApp
 
-## App Installation Instructions (extract_app):
+## App Installation Instructions/Packages (extract_app):
 1. yarn install
 2. npm i react-native-share-menu
 3. npm i react-native-zip-archive
@@ -9,7 +9,8 @@
 6. npm i react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view
 7. npm i react-native-collapsible
 8. yarn add @react-native-community/async-storage
-9. cd ios && pod install
+9. npm i react-native-mail
+10. cd ios && pod install
 
 ## To run app:
 * ios: "yarn react-native run-ios"
