@@ -10,7 +10,8 @@
 7. npm i react-native-collapsible
 8. yarn add @react-native-community/async-storage
 9. npm i react-native-mail
-10. cd ios && pod install
+10. npm i react-native-vector-icons
+11. cd ios && pod install
 
 ## To run app:
 * ios: "yarn react-native run-ios"
