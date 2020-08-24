@@ -7,7 +7,7 @@
  */
 
 import React, {useState, useEffect, useCallback, Component} from 'react';
-import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity, Linking} from 'react-native';
+import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity, Linking, SafeAreaView} from 'react-native';
 import ShareMenu from 'react-native-share-menu';
 import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
 import { MainBundlePath, DocumentDirectoryPath, ExternalDirectoryPath, DownloadDirectoryPath, TemporaryDirectoryPath, readFile, readDir, exists, stat, copyFile, unlink, writeFile } from 'react-native-fs'
@@ -19,7 +19,9 @@ import 'react-native-gesture-handler';
 import Accordion from 'react-native-collapsible/Accordion';
 import AsyncStorage from '@react-native-community/async-storage';
 import Mailer from 'react-native-mail';
-import EntypoIcon from 'react-native-vector-icons/Entypo'
+import EntypoIcon from 'react-native-vector-icons/Entypo';
+
+import {s} from './styles/styles.js';
 
 
 class SendScreen extends Component {
@@ -135,11 +137,13 @@ class AccordionView extends Component {
 
       })
       .catch((err) => {
+        console.log('ERROR LOGGED!!!!!!!!!!');
         console.log(err.message);
-      });
-    
 
-      
+      });
+
+
+
 
     //console.log("hello");
   }
@@ -361,57 +365,105 @@ function Screen1({ navigation }) {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+
       <View style={styles.header}>
-      {editing ? <Button title="Done" onPress={() => setEditing(false)}/> :
-      <EntypoIcon.Button name="pencil" onPress={() => setEditing(true)}>Edit URLs</EntypoIcon.Button>}
-      <Button title="Add to Send" onPress={() => sender()}/>
+        <Text style={styles.headerText}>WHATSAPP EXTRACTOR</Text>
       </View>
-      <Text style={styles.title}>
-         URLs Extracted: {urls.length===0 ? "(Share a Zipped WhatsApp Chat File)" : ""}
-      </Text>
-      <View style={{flex:10}}>
-      {editing ?
-      <FlatList data={urls} style={styles.list}
-      renderItem={({item}) =>
-      <View style={styles.item}>
-      <TouchableOpacity
-      onPress={() => Linking.openURL(item)}>
-        <Text style={{textDecorationLine: 'underline'}}>{item.length>45 ? item.substr(0,42)+"..." : item}</Text>
-      </TouchableOpacity>
-      <EntypoIcon name="cross" size={30} color="red" onPress={() => deleter(item)}/>
-      </View>}
-      /> :
-      <FlatList data={urls} style={styles.list}
-      renderItem={({item}) =>
-      <View>
-        <TouchableOpacity style={{padding:10}}
-        onPress={() => Linking.openURL(item)}>
-        <Text style={{textDecorationLine: 'underline'}}>{item}</Text>
-        </TouchableOpacity>
-      </View>}
-      />}
+
+      <View style={styles.contentContainer}>
+
+        <Text style={styles.title}>
+           URLs Extracted: {urls.length===0 ? "(Share a Zipped WhatsApp Chat File)" : ""}
+        </Text>
+
+        {editing ? <Button title="Done" onPress={() => setEditing(false)}/> :
+        <EntypoIcon.Button name="pencil" onPress={() => setEditing(true)}>Edit URLs</EntypoIcon.Button>}
+        <Button title="Add to Send" onPress={() => sender()}/>
+
+        <View style={{flex:10}}>
+          {editing ?
+          <FlatList data={urls} style={styles.list}
+          renderItem={({item}) =>
+          <View style={styles.item}>
+            <TouchableOpacity
+            onPress={() => Linking.openURL(item)}>
+              <Text style={{textDecorationLine: 'underline'}}>{item.length>45 ? item.substr(0,42)+"..." : item}</Text>
+            </TouchableOpacity>
+            <EntypoIcon name="cross" size={30} color="red" onPress={() => deleter(item)}/>
+          </View>}/> :
+
+          <FlatList data={urls} style={styles.list}
+          renderItem={({item}) =>
+            <View>
+              <TouchableOpacity style={{padding:10}}
+              onPress={() => Linking.openURL(item)}>
+                <Text style={{textDecorationLine: 'underline'}}>{item}</Text>
+              </TouchableOpacity>
+            </View>}
+          />}
+        </View>
+
+        <View style={styles.fsImageContainer}>
+          <Image
+            style={styles.fullScreenImage}
+            source={require('./assets/start-graphic.png')}
+          />
+        </View>
+
+        <View>
+         <TouchableOpacity style={[s.button, { position: "absolute", bottom: 30,}]}
+         onPress={() => navigation.navigate('AccordianView')}>
+           <Text style={s.buttonText}>Continue</Text>
+         </TouchableOpacity>
+        </View>
       </View>
-     <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 0}}>
-       <Button style={styles.nav}
-         title="Continue to See Chat Info"
-         onPress={() => navigation.navigate('AccordianView')}
-       />
-     </View>
-   </View>
+
+   </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#F5FCFF',
-    height: '100%',
-    justifyContent: 'flex-start'
+    flex: 1,
+    backgroundColor: '#F3F4F8',
+    alignItems: 'center',
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
+  	flexDirection: 'row',
+  	alignItems: 'center',
+  	padding: 15,
+    ...Platform.select({
+      android: {
+        marginTop: 20,
+      }
+    })
   },
+  headerText: {
+  	fontFamily: 'Montserrat-Bold',
+  	color: "#298978",
+    fontSize: 16
+  },
+  // container: {
+  //   backgroundColor: '#F5FCFF',
+  //   height: '100%',
+  //   justifyContent: 'flex-start'
+  // },
+
+
+    // header: {
+    //   flexDirection: 'row',
+    //   justifyContent: 'space-between'
+    // },
+
+  contentContainer: {
+  	width: "90%",
+  	height: "90%",
+  	alignItems: 'center',
+  	backgroundColor: '#FFF',
+  	borderRadius: 30,
+  },
+
   chatHeader: {
     backgroundColor:'lime',
     margin:5,
@@ -424,8 +476,10 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
-    marginTop:15
+    fontFamily: 'Montserrat-Bold',
+    marginTop: 30,
+    marginLeft: 20,
+    marginRight: 20,
   },
   item: {
     flexDirection:'row',
@@ -442,6 +496,16 @@ const styles = StyleSheet.create({
    //justifyContent: 'space-between',
    position: 'absolute',
    bottom: 0,
+ },
+ fullScreenImage: {
+   width: "100%",
+   height: 350,
+   resizeMode: 'contain',
+   resizeMethod: 'resize'
+ },
+ fsImageContainer: {
+   width: "70%",
+   height: "auto"
  }
 });
 
@@ -450,7 +514,7 @@ const Stack = createStackNavigator();
 function App() {
  return (
    <NavigationContainer>
-     <Stack.Navigator initialRouteName="Home">
+     <Stack.Navigator initialRouteName="Home" headerMode='none'>
        <Stack.Screen name="WhatsApp Extractor" component={Screen1} />
        <Stack.Screen name="AccordianView" component={AccordionView} />
        <Stack.Screen name="SendScreen" component={SendScreen} />
