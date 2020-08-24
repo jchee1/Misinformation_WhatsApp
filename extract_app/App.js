@@ -19,12 +19,22 @@ import 'react-native-gesture-handler';
 import Accordion from 'react-native-collapsible/Accordion';
 import AsyncStorage from '@react-native-community/async-storage';
 import Mailer from 'react-native-mail';
-import EntypoIcon from 'react-native-vector-icons/Entypo'
-
+import EntypoIcon from 'react-native-vector-icons/Entypo';
+import { CheckBox } from './checkbox';
 
 class SendScreen extends Component {
-
+  state = {
+    email: '',
+    termsAccepted: false,
+  }
+  
+  handleCheckBox = () => this.setState({ termsAccepted: !this.state.termsAccepted })
+  
   handleEmail = () => {
+    //var research;
+    if (this.state.termsAccepted === true) {
+      Mailer.mail.recipients.push("brohna@uchicago.edu");
+    }
     var filepath;
     if (Platform.OS === 'ios') {
       filepath = `${DocumentDirectoryPath}/test1.txt`;
@@ -34,7 +44,7 @@ class SendScreen extends Component {
     }
     Mailer.mail({
       subject: 'need help',
-      recipients: ['brohna@uchicago.edu'],
+      recipients: [this.state.email],
       ccRecipients: [],
       bccRecipients: [],
       body: '<b>A Bold Body</b>',
@@ -61,8 +71,21 @@ class SendScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text> Enter Text:</Text>
-        <TextInput style={styles.input}/>
+        <Text> Enter Email:</Text>
+        <TextInput 
+          style={styles.input}
+          keyboardType="email-address"
+          autoCapitalize='none'
+          value={this.state.email}
+          onChangeText={(newValue)=> this.setState({email: newValue})}
+          placeholder="brohna@uchicago.edu"
+        />
+        <Text>Email: {this.state.email}</Text>
+        <CheckBox 
+          selected={this.state.termsAccepted} 
+          onPress={this.handleCheckBox}
+          text='Send to Research team (research@uchicago.edu)'
+        />   
         <Button
           onPress={this.handleEmail}
           title="Email Me"
@@ -432,6 +455,10 @@ const styles = StyleSheet.create({
    borderColor: 'black',
    borderWidth: 1
  },
+ checkBox: {
+  flexDirection: 'row',
+  alignItems: 'center'
+},
     
 });
 
