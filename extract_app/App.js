@@ -185,9 +185,13 @@ function Screen1({ navigation }) {
   const [sent, setSent] = useState(false);
   const [editing, setEditing] = useState(false);
 
+  //AsyncStorage.clear();
   AsyncStorage.getItem("sections")
       .then((item) => {
-        SECTIONS=JSON.parse(item)
+        if(item!=null){
+          SECTIONS=JSON.parse(item);
+          console.log(SECTIONS)
+        }
       })
       .catch((error) => {
         console.error("get async", error)
@@ -195,7 +199,10 @@ function Screen1({ navigation }) {
 
   AsyncStorage.getItem("count")
       .then((item) => {
-        global.count=parseInt(item)
+        if(item!=null){
+          global.count=parseInt(item);
+          console.log(item);
+        }
       })
       .catch((error) => {
         console.error("get async", error)
@@ -333,7 +340,7 @@ function Screen1({ navigation }) {
       temp.url_list=urls;
       SECTIONS.push({title: `Chat ${global.count}`, content: temp});
       global.count++;
-      AsyncStorage.setItem("sections", JSON.stringify(temp))
+      AsyncStorage.setItem("sections", JSON.stringify(SECTIONS))
       .catch((error)=>{
           console.error("set async", error)
        });
