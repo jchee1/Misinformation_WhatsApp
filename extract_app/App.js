@@ -27,30 +27,10 @@ import { AccordionView } from './accordianview';
 
 
 //global variables
-global.count = 0;
+global.count = 1;
 
-var SECTIONS = [
-    {
-      title: 'Chat1',
-      content: 'Test1',
-    },
-    {
-      title: 'Chat2',
-      content: 'Test2',
-    },
-    {
-      title: 'Chat3',
-      content: 'Test3',
-    },
-    {
-      title: 'Chat4',
-      content: 'Test4',
-    },
-    {
-      title: 'Chat5',
-      content: 'Test5',
-    },
-  ];
+var SECTIONS = [];
+
 
 
 
@@ -67,6 +47,29 @@ function Screen1({ navigation }) {
   const [urls, setUrls] = useState([]);
   const [sent, setSent] = useState(false);
   const [editing, setEditing] = useState(false);
+
+  //AsyncStorage.clear();
+  AsyncStorage.getItem("sections")
+      .then((item) => {
+        if(item!=null){
+          SECTIONS=JSON.parse(item);
+          console.log(SECTIONS)
+        }
+      })
+      .catch((error) => {
+        console.error("get async", error)
+      });
+
+  AsyncStorage.getItem("count")
+      .then((item) => {
+        if(item!=null){
+          global.count=parseInt(item);
+          console.log(item);
+        }
+      })
+      .catch((error) => {
+        console.error("get async", error)
+      });
 
   const handleShare = useCallback((item: ?SharedItem) => {
     if (!item) {
@@ -198,14 +201,17 @@ function Screen1({ navigation }) {
     else{
       let temp=fileData;
       temp.url_list=urls;
-      AsyncStorage.setItem(`filedata${global.count}`, JSON.stringify(temp))
-       .then((save)=>{
-          global.count++;
-       })
-       .catch((error)=>{
+      SECTIONS.push({title: `Chat ${global.count}`, content: temp});
+      global.count++;
+      AsyncStorage.setItem("sections", JSON.stringify(SECTIONS))
+      .catch((error)=>{
           console.error("set async", error)
-       })
-       setSent(true);
+       });
+      AsyncStorage.setItem("count", global.count.toString())
+      .catch((error)=>{
+          console.error("set async", error)
+       });
+      setSent(true);
     }
   }
 
