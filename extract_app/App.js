@@ -20,89 +20,10 @@ import Accordion from 'react-native-collapsible/Accordion';
 import AsyncStorage from '@react-native-community/async-storage';
 import Mailer from 'react-native-mail';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
-import { CheckBox } from './checkbox';
-
-class SendScreen extends Component {
-  state = {
-    email: '',
-    termsAccepted: false,
-  }
-  
-  handleCheckBox = () => this.setState({ termsAccepted: !this.state.termsAccepted })
-  
-  handleEmail = () => {
-    var research;
-    var recips;
-    if (this.state.termsAccepted === true) {
-       research = ("brohna@uchicago.edu");
-    }
-    var filepath;
-    if (Platform.OS === 'ios') {
-      filepath = `${DocumentDirectoryPath}/test1.txt`;
-    }
-    else if (Platform.OS === 'android') {
-      filepath = `${DownloadDirectoryPath}/test1.txt`;
-    }
-    if (research != null) {
-      recips = [this.state.email, research];
-    }
-    else {
-      recips = [this.state.email];
-    }
-    Mailer.mail({
-      subject: 'need help',
-      recipients: recips,
-      ccRecipients: [],
-      bccRecipients: [],
-      body: '<b>A Bold Body</b>',
-      isHTML: true,
-      attachments: [{
-        path: filepath,  // The absolute path of the file from which to read data.
-        type: 'text',   // Mime Type: jpg, png, doc, ppt, html, pdf, csv
-        // mimeType - use only if you want to use custom type
-        name: 'chats.txt',   // Optional: Custom filename for attachment
-      }]
-    }, (error, event) => {
-      Alert.alert(
-        error,
-        event,
-        [
-          {text: 'Ok', onPress: () => console.log('OK: Email Error Response')},
-          {text: 'Cancel', onPress: () => console.log('CANCEL: Email Error Response')}
-        ],
-        { cancelable: true }
-      )
-    });
-  }
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text> Enter Email:</Text>
-        <TextInput 
-          style={styles.input}
-          keyboardType="email-address"
-          autoCapitalize='none'
-          value={this.state.email}
-          onChangeText={(newValue)=> this.setState({email: newValue})}
-          placeholder="brohna@uchicago.edu"
-        />
-        <Text>Email: {this.state.email}</Text>
-        <CheckBox 
-          selected={this.state.termsAccepted} 
-          onPress={this.handleCheckBox}
-          text='Send to Research team (research@uchicago.edu)'
-        />   
-        <Button
-          onPress={this.handleEmail}
-          title="Email Me"
-          color="#841584"
-          accessabilityLabel="Purple Email Me Button"
-        />
-      </View>
-    );
-  }
-}
+//import { CheckBox } from './checkbox';
+import { SendScreen } from'./SendScreen';
+import { styles } from './styles';
+import { AccordionView } from './accordianview';
 
 
 //global variables
@@ -131,92 +52,6 @@ var SECTIONS = [
     },
   ];
 
-class AccordionView extends Component {
-  state = {
-    activeSections: [],
-  };
-
-  _writeTo = () => {
-    var path;
-    if (Platform.OS === 'ios') {
-      path = `${DocumentDirectoryPath}/test1.txt`;
-    }
-    else if (Platform.OS === 'android') {
-      path = `${DownloadDirectoryPath}/test1.txt`;
-    }
-    // write the file
-    writeFile(path, JSON.stringify(SECTIONS), 'utf8')
-      .then((success) => {
-        console.log('FILE WRITTEN!');
-        console.log(JSON.stringify(SECTIONS));
-        console.log(path);
-
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-    
-  }
-
-  _renderHeader = section => {
-    return (
-      <View style={styles.chatHeader}>
-        <Text style={styles.text}>{section.title}</Text>
-      </View>
-    );
-  };
-
-  _renderContent = section => {
-    //console.log("section",SECTIONS[0].content);
-
-    for (let i = 0; i < global.count; i++) {
-      AsyncStorage.getItem(`filedata${i}`)
-      .then((file) => {
-        //console.log("async", file);
-        SECTIONS[i].content = JSON.parse(file);
-      })
-      .catch((error) => {
-        console.error("get async", error)
-      });
-    }
-
-    return (
-      <View style={styles.content}>
-      <FlatList data={section.content.url_list}
-      renderItem={({item}) =>
-      <View>
-        <Text style={{padding:5}}>{item}</Text>
-      </View>}
-      />
-      </View>
-    );
-  };
-
-  _updateSections = activeSections => {
-    this.setState({ activeSections });
-  };
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <Accordion
-          sections={SECTIONS}
-          activeSections={this.state.activeSections}
-          renderHeader={this._renderHeader}
-          renderContent={this._renderContent}
-          onChange={this._updateSections}
-        />
-
-        <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 36}}>
-          <Button style={styles.nav}
-          title="Continue to Send Chats"
-          onPress={() => {this._writeTo(); this.props.navigation.navigate('SendScreen');}}
-          />
-        </View>
-      </View>
-    );
-  }
-}
 
 
 type SharedItem = {
@@ -416,58 +251,6 @@ function Screen1({ navigation }) {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#F5FCFF',
-    height: '100%',
-    justifyContent: 'flex-start'
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  chatHeader: {
-    backgroundColor:'lime',
-    margin:5,
-    padding:5,
-    borderRadius:15
-  },
-  text: {
-    fontSize: 15,
-    fontWeight: 'bold',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginTop:15
-  },
-  item: {
-    flexDirection:'row',
-    justifyContent:'space-between',
-    padding: 10,
-    alignItems: 'center'
-  },
-  list: {
-
-  },
-  nav: {
-   //flex: 1,
-   //marginBottom: 36,
-   //justifyContent: 'space-between',
-   position: 'absolute',
-   bottom: 0,
- },
- input: {
-   margin: 15,
-   borderColor: 'black',
-   borderWidth: 1
- },
- checkBox: {
-  flexDirection: 'row',
-  alignItems: 'center'
-},
-    
-});
 
 const Stack = createStackNavigator();
 
