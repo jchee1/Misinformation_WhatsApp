@@ -7,7 +7,7 @@
  */
 
 import React, {useState, useEffect, useCallback, Component} from 'react';
-import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity, Linking} from 'react-native';
+import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity, TextInput} from 'react-native';
 import ShareMenu from 'react-native-share-menu';
 import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
 import { MainBundlePath, DocumentDirectoryPath, ExternalDirectoryPath, DownloadDirectoryPath, TemporaryDirectoryPath, readFile, readDir, exists, stat, copyFile, unlink, writeFile } from 'react-native-fs'
@@ -25,14 +25,12 @@ import EntypoIcon from 'react-native-vector-icons/Entypo'
 class SendScreen extends Component {
 
   handleEmail = () => {
-    //var Mailer = require('NativeModules').RNMail;
-    //this.writeTo;
     var filepath;
     if (Platform.OS === 'ios') {
-      filepath = `${DocumentDirectoryPath}/test1.doc`;
+      filepath = `${DocumentDirectoryPath}/test1.txt`;
     }
     else if (Platform.OS === 'android') {
-      filepath = `${DownloadDirectoryPath}/test1.doc`;
+      filepath = `${DownloadDirectoryPath}/test1.txt`;
     }
     Mailer.mail({
       subject: 'need help',
@@ -43,9 +41,9 @@ class SendScreen extends Component {
       isHTML: true,
       attachments: [{
         path: filepath,  // The absolute path of the file from which to read data.
-        type: 'doc',   // Mime Type: jpg, png, doc, ppt, html, pdf, csv
+        type: 'text',   // Mime Type: jpg, png, doc, ppt, html, pdf, csv
         // mimeType - use only if you want to use custom type
-        name: 'chats.doc',   // Optional: Custom filename for attachment
+        name: 'chats.txt',   // Optional: Custom filename for attachment
       }]
     }, (error, event) => {
       Alert.alert(
@@ -63,6 +61,8 @@ class SendScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Text> Enter Text:</Text>
+        <TextInput style={styles.input}/>
         <Button
           onPress={this.handleEmail}
           title="Email Me"
@@ -109,10 +109,10 @@ class AccordionView extends Component {
   _writeTo = () => {
     var path;
     if (Platform.OS === 'ios') {
-      path = `${DocumentDirectoryPath}/test1.doc`;
+      path = `${DocumentDirectoryPath}/test1.txt`;
     }
     else if (Platform.OS === 'android') {
-      path = `${DownloadDirectoryPath}/test1.doc`;
+      path = `${DownloadDirectoryPath}/test1.txt`;
     }
     // write the file
     writeFile(path, JSON.stringify(SECTIONS), 'utf8')
@@ -120,28 +120,12 @@ class AccordionView extends Component {
         console.log('FILE WRITTEN!');
         console.log(JSON.stringify(SECTIONS));
         console.log(path);
-        /*
-        if (Platform.OS === 'android') {
-           copyFile(path, path2)
-          .then(() => {
-            console.log('file copied');
-            console.log(path2);
-          })
-          .catch((error) => {
-            console.error('copy', error);
-          })
-        }
-        */
 
       })
       .catch((err) => {
         console.log(err.message);
       });
     
-
-      
-
-    //console.log("hello");
   }
 
   _renderHeader = section => {
@@ -442,7 +426,13 @@ const styles = StyleSheet.create({
    //justifyContent: 'space-between',
    position: 'absolute',
    bottom: 0,
- }
+ },
+ input: {
+   margin: 15,
+   borderColor: 'black',
+   borderWidth: 1
+ },
+    
 });
 
 const Stack = createStackNavigator();

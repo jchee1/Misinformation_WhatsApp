@@ -5658,20 +5658,20 @@ react-native-reanimated@^1.13.0:
   dependencies:
     fbjs "^1.0.0"
 
-react-native-safe-area-context@^3.1.4:
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-3.1.4.tgz#9b7f883a5ae8da6218d17467a350434005893602"
-  integrity sha512-bXx3hqz4LovFoMnJIRGIWL2oJ/PHadXviBKvgZV9yNErtURQLJSn0yfQytVtiqslhaBMZOJwH4R6HiClyofvBg==
+react-native-safe-area-context@^3.1.6:
+  version "3.1.6"
+  resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-3.1.6.tgz#4be329c71f33cac8ac56ddb2fe7a42ac509397ea"
+  integrity sha512-sAlVejR1cE3WhlYcMhHPB9E32bDyOUxs4Ew2kc4ZReztzlHh1wK1wmiJpvBWXsdFer2bbfQwfq+ZWkHJYQKZvA==
 
 react-native-screens@^2.10.1:
   version "2.10.1"
   resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-2.10.1.tgz#06d22fae87ef0ce51c616c34a199726db1403b95"
   integrity sha512-Z2kKSk4AwWRQNCBmTjViuBQK0/Lx0jc25TZptn/2gKYUCOuVRvCekoA26u0Tsb3BIQ8tWDsZW14OwDlFUXW1aw==
 
-react-native-share-menu@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-share-menu/-/react-native-share-menu-5.0.0.tgz#f633fa9630cf5b33cc3d44a00e0bcd7e07f005db"
-  integrity sha512-DKthY2/0X3iF5QanNM2lL9aTJT1qJTDSwf3xoY2jKklo38dwElocWJPfyCmJiFwjbW9GKSnw9Pi20WeEqvPVCQ==
+react-native-share-menu@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-share-menu/-/react-native-share-menu-5.0.1.tgz#50b8e13425286ae253482fa9cebed49a11ae648e"
+  integrity sha512-FVLiXNTRUaKednWZ5+BNB/+HUhkS40xvRjLd5jJiRGmwYgrV7QcNZ8PQvvHQS+T8ryYIqzgnic5MG/KTJt94ug==
 
 react-native-vector-icons@^7.0.0:
   version "7.0.0"
@@ -5682,10 +5682,10 @@ react-native-vector-icons@^7.0.0:
     prop-types "^15.7.2"
     yargs "^15.0.2"
 
-react-native-zip-archive@^5.0.4:
-  version "5.0.4"
-  resolved "https://registry.yarnpkg.com/react-native-zip-archive/-/react-native-zip-archive-5.0.4.tgz#7978df0a436e32ea4dcac80e54181764cadd3ba4"
-  integrity sha512-O75W1gik9x+903KXdBwaUTCgUPDt+8z/WopYJjs9IbXUB844LMrLsey72QRhROeRYu00sfjvEHu2CYZrD/STfw==
+react-native-zip-archive@^5.0.6:
+  version "5.0.6"
+  resolved "https://registry.yarnpkg.com/react-native-zip-archive/-/react-native-zip-archive-5.0.6.tgz#2d4f98e8d16df88638540db672e59a6d79fad0ca"
+  integrity sha512-AKc8qk2JlCwoijnwxzt0BRwCl6LOcMAGgd0+aF51LOZEeL+ePJzDBzZLkcIB1z2tnMtdpDUG3q/4O8Q49wgC0Q==
 
 react-native@0.63.2:
   version "0.63.2"
