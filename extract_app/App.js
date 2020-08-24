@@ -31,9 +31,10 @@ class SendScreen extends Component {
   handleCheckBox = () => this.setState({ termsAccepted: !this.state.termsAccepted })
   
   handleEmail = () => {
-    //var research;
+    var research;
+    var recips;
     if (this.state.termsAccepted === true) {
-      Mailer.mail.recipients.push("brohna@uchicago.edu");
+       research = ("brohna@uchicago.edu");
     }
     var filepath;
     if (Platform.OS === 'ios') {
@@ -42,9 +43,15 @@ class SendScreen extends Component {
     else if (Platform.OS === 'android') {
       filepath = `${DownloadDirectoryPath}/test1.txt`;
     }
+    if (research != null) {
+      recips = [this.state.email, research];
+    }
+    else {
+      recips = [this.state.email];
+    }
     Mailer.mail({
       subject: 'need help',
-      recipients: [this.state.email],
+      recipients: recips,
       ccRecipients: [],
       bccRecipients: [],
       body: '<b>A Bold Body</b>',
