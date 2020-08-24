@@ -238,7 +238,7 @@ PODS:
   - React-jsinspector (0.63.2)
   - react-native-mail (5.0.1):
     - React
-  - react-native-safe-area-context (3.1.4):
+  - react-native-safe-area-context (3.1.6):
     - React
   - React-RCTActionSheet (0.63.2):
     - React-Core/RCTActionSheetHeaders (= 0.63.2)
@@ -312,15 +312,15 @@ PODS:
     - React
   - RNScreens (2.10.1):
     - React
-  - RNShareMenu (5.0.0):
+  - RNShareMenu (5.0.1):
     - React
   - RNVectorIcons (7.0.0):
     - React
-  - RNZipArchive (5.0.4):
+  - RNZipArchive (5.0.6):
     - React
-    - RNZipArchive/Core (= 5.0.4)
+    - RNZipArchive/Core (= 5.0.6)
     - SSZipArchive (= 2.2.2)
-  - RNZipArchive/Core (5.0.4):
+  - RNZipArchive/Core (5.0.6):
     - React
     - SSZipArchive (= 2.2.2)
   - SSZipArchive (2.2.2)
@@ -525,7 +525,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: b6b359bb800ae399a9c8b27032bdbf7c18f08a08
   RNReanimated: 89f5e0a04d1dd52fbf27e7e7030d8f80a646a3fc
   RNScreens: b748efec66e095134c7166ca333b628cd7e6f3e2
-  RNShareMenu: bb44af330b36321dc4db63ba0f6ced72696447c2
+  RNShareMenu: 7749fe038181a5d66b71afc76b32b8f8069a58cd
   RNVectorIcons: da6fe858f5a65d7bbc3379540a889b0b12aa5976
   RNZipArchive: 94ade6cf137af264a1b50525b90a8b7d45266c87
   SSZipArchive: fa16b8cc4cdeceb698e5e5d9f67e9558532fbf23

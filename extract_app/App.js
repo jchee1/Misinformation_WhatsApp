@@ -7,7 +7,7 @@
  */
 
 import React, {useState, useEffect, useCallback, Component} from 'react';
-import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity, Linking} from 'react-native';
+import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity, TextInput} from 'react-native';
 import ShareMenu from 'react-native-share-menu';
 import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
 import { MainBundlePath, DocumentDirectoryPath, ExternalDirectoryPath, DownloadDirectoryPath, TemporaryDirectoryPath, readFile, readDir, exists, stat, copyFile, unlink, writeFile } from 'react-native-fs'
@@ -19,60 +19,11 @@ import 'react-native-gesture-handler';
 import Accordion from 'react-native-collapsible/Accordion';
 import AsyncStorage from '@react-native-community/async-storage';
 import Mailer from 'react-native-mail';
-import EntypoIcon from 'react-native-vector-icons/Entypo'
-
-
-class SendScreen extends Component {
-
-  handleEmail = () => {
-    //var Mailer = require('NativeModules').RNMail;
-    //this.writeTo;
-    var filepath;
-    if (Platform.OS === 'ios') {
-      filepath = `${DocumentDirectoryPath}/test1.doc`;
-    }
-    else if (Platform.OS === 'android') {
-      filepath = `${DownloadDirectoryPath}/test1.doc`;
-    }
-    Mailer.mail({
-      subject: 'need help',
-      recipients: ['brohna@uchicago.edu'],
-      ccRecipients: [],
-      bccRecipients: [],
-      body: '<b>A Bold Body</b>',
-      isHTML: true,
-      attachments: [{
-        path: filepath,  // The absolute path of the file from which to read data.
-        type: 'doc',   // Mime Type: jpg, png, doc, ppt, html, pdf, csv
-        // mimeType - use only if you want to use custom type
-        name: 'chats.doc',   // Optional: Custom filename for attachment
-      }]
-    }, (error, event) => {
-      Alert.alert(
-        error,
-        event,
-        [
-          {text: 'Ok', onPress: () => console.log('OK: Email Error Response')},
-          {text: 'Cancel', onPress: () => console.log('CANCEL: Email Error Response')}
-        ],
-        { cancelable: true }
-      )
-    });
-  }
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <Button
-          onPress={this.handleEmail}
-          title="Email Me"
-          color="#841584"
-          accessabilityLabel="Purple Email Me Button"
-        />
-      </View>
-    );
-  }
-}
+import EntypoIcon from 'react-native-vector-icons/Entypo';
+//import { CheckBox } from './checkbox';
+import { SendScreen } from'./SendScreen';
+import { styles } from './styles';
+import { AccordionView } from './accordianview';
 
 
 //global variables
@@ -80,95 +31,7 @@ global.count = 1;
 
 var SECTIONS = [];
 
-class AccordionView extends Component {
-  state = {
-    activeSections: [],
-  };
 
-  _writeTo = () => {
-    var path;
-    if (Platform.OS === 'ios') {
-      path = `${DocumentDirectoryPath}/test1.doc`;
-    }
-    else if (Platform.OS === 'android') {
-      path = `${DownloadDirectoryPath}/test1.doc`;
-    }
-    // write the file
-    writeFile(path, JSON.stringify(SECTIONS), 'utf8')
-      .then((success) => {
-        console.log('FILE WRITTEN!');
-        console.log(JSON.stringify(SECTIONS));
-        console.log(path);
-        /*
-        if (Platform.OS === 'android') {
-           copyFile(path, path2)
-          .then(() => {
-            console.log('file copied');
-            console.log(path2);
-          })
-          .catch((error) => {
-            console.error('copy', error);
-          })
-        }
-        */
-
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-
-
-
-
-    //console.log("hello");
-  }
-
-  _renderHeader = section => {
-    return (
-      <View style={styles.chatHeader}>
-        <Text style={styles.text}>{section.title}</Text>
-      </View>
-    );
-  };
-
-  _renderContent = section => {
-    return (
-      <View style={styles.content}>
-      <FlatList data={section.content.url_list}
-      renderItem={({item}) =>
-      <View>
-        <Text style={{padding:5}}>{item}</Text>
-      </View>}
-      />
-      </View>
-    );
-  };
-
-  _updateSections = activeSections => {
-    this.setState({ activeSections });
-  };
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <Accordion
-          sections={SECTIONS}
-          activeSections={this.state.activeSections}
-          renderHeader={this._renderHeader}
-          renderContent={this._renderContent}
-          onChange={this._updateSections}
-        />
-
-        <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 36}}>
-          <Button style={styles.nav}
-          title="Continue to Send Chats"
-          onPress={() => {this._writeTo(); this.props.navigation.navigate('SendScreen');}}
-          />
-        </View>
-      </View>
-    );
-  }
-}
 
 
 type SharedItem = {
@@ -394,48 +257,6 @@ function Screen1({ navigation }) {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#F5FCFF',
-    height: '100%',
-    justifyContent: 'flex-start'
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  chatHeader: {
-    backgroundColor:'lime',
-    margin:5,
-    padding:5,
-    borderRadius:15
-  },
-  text: {
-    fontSize: 15,
-    fontWeight: 'bold',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginTop:15
-  },
-  item: {
-    flexDirection:'row',
-    justifyContent:'space-between',
-    padding: 10,
-    alignItems: 'center'
-  },
-  list: {
-
-  },
-  nav: {
-   //flex: 1,
-   //marginBottom: 36,
-   //justifyContent: 'space-between',
-   position: 'absolute',
-   bottom: 0,
- }
-});
 
 const Stack = createStackNavigator();
 
