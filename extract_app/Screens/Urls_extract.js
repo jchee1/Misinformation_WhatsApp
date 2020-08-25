@@ -89,8 +89,7 @@ export function Urls_extract({ navigation }) {
 
     if (mimeType.startsWith('application/zip')){
       const sourcePath = data;
-      //var n = Math.floor(Math.random() * 20);
-      //const tempPath = `${TemporaryDirectoryPath}/tester${n}.zip`;
+      
       console.log(sourcePath);
       var tempPath;
       if (Platform.OS === "android") {
