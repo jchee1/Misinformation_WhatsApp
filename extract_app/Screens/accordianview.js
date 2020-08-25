@@ -3,7 +3,7 @@ import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, Toucha
 import ShareMenu from 'react-native-share-menu';
 import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
 import { MainBundlePath, DocumentDirectoryPath, ExternalDirectoryPath, DownloadDirectoryPath, TemporaryDirectoryPath, readFile, readDir, exists, stat, copyFile, unlink, writeFile } from 'react-native-fs'
-import {returner} from "./parser.js";
+import {returner} from "../parser.js";
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -75,25 +75,9 @@ export class AccordionView extends Component {
     _renderContent = section => {
       //console.log("section",SECTIONS[0].content);
   
-      for (let i = 0; i < global.count; i++) {
-        AsyncStorage.getItem(`filedata${i}`)
-        .then((file) => {
-          //console.log("async", file);
-          SECTIONS[i].content = JSON.parse(file);
-        })
-        .catch((error) => {
-          console.error("get async", error)
-        });
-      }
-  
       return (
         <View style={styles.content}>
-        <FlatList data={section.content.url_list}
-        renderItem={({item}) =>
-        <View>
-          <Text style={{padding:5}}>{item}</Text>
-        </View>}
-        />
+          <Text style={{padding:5}}>{section.content}</Text>
         </View>
       );
     };

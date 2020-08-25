@@ -3,7 +3,7 @@ import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, Toucha
 import ShareMenu from 'react-native-share-menu';
 import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
 import { MainBundlePath, DocumentDirectoryPath, ExternalDirectoryPath, DownloadDirectoryPath, TemporaryDirectoryPath, readFile, readDir, exists, stat, copyFile, unlink, writeFile } from 'react-native-fs'
-import {returner} from "./parser.js";
+import {returner} from "../parser.js";
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -12,7 +12,7 @@ import Accordion from 'react-native-collapsible/Accordion';
 import AsyncStorage from '@react-native-community/async-storage';
 import Mailer from 'react-native-mail';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
-import { CheckBox } from './checkbox';
+import { CheckBox } from '../checkbox';
 import { styles } from './styles';
 
 
