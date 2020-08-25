@@ -16,12 +16,8 @@ import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { SendScreen } from'./SendScreen';
 import { styles } from './styles';
 import { AccordionView } from './accordianview';
+import {SECTIONS} from '../global';
 
-
-//global variables
-global.count = 1;
-
-var SECTIONS = [];
 
 type SharedItem = {
   mimeType: string,
@@ -29,10 +25,6 @@ type SharedItem = {
 };
 
 export function Urls_extract({ navigation, route }) {
-  const [sharedData, setSharedData] = useState('');
-  const [sharedMimeType, setSharedMimeType] = useState('');
-  const [sharedExtraData, setSharedExtraData] = useState(null);
-  const [fileData, setFileData] = useState({});
   const {file} = route.params
   const [urls, setUrls] = useState(file.url_list);
   const [sent, setSent] = useState(false);
@@ -54,7 +46,7 @@ export function Urls_extract({ navigation, route }) {
       Alert.alert("URLs already sent");
     }
     else{
-      let temp=fileData;
+      let temp=file;
       temp.url_list=urls;
       SECTIONS.push({title: `Chat ${global.count}`, content: temp});
       global.count++;

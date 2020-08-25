@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback, Component} from 'react';
+import React, {useState, useEffect, useCallback, Component, componentDidMount} from 'react';
 import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity, TextInput} from 'react-native';
 import ShareMenu from 'react-native-share-menu';
 import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
@@ -13,29 +13,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { SendScreen } from'./SendScreen';
 import { styles } from './styles';
+import {SECTIONS} from '../global';
 
-var SECTIONS = [
-    {
-      title: 'Chat1',
-      content: 'Test1',
-    },
-    {
-      title: 'Chat2',
-      content: 'Test2',
-    },
-    {
-      title: 'Chat3',
-      content: 'Test3',
-    },
-    {
-      title: 'Chat4',
-      content: 'Test4',
-    },
-    {
-      title: 'Chat5',
-      content: 'Test5',
-    },
-  ];
 
   type SharedItem = {
       mimeType: string,
@@ -43,7 +22,7 @@ var SECTIONS = [
     };
 
 export function AccordionView ({navigation}) {
-
+  //console.log(SECTIONS);
   const [sharedData, setSharedData] = useState('');
   const [sharedMimeType, setSharedMimeType] = useState('');
   const [sharedExtraData, setSharedExtraData] = useState(null);
@@ -51,6 +30,7 @@ export function AccordionView ({navigation}) {
   const [urls, setUrls] = useState([]);
   const [sent, setSent] = useState(false);
   const [editing, setEditing] = useState(false);
+
 
   const handleShare = useCallback((item: ?SharedItem) => {
     if (!item) {
@@ -180,7 +160,16 @@ export function AccordionView ({navigation}) {
   }, []);
 
     const [activeSections, setActiveSections] = useState([]);
+    const [randomnum, setRandomnum] = useState(0.2);
+    const unsubscribe = navigation.addListener('focus', () => {
+      // do something
+      console.log('listen');
+      setRandomnum(Math.random());
+      //console.log(sect);
+      
+    });
 
+    
     function _writeTo(){
       var path;
       if (Platform.OS === 'ios') {
@@ -216,7 +205,7 @@ export function AccordionView ({navigation}) {
 
       return (
         <View style={styles.content}>
-          <Text style={{padding:5}}>{section.content}</Text>
+          <Text style={{padding:5}}>{JSON.stringify(section.content)}</Text>
         </View>
       );
     };
@@ -224,6 +213,20 @@ export function AccordionView ({navigation}) {
     function _updateSections(activeSections){
       setActiveSections(activeSections);
     };
+    console.log('sections', SECTIONS);
+    /*
+    useEffect(() => {
+      navigation.addListener(
+          'didFocus',
+          payload => {
+              forceUpdate();
+              console.log('forceupdate');
+          }
+      );
+  }, [])
+  
+  */
+
 
       return (
         <View style={styles.container}>

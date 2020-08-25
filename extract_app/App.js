@@ -25,12 +25,9 @@ import { styles } from './Screens/styles';
 import { AccordionView } from './Screens/accordianview';
 import { Urls_extract } from './Screens/Urls_extract';
 import { Chat_info } from './Screens/Chat_info';
+import {count, SECTIONS} from './global';
 
 
-//global variables
-global.count = 1;
-
-var SECTIONS = [];
 
 const Stack = createStackNavigator();
 
