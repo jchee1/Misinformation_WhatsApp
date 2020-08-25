@@ -38,9 +38,9 @@ function App() {
  return (
    <NavigationContainer>
      <Stack.Navigator initialRouteName="Home">
+       <Stack.Screen name="AccordianView" component={AccordionView} />
        <Stack.Screen name="chat-info" component={Chat_info} />
        <Stack.Screen name="Urls-extract" component={Urls_extract} />
-       <Stack.Screen name="AccordianView" component={AccordionView} />
        <Stack.Screen name="SendScreen" component={SendScreen} />
      </Stack.Navigator>
    </NavigationContainer>
