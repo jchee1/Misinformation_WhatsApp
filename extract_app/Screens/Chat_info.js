@@ -163,7 +163,7 @@ export function Chat_info({ navigation }) {
         <Text style={styles.header}>Chat Information</Text>
 
         <View style={{flex:10, alignItems: "center", justifyContent: "center"}}>
-            <Text>{JSON.stringify(fileData)}</Text>
+            <Text>{JSON.stringify(fileData.info)}</Text>
         </View>
        <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 0}}>
          <Button style={styles.nav}
