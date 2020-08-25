@@ -37,12 +37,151 @@ var SECTIONS = [
     },
   ];
 
-export class AccordionView extends Component {
-    state = {
-      activeSections: [],
+  type SharedItem = {
+      mimeType: string,
+      data: string,
     };
-  
-    _writeTo = () => {
+
+export function AccordionView ({navigation}) {
+
+  const [sharedData, setSharedData] = useState('');
+  const [sharedMimeType, setSharedMimeType] = useState('');
+  const [sharedExtraData, setSharedExtraData] = useState(null);
+  const [fileData, setFileData] = useState({});
+  const [urls, setUrls] = useState([]);
+  const [sent, setSent] = useState(false);
+  const [editing, setEditing] = useState(false);
+
+  const handleShare = useCallback((item: ?SharedItem) => {
+    if (!item) {
+      return;
+    }
+
+    const {mimeType, data, extraData} = item;
+    setSharedData(data);
+    setSharedExtraData(extraData);
+    setSharedMimeType(mimeType);
+    setFileData({});
+    setSent(false);
+
+    console.log(mimeType);
+    let thingy;
+
+    if (mimeType.startsWith('text/plain')) {
+      readFile(data)
+      .then((contents) => {
+        thingy = returner(0, contents);
+        setFileData(thingy);
+        setUrls(returner(1, contents));
+        navigation.navigate("chat-info", {fileDat: thingy});
+      })
+      .catch((error) => {
+        console.error("text:", error);
+      })
+    }
+
+    if (mimeType.startsWith('application/zip')){
+      const sourcePath = data;
+
+      console.log(sourcePath);
+      var tempPath;
+      if (Platform.OS === "android") {
+        tempPath = `${DocumentDirectoryPath}/tester1.zip`;
+        copyFile(sourcePath, tempPath)
+        .then(() => {
+          const targetPath = DocumentDirectoryPath
+          const charset = 'UTF-8'
+          unzip(tempPath, targetPath, charset)
+           .then((path) => {
+
+             unlink(tempPath);
+
+             readDir(DocumentDirectoryPath)
+             .then((result) => {
+               var i = 0;
+               while(result[i]["name"]!="_chat.txt"){
+                 i = i+1;
+               }
+               console.log("result:" , result[i]["path"]);
+               return readFile(result[i]["path"]);
+             })
+             .then((contents) => {
+               // log the file contents
+               //console.log(JSON.stringify(contents));
+               //console.log(contents);
+               //console.log(contents);
+               thingy = returner(0, contents);
+               setFileData(thingy);
+
+               //console.log("item:", item);
+
+               //console.log(fileData);
+               setUrls(returner(1, contents));
+               navigation.navigate("chat-info", {fileDat: thingy});
+             })
+           })
+           .catch((error) => {
+             console.error("ERROR!", error)
+           })
+          })
+        .catch((error) => {
+        console.error(error)
+        });
+
+      }
+      else if (Platform.OS === "ios") {
+        tempPath = sourcePath;
+        const targetPath = DocumentDirectoryPath
+        const charset = 'UTF-8'
+        unzip(tempPath, targetPath, charset)
+         .then((path) => {
+
+           unlink(tempPath);
+
+           readDir(DocumentDirectoryPath)
+           .then((result) => {
+             var i = 0;
+             while(result[i]["name"]!="_chat.txt"){
+               i = i+1;
+             }
+             console.log("result:" , result[i]["path"]);
+             return readFile(result[i]["path"]);
+           })
+           .then((contents) => {
+             // log the file contents
+             //console.log(JSON.stringify(contents));
+             //console.log(contents);
+             thingy = returner(0, contents);
+             setFileData(thingy);
+
+             //console.log("item:", item);
+
+             setUrls(returner(1, contents));
+             navigation.navigate("chat-info", {fileDat: thingy});
+           })
+         })
+         .catch((error) => {
+           console.error("ERROR!", error)
+         })
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    ShareMenu.getInitialShare(handleShare);
+  }, []);
+
+  useEffect(() => {
+    const listener = ShareMenu.addNewShareListener(handleShare);
+
+    return () => {
+      listener.remove();
+    };
+  }, []);
+
+    const [activeSections, setActiveSections] = useState([]);
+
+    function _writeTo(){
       var path;
       if (Platform.OS === 'ios') {
         path = `${DocumentDirectoryPath}/test1.txt`;
@@ -56,55 +195,54 @@ export class AccordionView extends Component {
           console.log('FILE WRITTEN!');
           console.log(JSON.stringify(SECTIONS));
           console.log(path);
-  
+
         })
         .catch((err) => {
           console.log(err.message);
         });
-      
+
     }
-  
-    _renderHeader = section => {
+
+    function _renderHeader(section){
       return (
         <View style={styles.chatHeader}>
           <Text style={styles.text}>{section.title}</Text>
         </View>
       );
     };
-  
-    _renderContent = section => {
+
+    function _renderContent(section){
       //console.log("section",SECTIONS[0].content);
-  
+
       return (
         <View style={styles.content}>
           <Text style={{padding:5}}>{section.content}</Text>
         </View>
       );
     };
-  
-    _updateSections = activeSections => {
-      this.setState({ activeSections });
+
+    function _updateSections(activeSections){
+      setActiveSections(activeSections);
     };
-  
-    render() {
+
       return (
         <View style={styles.container}>
           <Accordion
             sections={SECTIONS}
-            activeSections={this.state.activeSections}
-            renderHeader={this._renderHeader}
-            renderContent={this._renderContent}
-            onChange={this._updateSections}
+            activeSections={activeSections}
+            renderHeader={_renderHeader}
+            renderContent={_renderContent}
+            onChange={_updateSections}
           />
-  
+
           <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 36}}>
             <Button style={styles.nav}
             title="Continue to Send Chats"
-            onPress={() => {this._writeTo(); this.props.navigation.navigate('SendScreen');}}
+            onPress={() => {_writeTo(); navigation.navigate('SendScreen');}}
             />
           </View>
         </View>
       );
-    }
+
   }
   export default AccordionView
