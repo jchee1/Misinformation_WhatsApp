@@ -1,8 +1,6 @@
 global.count = 1;
 
-var SECTIONS = [
-    
-  ];
+global.SECTIONS = [];
 
-  export {SECTIONS};
+  //export {SECTIONS};
   //export {global.count};

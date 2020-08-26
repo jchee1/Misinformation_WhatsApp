@@ -16,7 +16,7 @@ import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { SendScreen } from'./SendScreen';
 import { styles } from './styles';
 import { AccordionView } from './accordianview';
-import {SECTIONS} from '../global';
+//import {SECTIONS} from '../global';
 
 
 type SharedItem = {
@@ -48,9 +48,10 @@ export function Urls_extract({ navigation, route }) {
     else{
       let temp=file;
       temp.url_list=urls;
-      SECTIONS.push({title: `Chat ${global.count}`, content: temp});
+      global.SECTIONS.push({title: `Chat ${global.count}`, content: temp});
       global.count++;
-      AsyncStorage.setItem("sections", JSON.stringify(SECTIONS))
+      console.log(global.SECTIONS);
+      AsyncStorage.setItem("sections", JSON.stringify(global.SECTIONS))
       .then(()=>{
         console.log("succeeded in sync")
       })
