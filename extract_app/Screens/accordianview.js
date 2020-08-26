@@ -13,7 +13,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { SendScreen } from'./SendScreen';
 import { styles } from './styles';
-import {SECTIONS} from '../global';
+//import {SECTIONS} from '../global';
 
 
   type SharedItem = {
@@ -22,6 +22,7 @@ import {SECTIONS} from '../global';
     };
 
 export function AccordionView ({navigation}) {
+
   //console.log(SECTIONS);
   const [sharedData, setSharedData] = useState('');
   const [sharedMimeType, setSharedMimeType] = useState('');
@@ -161,15 +162,37 @@ export function AccordionView ({navigation}) {
 
     const [activeSections, setActiveSections] = useState([]);
     const [randomnum, setRandomnum] = useState(0.2);
+    //AsyncStorage.clear();
     const unsubscribe = navigation.addListener('focus', () => {
       // do something
+      AsyncStorage.getItem('sections')
+      .then((item) => {
+        //console.log('async item',item);
+        //console.log('parsed item', JSON.parse(item));
+
+        item=JSON.parse(item);
+        if(global.SECTIONS.length===0 && item!=null){
+          for(let i=0; i<item.length; i++){
+            global.SECTIONS.push(item[i]);
+          }
+        }
+        console.log('SECTIONS',global.SECTIONS);
+        setRandomnum(Math.random());
+      })
+      .catch((error) => {
+        console.error("async get error", error);
+      })
+      AsyncStorage.getItem('count')
+      .then((item)=>{
+        global.count=parseInt(count);
+      })
       console.log('listen');
-      setRandomnum(Math.random());
+      //setRandomnum(Math.random());
       //console.log(sect);
-      
+
     });
 
-    
+
     function _writeTo(){
       var path;
       if (Platform.OS === 'ios') {
@@ -179,10 +202,10 @@ export function AccordionView ({navigation}) {
         path = `${DownloadDirectoryPath}/test1.txt`;
       }
       // write the file
-      writeFile(path, JSON.stringify(SECTIONS), 'utf8')
+      writeFile(path, JSON.stringify(global.SECTIONS), 'utf8')
         .then((success) => {
           console.log('FILE WRITTEN!');
-          console.log(JSON.stringify(SECTIONS));
+          console.log(JSON.stringify(global.SECTIONS));
           console.log(path);
 
         })
@@ -213,7 +236,7 @@ export function AccordionView ({navigation}) {
     function _updateSections(activeSections){
       setActiveSections(activeSections);
     };
-    console.log('sections', SECTIONS);
+    console.log('sections', global.SECTIONS);
     /*
     useEffect(() => {
       navigation.addListener(
@@ -224,14 +247,14 @@ export function AccordionView ({navigation}) {
           }
       );
   }, [])
-  
+
   */
 
 
       return (
         <View style={styles.container}>
           <Accordion
-            sections={SECTIONS}
+            sections={global.SECTIONS}
             activeSections={activeSections}
             renderHeader={_renderHeader}
             renderContent={_renderContent}
