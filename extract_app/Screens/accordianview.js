@@ -46,19 +46,23 @@ export function AccordionView ({navigation}) {
     setSent(false);
 
     console.log(mimeType);
-    let thingy;
+    let metadata;
 
     if (mimeType.startsWith('text/plain')) {
-      readFile(data)
+      const sourcePath = `${DocumentDirectoryPath}/_chat.txt`
+      readFile(sourcePath)
       .then((contents) => {
-        thingy = returner(0, contents);
-        setFileData(thingy);
+        //console.log("text2");
+        metadata = returner(0, contents);
+        setFileData(metadata);
         setUrls(returner(1, contents));
-        navigation.navigate("chat-info", {fileDat: thingy});
+        navigation.navigate("chat-info", {fileDat: metadata});
       })
+      
       .catch((error) => {
         console.error("text:", error);
       })
+      
     }
 
     if (mimeType.startsWith('application/zip')){
@@ -91,14 +95,14 @@ export function AccordionView ({navigation}) {
                //console.log(JSON.stringify(contents));
                //console.log(contents);
                //console.log(contents);
-               thingy = returner(0, contents);
-               setFileData(thingy);
+               metadata = returner(0, contents);
+               setFileData(metadata);
 
                //console.log("item:", item);
 
                //console.log(fileData);
                setUrls(returner(1, contents));
-               navigation.navigate("chat-info", {fileDat: thingy});
+               navigation.navigate("chat-info", {fileDat: metadata});
              })
            })
            .catch((error) => {
@@ -132,13 +136,13 @@ export function AccordionView ({navigation}) {
              // log the file contents
              //console.log(JSON.stringify(contents));
              //console.log(contents);
-             thingy = returner(0, contents);
-             setFileData(thingy);
+             metadata = returner(0, contents);
+             setFileData(metadata);
 
              //console.log("item:", item);
 
              setUrls(returner(1, contents));
-             navigation.navigate("chat-info", {fileDat: thingy});
+             navigation.navigate("chat-info", {fileDat: metadata});
            })
          })
          .catch((error) => {
