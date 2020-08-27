@@ -258,6 +258,9 @@ export function AccordionView ({navigation}) {
 
       return (
         <View style={styles.container}>
+          <TouchableOpacity onPress={()=> {AsyncStorage.clear(); global.SECTIONS=[]; setRandomnum(Math.random())}}>
+            <Text>Clear All Chats</Text>
+          </TouchableOpacity>
           <Accordion
             sections={global.SECTIONS}
             activeSections={activeSections}
