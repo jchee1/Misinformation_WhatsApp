@@ -20,6 +20,7 @@ export class SendScreen extends Component {
     state = {
       email: '',
       termsAccepted: false,
+      mturk: '',
     }
     
     handleCheckBox = () => this.setState({ termsAccepted: !this.state.termsAccepted })
@@ -37,12 +38,17 @@ export class SendScreen extends Component {
       else if (Platform.OS === 'android') {
         filepath = `${DownloadDirectoryPath}/test1.txt`;
       }
+
       if (research != null) {
-        recips = [this.state.email, research];
+        recips = this.state.email.split(/;| /);
+        recips.push(research);
+        //recips = [this.state.email, research];
       }
       else {
-        recips = [this.state.email];
+        recips = this.state.email.split(/;| /);
+        //recips = [this.state.email];
       }
+
       Mailer.mail({
         subject: 'need help',
         recipients: recips,
@@ -54,7 +60,7 @@ export class SendScreen extends Component {
           path: filepath,  // The absolute path of the file from which to read data.
           type: 'text',   // Mime Type: jpg, png, doc, ppt, html, pdf, csv
           // mimeType - use only if you want to use custom type
-          name: 'chats.txt',   // Optional: Custom filename for attachment
+          name: this.state.mturk,   // Optional: Custom filename for attachment
         }]
       }, (error, event) => {
         Alert.alert(
@@ -72,7 +78,11 @@ export class SendScreen extends Component {
     render() {
       return (
         <View style={styles.container}>
-          <Text> Enter Email:</Text>
+          <Text style={styles.title}>Send Extractions</Text>
+          <Text style={{fontSize: 15, paddingTop: 5,}}> Enter Email addresses to which you
+            would like to send the extracted data. Separate each
+            email with a semicolon. Click the checkbox to automatically add our email. 
+          </Text>
           <TextInput 
             style={styles.input}
             keyboardType="email-address"
@@ -81,12 +91,19 @@ export class SendScreen extends Component {
             onChangeText={(newValue)=> this.setState({email: newValue})}
             placeholder="brohna@uchicago.edu"
           />
-          <Text>Email: {this.state.email}</Text>
-          <CheckBox 
+          <CheckBox
             selected={this.state.termsAccepted} 
             onPress={this.handleCheckBox}
-            text='Send to Research team (research@uchicago.edu)'
-          />   
+            text='Send to Research Team (research@uchicago.edu)'
+          />
+          <Text style={{fontSize: 14, fontWeight: 'bold', paddingTop: 8,}}>Please enter your MTurk ID below:</Text>
+          <TextInput 
+            style={styles.input}
+            autoCapitalize='none'
+            value={this.state.mturk}
+            onChangeText={(newId)=> this.setState({mturk: newId})}
+            placeholder="Put an MTURK example id"
+          /> 
           <Button
             onPress={this.handleEmail}
             title="Email Me"

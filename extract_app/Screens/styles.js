@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
     },
     header: {
       flexDirection: 'row',
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
     },
     chatHeader: {
       backgroundColor:'lime',
@@ -44,7 +44,8 @@ export const styles = StyleSheet.create({
    input: {
      margin: 15,
      borderColor: 'black',
-     borderWidth: 1
+     borderWidth: 2,
+     height: 29,
    },
    checkBox: {
     flexDirection: 'row',

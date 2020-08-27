@@ -241,22 +241,14 @@ export function AccordionView ({navigation}) {
       setActiveSections(activeSections);
     };
     console.log('sections', global.SECTIONS);
-    /*
-    useEffect(() => {
-      navigation.addListener(
-          'didFocus',
-          payload => {
-              forceUpdate();
-              console.log('forceupdate');
-          }
-      );
-  }, [])
-
-  */
-
 
       return (
         <View style={styles.container}>
+          <Text style={styles.title}>
+            WhatsApp Extractor
+          </Text>
+          <Text style={{paddingTop: 10,}}>To get started, please export a chat from WhatsApp.</Text>
+          <Text style={{paddingBottom: 15,}}>(Link to privacy policy)</Text>
           <Accordion
             sections={global.SECTIONS}
             activeSections={activeSections}

@@ -21,18 +21,19 @@ import { Urls_extract } from './Urls_extract';
 
 export function Chat_info({ navigation, route }) {
 
-    //const file = navigation.getParam("fileDat", 'default value');
     const {fileDat} = route.params
     console.log(fileDat);
 
     return (
     <View style={styles.container}>
-        <Text style={styles.header}>Chat Information</Text>
-
+        <Text style={styles.title}>Chat Information</Text>
+        <Text style={{paddingTop: 10, fontSize: 17.5,}}>
+            Please verify that the chat information shown below is correct.
+        </Text>
         <View style={{flex:10, alignItems: "center", justifyContent: "center"}}>
             <Text>{JSON.stringify(fileDat)}</Text>
         </View>
-       <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 0}}>
+       <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 36}}>
          <Button style={styles.nav}
            title="Continue to Edit Urls"
            onPress={() => navigation.navigate('Urls-extract', {file: fileDat})}

@@ -2,7 +2,7 @@ import React from 'react'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { TouchableOpacity, Text, StyleSheet } from 'react-native'
 
-export const CheckBox = ({ selected, onPress, style, textStyle, size = 30, color = '#211f30', text = '', ...props}) => (
+export const CheckBox = ({ selected, onPress, style, textStyle, size = 38, color = '#211f30', text = '', ...props}) => (
     <TouchableOpacity style={[styles.checkBox, style]} onPress={onPress} {...props}>
         <Icon
             size={size}
@@ -17,7 +17,7 @@ export const CheckBox = ({ selected, onPress, style, textStyle, size = 30, color
 const styles = StyleSheet.create({
     checkBox: {
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
     }
 })
 
