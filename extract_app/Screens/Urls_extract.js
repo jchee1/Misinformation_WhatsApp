@@ -76,6 +76,11 @@ export function Urls_extract({ navigation, route }) {
       <Text style={styles.title}>
          URLs Extracted: {urls.length===0 ? "(Share a Zipped WhatsApp Chat File)" : ""}
       </Text>
+      <Text style={{paddingHorizontal: 15, paddingTop: 10, paddingBottom: 20, fontSize: 16,}}>Below is a list of URLs extracted from your chat. You can edit this list before 
+          sending it by tapping on the pencil icon above and removing any undesired links. Once you're finished 
+          editing, click "Done" and save the information by clicking "Add to Send". 
+          Return to the home page with the button at the bottom.
+      </Text>
       <View style={{flex:10}}>
       {editing ?
       <FlatList data={urls} style={styles.list}
@@ -98,9 +103,9 @@ export function Urls_extract({ navigation, route }) {
       </View>}
       />}
       </View>
-     <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 0}}>
+     <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 36}}>
        <Button style={styles.nav}
-         title="Continue to See Chat Info"
+         title="Return to Home Page"
          onPress={() => navigation.navigate('AccordianView')}
        />
      </View>

@@ -21,13 +21,15 @@ import { Urls_extract } from './Urls_extract';
 
 export function Chat_info({ navigation, route }) {
 
-    //const file = navigation.getParam("fileDat", 'default value');
     const {fileDat} = route.params
     console.log(fileDat);
 
     return (
     <View style={styles.container}>
         <Text style={{fontSize:30, fontWeight:'bold'}}>Shared Chat Information</Text>
+        <Text style={{paddingTop: 10, fontSize: 17.5,}}>
+            Please verify that the chat information shown below is correct.
+        </Text>
         <View style={{flexDirection: 'row', margin:10, marginTop:20}}>
           <Text style={styles.chatSect}>Number of Members: </Text>
           <Text style={styles.chatText}>{fileDat.info.Contacts}</Text>
@@ -55,7 +57,7 @@ export function Chat_info({ navigation, route }) {
         <Text style={{textAlign:'center', marginTop:30}}>
         Look like you shared the correct chat?
         Click the "Continue to Edit URLs" button below! </Text>
-       <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 0}}>
+       <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 36}}>
          <Button style={styles.nav}
            title="Continue to Edit Urls"
            onPress={() => navigation.navigate('Urls-extract', {file: fileDat})}
