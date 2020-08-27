@@ -58,11 +58,11 @@ export function AccordionView ({navigation}) {
         setUrls(returner(1, contents));
         navigation.navigate("chat-info", {fileDat: metadata});
       })
-      
+
       .catch((error) => {
         console.error("text:", error);
       })
-      
+
     }
 
     if (mimeType.startsWith('application/zip')){
@@ -232,7 +232,8 @@ export function AccordionView ({navigation}) {
 
       return (
         <View style={styles.content}>
-          <Text style={{padding:5}}>{JSON.stringify(section.content)}</Text>
+          <FlatList data={section.content.url_list}
+          renderItem={({item}) => <Text style={{padding:5}}>{item}</Text>} />
         </View>
       );
     };
@@ -249,6 +250,9 @@ export function AccordionView ({navigation}) {
           </Text>
           <Text style={{paddingTop: 10,}}>To get started, please export a chat from WhatsApp.</Text>
           <Text style={{paddingBottom: 15,}}>(Link to privacy policy)</Text>
+          <TouchableOpacity onPress={()=> {AsyncStorage.clear(); global.SECTIONS=[]; setRandomnum(Math.random())}}>
+            <Text>Clear All Chats</Text>
+          </TouchableOpacity>
           <Accordion
             sections={global.SECTIONS}
             activeSections={activeSections}
