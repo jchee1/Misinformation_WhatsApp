@@ -32,7 +32,7 @@ export const styles = StyleSheet.create({
       alignItems: 'center'
     },
     list: {
-  
+
     },
     nav: {
      //flex: 1,
@@ -49,8 +49,14 @@ export const styles = StyleSheet.create({
    checkBox: {
     flexDirection: 'row',
     alignItems: 'center'
-  },
-      
+   },
+   chatSect: {
+     fontSize: 20,
+     fontWeight: 'bold',
+   },
+   chatText: {
+     fontSize: 20,
+   },
   });
 
   export default styles

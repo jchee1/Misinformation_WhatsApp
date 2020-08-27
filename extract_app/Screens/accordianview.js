@@ -58,11 +58,11 @@ export function AccordionView ({navigation}) {
         setUrls(returner(1, contents));
         navigation.navigate("chat-info", {fileDat: metadata});
       })
-      
+
       .catch((error) => {
         console.error("text:", error);
       })
-      
+
     }
 
     if (mimeType.startsWith('application/zip')){
@@ -232,7 +232,8 @@ export function AccordionView ({navigation}) {
 
       return (
         <View style={styles.content}>
-          <Text style={{padding:5}}>{JSON.stringify(section.content)}</Text>
+          <FlatList data={section.content.url_list}
+          renderItem={({item}) => <Text style={{padding:5}}>{item}</Text>} />
         </View>
       );
     };

@@ -27,11 +27,34 @@ export function Chat_info({ navigation, route }) {
 
     return (
     <View style={styles.container}>
-        <Text style={styles.header}>Chat Information</Text>
-
-        <View style={{flex:10, alignItems: "center", justifyContent: "center"}}>
-            <Text>{JSON.stringify(fileDat)}</Text>
+        <Text style={{fontSize:30, fontWeight:'bold'}}>Shared Chat Information</Text>
+        <View style={{flexDirection: 'row', margin:10, marginTop:20}}>
+          <Text style={styles.chatSect}>Number of Members: </Text>
+          <Text style={styles.chatText}>{fileDat.info.Contacts}</Text>
         </View>
+        <View style={{flexDirection: 'row', margin:10}}>
+          <Text style={styles.chatSect}>Chat Start Date: </Text>
+          <Text style={styles.chatText}>{fileDat.info.startdate}</Text>
+        </View>
+        <View style={{flexDirection: 'row', margin:10}}>
+          <Text style={styles.chatSect}>Total Number of Messages: </Text>
+          <Text style={styles.chatText}>{fileDat.info.Total_messages}</Text>
+        </View>
+        <View style={{flexDirection: 'row', margin:10}}>
+          <Text style={styles.chatSect}>Number of URLs in Chat: </Text>
+          <Text style={styles.chatText}>{fileDat.info.URLs}</Text>
+        </View>
+        <View style={{flexDirection: 'row', margin:10}}>
+          <Text style={styles.chatSect}>Number of Images in Chat: </Text>
+          <Text style={styles.chatText}>{fileDat.info.Images}</Text>
+        </View>
+        <View style={{flexDirection: 'row', margin:10}}>
+          <Text style={styles.chatSect}>Number of Texts in Chat: </Text>
+          <Text style={styles.chatText}>{fileDat.info.Text}</Text>
+        </View>
+        <Text style={{textAlign:'center', marginTop:30}}>
+        Look like you shared the correct chat?
+        Click the "Continue to Edit URLs" button below! </Text>
        <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 0}}>
          <Button style={styles.nav}
            title="Continue to Edit Urls"
