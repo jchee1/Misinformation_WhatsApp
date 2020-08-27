@@ -42,10 +42,20 @@ export class SendScreen extends Component {
       if (research != null) {
         recips = this.state.email.split(/;| /);
         recips.push(research);
+        //remove empty strings
+        recips = recips.filter(el => {
+          return el != null && el != '';
+        });
+        console.log(recips);
         //recips = [this.state.email, research];
       }
       else {
-        recips = this.state.email.split(/;| /);
+        recips = this.state.email.split(/[ ;]+/);
+        //remove empty strings
+        recips = recips.filter(el => {
+          return el != null && el != '';
+        });
+        console.log(recips);
         //recips = [this.state.email];
       }
 
