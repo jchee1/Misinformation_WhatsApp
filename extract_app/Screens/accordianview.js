@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback, Component, componentDidMount} from 'react';
-import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity, TextInput} from 'react-native';
+import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity, TextInput, PermissionsAndroid} from 'react-native';
 import ShareMenu from 'react-native-share-menu';
 import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
 import { MainBundlePath, DocumentDirectoryPath, ExternalDirectoryPath, DownloadDirectoryPath, TemporaryDirectoryPath, readFile, readDir, exists, stat, copyFile, unlink, writeFile } from 'react-native-fs'
@@ -32,6 +32,10 @@ export function AccordionView ({navigation}) {
   const [sent, setSent] = useState(false);
   const [editing, setEditing] = useState(false);
 
+  PermissionsAndroid.requestMultiple([PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE])
+  .catch((error) => {
+    console.error("text:", error);
+  });
 
   const handleShare = useCallback((item: ?SharedItem) => {
     if (!item) {
