@@ -32,10 +32,12 @@ export function AccordionView ({navigation}) {
   const [sent, setSent] = useState(false);
   const [editing, setEditing] = useState(false);
 
-  PermissionsAndroid.requestMultiple([PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE])
-  .catch((error) => {
-    console.error("text:", error);
-  });
+  if (Platform.OS === "android"){
+    PermissionsAndroid.requestMultiple([PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE])
+    .catch((error) => {
+      console.error("text:", error);
+    });
+  }
 
   const handleShare = useCallback((item: ?SharedItem) => {
     if (!item) {
@@ -236,8 +238,18 @@ export function AccordionView ({navigation}) {
 
       return (
         <View style={styles.content}>
+        {editing ?
           <FlatList data={section.content.url_list}
-          renderItem={({item}) => <Text style={{padding:5}}>{item}</Text>} />
+          renderItem={({item}) =>
+          <View style={styles.item}>
+          <TouchableOpacity
+          onPress={() => Linking.openURL(item)}>
+            <Text style={{textDecorationLine: 'underline'}}>{item.length>45 ? item.substr(0,42)+"..." : item}</Text>
+          </TouchableOpacity>
+          <EntypoIcon name="cross" size={30} color="red" onPress={() => Alert.alert("need to add delete")}/>
+          </View>} /> :
+          <FlatList data={section.content.url_list}
+            renderItem={({item}) => <Text style={{padding:5}}>{item}</Text>} />}
         </View>
       );
     };
@@ -249,6 +261,10 @@ export function AccordionView ({navigation}) {
 
       return (
         <View style={styles.container}>
+          <View>
+          {editing ? <Button title="Done" onPress={() => setEditing(false)}/> :
+          <EntypoIcon.Button name="pencil" onPress={() => setEditing(true)}>Edit URLs</EntypoIcon.Button>}
+          </View>
           <Text style={styles.title}>
             WhatsApp Extractor
           </Text>
