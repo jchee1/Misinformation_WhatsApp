@@ -23,7 +23,7 @@ import { styles } from './styles';
 
 export function AccordionView ({navigation}) {
 
-  //console.log(SECTIONS);
+  //(SECTIONS);
   const [sharedData, setSharedData] = useState('');
   const [sharedMimeType, setSharedMimeType] = useState('');
   const [sharedExtraData, setSharedExtraData] = useState(null);
@@ -186,7 +186,6 @@ export function AccordionView ({navigation}) {
             global.SECTIONS.push(item[i]);
           }
         }
-        console.log('SECTIONS',global.SECTIONS);
         setRandomnum(Math.random());
       })
       .catch((error) => {
@@ -196,7 +195,6 @@ export function AccordionView ({navigation}) {
       .then((item)=>{
         global.count=parseInt(count);
       })
-      console.log('listen');
       //setRandomnum(Math.random());
       //console.log(sect);
 
@@ -225,16 +223,40 @@ export function AccordionView ({navigation}) {
 
     }
 
+    function deleteChat(chat){
+      global.SECTIONS= global.SECTIONS.filter(function(value, index, arr){ return value.title!=chat.title;})
+      for(let i=0; i<global.SECTIONS.length; i++){
+        global.SECTIONS[i].title=`Chat ${i+1}`
+      }
+      setRandomnum(Math.random())
+    }
+
     function _renderHeader(section){
       return (
-        <View style={styles.chatHeader}>
-          <Text style={styles.text}>{section.title}</Text>
+        <View>
+        {editing ?
+          <View style={styles.chatHeader}>
+            <Text style={styles.text}>{section.title}</Text>
+            <EntypoIcon name="cross" size={30} color="red" onPress={() => deleteChat(section)}/>
+          </View>
+          :
+          <View style={styles.chatHeader}>
+            <Text style={styles.text}>{section.title}</Text>
+          </View>
+        }
         </View>
       );
     };
 
+    function deleteURL(link){
+      for(let i=0; i<global.SECTIONS.length; i++){
+        global.SECTIONS[i].content.url_list=global.SECTIONS[i].content.url_list.filter(function(value, index, arr){ return value!=link;})
+      }
+      setRandomnum(Math.random())
+    }
+
     function _renderContent(section){
-      //console.log("section",SECTIONS[0].content);
+      //("section",SECTIONS[0].content);
 
       return (
         <View style={styles.content}>
@@ -246,7 +268,7 @@ export function AccordionView ({navigation}) {
           onPress={() => Linking.openURL(item)}>
             <Text style={{textDecorationLine: 'underline'}}>{item.length>45 ? item.substr(0,42)+"..." : item}</Text>
           </TouchableOpacity>
-          <EntypoIcon name="cross" size={30} color="red" onPress={() => Alert.alert("need to add delete")}/>
+          <EntypoIcon name="cross" size={30} color="red" onPress={() => deleteURL(item)}/>
           </View>} /> :
           <FlatList data={section.content.url_list}
             renderItem={({item}) => <Text style={{padding:5}}>{item}</Text>} />}
@@ -257,7 +279,6 @@ export function AccordionView ({navigation}) {
     function _updateSections(activeSections){
       setActiveSections(activeSections);
     };
-    console.log('sections', global.SECTIONS);
 
       return (
         <View style={styles.container}>
@@ -270,7 +291,7 @@ export function AccordionView ({navigation}) {
           </Text>
           <Text style={{paddingTop: 10,}}>To get started, please export a chat from WhatsApp.</Text>
           <Text style={{paddingBottom: 15,}}>(Link to privacy policy)</Text>
-          <TouchableOpacity onPress={()=> {AsyncStorage.clear(); global.SECTIONS=[]; setRandomnum(Math.random())}}>
+          <TouchableOpacity onPress={()=> {AsyncStorage.clear(); global.SECTIONS=[]; global.count=1; setRandomnum(Math.random())}}>
             <Text>Clear All Chats</Text>
           </TouchableOpacity>
           <Accordion

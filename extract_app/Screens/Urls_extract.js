@@ -1,7 +1,5 @@
-
-
 import React, {useState, useEffect, useCallback, Component} from 'react';
-import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity, TextInput} from 'react-native';
+import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity, TextInput, Linking} from 'react-native';
 import ShareMenu from 'react-native-share-menu';
 import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
 import { MainBundlePath, DocumentDirectoryPath, ExternalDirectoryPath, DownloadDirectoryPath, TemporaryDirectoryPath, readFile, readDir, exists, stat, copyFile, unlink, writeFile } from 'react-native-fs'
@@ -76,9 +74,9 @@ export function Urls_extract({ navigation, route }) {
       <Text style={styles.title}>
          URLs Extracted: {urls.length===0 ? "(Share a Zipped WhatsApp Chat File)" : ""}
       </Text>
-      <Text style={{paddingHorizontal: 15, paddingTop: 10, paddingBottom: 20, fontSize: 16,}}>Below is a list of URLs extracted from your chat. You can edit this list before 
-          sending it by tapping on the pencil icon above and removing any undesired links. Once you're finished 
-          editing, click "Done" and save the information by clicking "Add to Send". 
+      <Text style={{paddingHorizontal: 15, paddingTop: 10, paddingBottom: 20, fontSize: 16,}}>Below is a list of URLs extracted from your chat. You can edit this list before
+          sending it by tapping on the pencil icon above and removing any undesired links. Once you're finished
+          editing, click "Done" and save the information by clicking "Add to Send".
           Return to the home page with the button at the bottom.
       </Text>
       <View style={{flex:10}}>
