@@ -34,7 +34,7 @@ function App() {
  return (
    <NavigationContainer>
      <Stack.Navigator initialRouteName="Home" headerMode='none'>
-       <Stack.Screen name="AccordianView" component={AccordionView} />
+       <Stack.Screen name="AccordianView" component={AccordionView} headerMode='none'/>
        <Stack.Screen name="chat-info" component={Chat_info} />
        <Stack.Screen name="Urls-extract" component={Urls_extract} />
        <Stack.Screen name="SendScreen" component={SendScreen} />
