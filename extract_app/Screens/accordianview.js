@@ -285,31 +285,38 @@ export function AccordionView ({navigation}) {
           <View style={styles.header}>
             <Text style={styles.headerText}>WHATSAPP EXTRACTOR</Text>
           </View>
-          <View>
-          {editing ? <Button title="Done" onPress={() => setEditing(false)}/> :
-          <EntypoIcon.Button name="pencil" onPress={() => setEditing(true)}>Edit URLs</EntypoIcon.Button>}
+          <View style={styles.contentContainer}>
+            <View>
+            {editing ? <Button title="Done" onPress={() => setEditing(false)}/> :
+            <EntypoIcon.Button name="pencil" onPress={() => setEditing(true)}>Edit URLs</EntypoIcon.Button>}
+            </View>
+
+            <View style={styles.fsImageContainer}>
+              <Image
+                style={styles.fullScreenImage}
+                source={require('../assets/start-graphic.png')}
+              />
+            </View>
+
+            <Text style={{paddingBottom: 15,}}>(Link to privacy policy)</Text>
+            <TouchableOpacity onPress={()=> {AsyncStorage.clear(); global.SECTIONS=[]; global.count=1; setRandomnum(Math.random())}}>
+              <Text style={{color: '#a10000',}}>Clear All Chats</Text>
+            </TouchableOpacity>
+            <Accordion
+              sections={global.SECTIONS}
+              activeSections={activeSections}
+              renderHeader={_renderHeader}
+              renderContent={_renderContent}
+              onChange={_updateSections}
+            />
+
+
+             <TouchableOpacity style={[styles.button, { position: "absolute", bottom: 30,}]}
+             onPress={() => navigation.navigate('SendScreen')}>
+               <Text style={styles.buttonText}>Continue</Text>
+             </TouchableOpacity>
+
           </View>
-
-          <Text style={{paddingTop: 10,}}>To get started, please export a chat from WhatsApp.</Text>
-          <Text style={{paddingBottom: 15,}}>(Link to privacy policy)</Text>
-          <TouchableOpacity onPress={()=> {AsyncStorage.clear(); global.SECTIONS=[]; global.count=1; setRandomnum(Math.random())}}>
-            <Text style={{color: '#a10000',}}>Clear All Chats</Text>
-          </TouchableOpacity>
-          <Accordion
-            sections={global.SECTIONS}
-            activeSections={activeSections}
-            renderHeader={_renderHeader}
-            renderContent={_renderContent}
-            onChange={_updateSections}
-          />
-
-
-           <TouchableOpacity style={[styles.button, { position: "absolute", bottom: 30,}]}
-           onPress={() => navigation.navigate('SendScreen')}>
-             <Text style={styles.buttonText}>Continue</Text>
-           </TouchableOpacity>
-          
-
 
         </SafeAreaView>
       );

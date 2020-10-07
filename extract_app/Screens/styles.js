@@ -122,6 +122,23 @@ export const styles = StyleSheet.create({
      marginTop: "6%",
      marginBottom: "6%",
    },
+   fullScreenImage: {
+     width: "100%",
+     height: 350,
+     resizeMode: 'contain',
+   },
+   fsImageContainer: {
+     width: "70%",
+     height: "auto",
+     paddingTop: 20
+   },
+   contentContainer: {
+   	width: "94%",
+   	height: "90%",
+   	alignItems: 'center',
+   	backgroundColor: '#FFF',
+   	borderRadius: 30,
+   },
   });
 
   export default styles
