@@ -13,6 +13,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { SendScreen } from'./SendScreen';
 import { styles } from './styles';
+import DocumentPicker from 'react-native-document-picker';
 //import {SECTIONS} from '../global';
 
 
@@ -279,12 +280,30 @@ export function AccordionView ({navigation}) {
     function _updateSections(activeSections){
       setActiveSections(activeSections);
     };
+    function picker(){
+      DocumentPicker.pick()
+      .then((res) => {
+        console.log("result:")
+        console.log(res)
+        return readFile(res.uri)
+      .then((contents) => {
+        let metadata = returner(0, contents);
+        setFileData(metadata);
+        setUrls(returner(1, contents));
+        navigation.navigate("chat-info", {fileDat: metadata});
+        })
+      })
+      .catch((err) => {
+        console.log("picker error:", err)
+      })
+    }
 
       return (
         <View style={styles.container}>
-          <View>
+          <View style={styles.header}>
           {editing ? <Button title="Done" onPress={() => setEditing(false)}/> :
           <EntypoIcon.Button name="pencil" onPress={() => setEditing(true)}>Edit URLs</EntypoIcon.Button>}
+          <Button title="Import Files" onPress={() => picker()}/>
           </View>
           <Text style={styles.title}>
             WhatsApp Extractor
