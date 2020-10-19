@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback, Component} from 'react';
-import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity, TextInput} from 'react-native';
+import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity, TextInput, SafeAreaView} from 'react-native';
 import ShareMenu from 'react-native-share-menu';
 import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
 import { MainBundlePath, DocumentDirectoryPath, ExternalDirectoryPath, DownloadDirectoryPath, TemporaryDirectoryPath, readFile, readDir, exists, stat, copyFile, unlink, writeFile } from 'react-native-fs'
@@ -22,9 +22,9 @@ export class SendScreen extends Component {
       termsAccepted: false,
       mturk: '',
     }
-    
+
     handleCheckBox = () => this.setState({ termsAccepted: !this.state.termsAccepted })
-    
+
     handleEmail = () => {
       var research;
       var recips;
@@ -84,43 +84,48 @@ export class SendScreen extends Component {
         )
       });
     }
-  
+
     render() {
       return (
-        <View style={styles.container}>
-          <Text style={styles.title}>Send Extractions</Text>
-          <Text style={{fontSize: 15, paddingTop: 5,}}> Enter Email addresses to which you
-            would like to send the extracted data. Separate each
-            email with a semicolon. Click the checkbox to automatically add our email. 
-          </Text>
-          <TextInput 
-            style={styles.input}
-            keyboardType="email-address"
-            autoCapitalize='none'
-            value={this.state.email}
-            onChangeText={(newValue)=> this.setState({email: newValue})}
-            placeholder="brohna@uchicago.edu"
-          />
-          <CheckBox
-            selected={this.state.termsAccepted} 
-            onPress={this.handleCheckBox}
-            text='Send to Research Team (research@uchicago.edu)'
-          />
-          <Text style={{fontSize: 14, fontWeight: 'bold', paddingTop: 8,}}>Please enter your MTurk ID below:</Text>
-          <TextInput 
-            style={styles.input}
-            autoCapitalize='none'
-            value={this.state.mturk}
-            onChangeText={(newId)=> this.setState({mturk: newId})}
-            placeholder="Put an MTURK example id"
-          /> 
-          <Button
-            onPress={this.handleEmail}
-            title="Email Me"
-            color="#841584"
-            accessabilityLabel="Purple Email Me Button"
-          />
-        </View>
+        <SafeAreaView style={styles.container}>
+          <View style={styles.header}>
+            <Text style={styles.headerText}>EMAIL EXTRACTIONS</Text>
+          </View>
+          <View style={styles.contentContainer}>
+
+            <Text style={{fontSize: 15, padding: 20, paddingBottom: 5}}> Enter Email addresses to which you
+              would like to send the extracted data. Separate each
+              email with a semicolon. Click the checkbox to automatically add our email.
+            </Text>
+            <TextInput
+              style={styles.input}
+              keyboardType="email-address"
+              autoCapitalize='none'
+              value={this.state.email}
+              onChangeText={(newValue)=> this.setState({email: newValue})}
+              placeholder="brohna@uchicago.edu"
+            />
+            <CheckBox
+              selected={this.state.termsAccepted}
+              onPress={this.handleCheckBox}
+              style={{color:'red'}}
+              text='Send to Research Team (research@uchicago.edu)'
+            />
+            <Text style={{fontSize: 14, fontWeight: 'bold', paddingTop: 8,}}>Please enter your MTurk ID below:</Text>
+            <TextInput
+              style={styles.input}
+              autoCapitalize='none'
+              value={this.state.mturk}
+              onChangeText={(newId)=> this.setState({mturk: newId})}
+              placeholder="Put an MTURK example id"
+            />
+
+            <TouchableOpacity style={[styles.button, { position: "absolute", bottom: 30,}]}
+            onPress={this.handleEmail}>
+              <Text style={styles.buttonText}>Send</Text>
+            </TouchableOpacity>
+          </View>
+        </SafeAreaView>
       );
     }
   }
