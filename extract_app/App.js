@@ -7,7 +7,7 @@
  */
 
 import React, {useState, useEffect, useCallback, Component} from 'react';
-import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity, TextInput} from 'react-native';
+import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity, Linking, SafeAreaView} from 'react-native';
 import ShareMenu from 'react-native-share-menu';
 import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
 import { MainBundlePath, DocumentDirectoryPath, ExternalDirectoryPath, DownloadDirectoryPath, TemporaryDirectoryPath, readFile, readDir, exists, stat, copyFile, unlink, writeFile } from 'react-native-fs'
@@ -28,14 +28,13 @@ import { Chat_info } from './Screens/Chat_info';
 import {count, SECTIONS} from './global';
 
 
-
 const Stack = createStackNavigator();
 
 function App() {
  return (
    <NavigationContainer>
-     <Stack.Navigator initialRouteName="Home">
-       <Stack.Screen name="AccordianView" component={AccordionView} />
+     <Stack.Navigator initialRouteName="Home" headerMode='none'>
+       <Stack.Screen name="AccordianView" component={AccordionView} headerMode='none'/>
        <Stack.Screen name="chat-info" component={Chat_info} />
        <Stack.Screen name="Urls-extract" component={Urls_extract} />
        <Stack.Screen name="SendScreen" component={SendScreen} />
