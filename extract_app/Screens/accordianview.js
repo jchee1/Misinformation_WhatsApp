@@ -237,12 +237,12 @@ export function AccordionView ({navigation}) {
         <View>
         {editing ?
           <View style={styles.chatHeader}>
-            <Text style={styles.text}>{section.title}</Text>
+            <Text style={styles.buttonText}>{section.title}</Text>
             <EntypoIcon name="cross" size={30} color="red" onPress={() => deleteChat(section)}/>
           </View>
           :
           <View style={styles.chatHeader}>
-            <Text style={styles.text}>{section.title}</Text>
+            <Text style={styles.buttonText}>{section.title}</Text>
           </View>
         }
         </View>
@@ -260,7 +260,7 @@ export function AccordionView ({navigation}) {
       //("section",SECTIONS[0].content);
 
       return (
-        <View style={styles.content}>
+        <View style={{flex: 0.4}}>
         {editing ?
           <FlatList data={section.content.url_list}
           renderItem={({item}) =>
@@ -307,14 +307,17 @@ export function AccordionView ({navigation}) {
             <View style={styles.header2}>
             {editing ? <Button title="Done" onPress={() => setEditing(false)}/> :
             <EntypoIcon.Button name="pencil" onPress={() => setEditing(true)}>Edit URLs</EntypoIcon.Button>}
-            <Button title="Import Files" onPress={() => picker()}/>
+            <TouchableOpacity style={styles.chatHeader} onPress={() => picker()}>
+              <Text style={styles.buttonText}>Import Files</Text>
+            </TouchableOpacity>
             </View>
 
             <View style={styles.fsImageContainer}>
+              {global.SECTIONS==[] ?
               <Image
                 style={styles.fullScreenImage}
                 source={require('../assets/start-graphic.png')}
-              />
+              /> : <View></View>}
             </View>
 
             <Text style={{paddingBottom: 15,}}>(Link to privacy policy)</Text>
@@ -332,7 +335,7 @@ export function AccordionView ({navigation}) {
 
              <TouchableOpacity style={[styles.button, { position: "absolute", bottom: 30,}]}
              onPress={() => navigation.navigate('SendScreen')}>
-               <Text style={styles.buttonText}>Continue</Text>
+               <Text style={styles.buttonText}>Send Chats</Text>
              </TouchableOpacity>
 
           </View>

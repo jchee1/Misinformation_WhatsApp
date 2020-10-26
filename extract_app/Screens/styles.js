@@ -55,9 +55,6 @@ export const styles = StyleSheet.create({
       padding: 10,
       alignItems: 'center'
     },
-    list: {
-
-    },
     nav: {
      //flex: 1,
      //marginBottom: 36,
@@ -69,7 +66,8 @@ export const styles = StyleSheet.create({
      margin: 15,
      borderColor: 'black',
      borderWidth: 2,
-     height: 29,
+     height: 30,
+     width: '80%'
    },
    checkBox: {
     flexDirection: 'row',

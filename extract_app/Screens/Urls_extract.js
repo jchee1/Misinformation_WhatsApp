@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback, Component} from 'react';
-import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity, TextInput, Linking} from 'react-native';
+import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity, TextInput, Linking, SafeAreaView} from 'react-native';
 import ShareMenu from 'react-native-share-menu';
 import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
 import { MainBundlePath, DocumentDirectoryPath, ExternalDirectoryPath, DownloadDirectoryPath, TemporaryDirectoryPath, readFile, readDir, exists, stat, copyFile, unlink, writeFile } from 'react-native-fs'
@@ -65,49 +65,54 @@ export function Urls_extract({ navigation, route }) {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-      {editing ? <Button title="Done" onPress={() => setEditing(false)}/> :
-      <EntypoIcon.Button name="pencil" onPress={() => setEditing(true)}>Edit URLs</EntypoIcon.Button>}
-      <Button title="Add to Send" onPress={() => sender()}/>
+        <Text style={styles.headerText}>EXTRACTED URLS</Text>
       </View>
-      <Text style={styles.title}>
-         URLs Extracted: {urls.length===0 ? "(Share a Zipped WhatsApp Chat File)" : ""}
-      </Text>
-      <Text style={{paddingHorizontal: 15, paddingTop: 10, paddingBottom: 20, fontSize: 16,}}>Below is a list of URLs extracted from your chat. You can edit this list before
-          sending it by tapping on the pencil icon above and removing any undesired links. Once you're finished
-          editing, click "Done" and save the information by clicking "Add to Send".
-          Return to the home page with the button at the bottom.
-      </Text>
-      <View style={{flex:10}}>
-      {editing ?
-      <FlatList data={urls} style={styles.list}
-      renderItem={({item}) =>
-      <View style={styles.item}>
-      <TouchableOpacity
-      onPress={() => Linking.openURL(item)}>
-        <Text style={{textDecorationLine: 'underline'}}>{item.length>45 ? item.substr(0,42)+"..." : item}</Text>
-      </TouchableOpacity>
-      <EntypoIcon name="cross" size={30} color="red" onPress={() => deleter(item)}/>
-      </View>}
-      /> :
-      <FlatList data={urls} style={styles.list}
-      renderItem={({item}) =>
-      <View>
-        <TouchableOpacity style={{padding:10}}
-        onPress={() => Linking.openURL(item)}>
-        <Text style={{textDecorationLine: 'underline'}}>{item}</Text>
+      <View style={styles.contentContainer}>
+        <View style={styles.header2}>
+        {editing ? <Button title="Done" onPress={() => setEditing(false)}/> :
+        <EntypoIcon.Button name="pencil" onPress={() => setEditing(true)}>Edit URLs</EntypoIcon.Button>}
+        <TouchableOpacity style={styles.chatHeader} onPress={() => {sender(); navigation.navigate('AccordianView')}}>
+          <Text style={styles.buttonText}>Add to Send</Text>
         </TouchableOpacity>
-      </View>}
-      />}
-      </View>
-     <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 36}}>
-       <Button style={styles.nav}
-         title="Return to Home Page"
-         onPress={() => navigation.navigate('AccordianView')}
-       />
-     </View>
-   </View>
+        </View>
+        <Text style={styles.title}>
+          URLs Extracted: {urls.length===0 ? "(Share a Zipped WhatsApp Chat File)" : ""}
+        </Text>
+        <Text style={{paddingHorizontal: 15, paddingTop: 10, paddingBottom: 20, fontSize: 16,}}>Below is a list of URLs extracted from your chat. You can edit this list before
+            sending it by tapping on the pencil icon above and removing any undesired links. Once you're finished
+            editing, click "Done" and save the information by clicking "Add to Send".
+            Return to the home page with the button at the bottom.
+        </Text>
+        <View style={{flex:0.8}}>
+        {editing ?
+        <FlatList data={urls} style={styles.list}
+        renderItem={({item}) =>
+        <View style={styles.item}>
+        <TouchableOpacity
+        onPress={() => Linking.openURL(item)}>
+          <Text style={{textDecorationLine: 'underline'}}>{item.length>45 ? item.substr(0,42)+"..." : item}</Text>
+        </TouchableOpacity>
+        <EntypoIcon name="cross" size={30} color="red" onPress={() => deleter(item)}/>
+        </View>}
+        /> :
+        <FlatList data={urls} style={styles.list}
+        renderItem={({item}) =>
+        <View>
+          <TouchableOpacity style={{padding:10}}
+          onPress={() => Linking.openURL(item)}>
+          <Text style={{textDecorationLine: 'underline'}}>{item}</Text>
+          </TouchableOpacity>
+        </View>}
+        />}
+        </View>
+        <TouchableOpacity style={[styles.button, { position: "absolute", bottom: 30,}]}
+              onPress={() => navigation.navigate('AccordianView')}>
+                <Text style={styles.buttonText}>Return to Home Page</Text>
+        </TouchableOpacity>
+        </View>
+   </SafeAreaView>
   );
 };
 

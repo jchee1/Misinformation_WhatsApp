@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback, Component} from 'react';
-import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity, TextInput} from 'react-native';
+import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity, TextInput, SafeAreaView} from 'react-native';
 import ShareMenu from 'react-native-share-menu';
 import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
 import { MainBundlePath, DocumentDirectoryPath, ExternalDirectoryPath, DownloadDirectoryPath, TemporaryDirectoryPath, readFile, readDir, exists, stat, copyFile, unlink, writeFile } from 'react-native-fs'
@@ -25,8 +25,11 @@ export function Chat_info({ navigation, route }) {
     console.log(fileDat);
 
     return (
-    <View style={styles.container}>
-        <Text style={{fontSize:30, fontWeight:'bold'}}>Shared Chat Information</Text>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+            <Text style={styles.headerText}>SHARED CHAT INFO</Text>
+      </View>
+      <View style={styles.contentContainer}>
         <Text style={{paddingTop: 10, fontSize: 17.5,}}>
             Please verify that the chat information shown below is correct.
         </Text>
@@ -57,13 +60,12 @@ export function Chat_info({ navigation, route }) {
         <Text style={{textAlign:'center', marginTop:30}}>
         Look like you shared the correct chat?
         Click the "Continue to Edit URLs" button below! </Text>
-       <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 36}}>
-         <Button style={styles.nav}
-           title="Continue to Edit Urls"
-           onPress={() => navigation.navigate('Urls-extract', {file: fileDat})}
-         />
-       </View>
-    </View>
+        <TouchableOpacity style={[styles.button, { position: "absolute", bottom: 30,}]}
+             onPress={() => navigation.navigate('Urls-extract', {file: fileDat})}>
+               <Text style={styles.buttonText}>Continue to Edit URLs</Text>
+        </TouchableOpacity>
+        </View>
+    </SafeAreaView>
     );
   };
 
