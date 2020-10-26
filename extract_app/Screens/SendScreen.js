@@ -103,7 +103,7 @@ export class SendScreen extends Component {
               autoCapitalize='none'
               value={this.state.email}
               onChangeText={(newValue)=> this.setState({email: newValue})}
-              placeholder="brohna@uchicago.edu"
+              placeholder="example@example.com"
             />
             <CheckBox
               selected={this.state.termsAccepted}
