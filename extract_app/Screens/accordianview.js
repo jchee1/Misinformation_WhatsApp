@@ -97,7 +97,6 @@ export function AccordionView ({navigation}) {
              .then((contents) => {
                // log the file contents
                //console.log(JSON.stringify(contents));
-               //console.log(contents);
                metadata = returner(0, contents);
                setFileData(metadata);
                setUrls(returner(1, contents));
