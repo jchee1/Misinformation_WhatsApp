@@ -47,7 +47,6 @@ export class SendScreen extends Component {
           return el != null && el != '';
         });
         console.log(recips);
-        //recips = [this.state.email, research];
       }
       else {
         recips = this.state.email.split(/[ ;]+/);
@@ -56,7 +55,6 @@ export class SendScreen extends Component {
           return el != null && el != '';
         });
         console.log(recips);
-        //recips = [this.state.email];
       }
 
       Mailer.mail({

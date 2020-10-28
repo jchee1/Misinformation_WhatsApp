@@ -14,7 +14,6 @@ import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { SendScreen } from'./SendScreen';
 import { styles } from './styles';
 import DocumentPicker from 'react-native-document-picker';
-//import {SECTIONS} from '../global';
 
 
   type SharedItem = {
@@ -24,7 +23,6 @@ import DocumentPicker from 'react-native-document-picker';
 
 export function AccordionView ({navigation}) {
 
-  //(SECTIONS);
   const [sharedData, setSharedData] = useState('');
   const [sharedMimeType, setSharedMimeType] = useState('');
   const [sharedExtraData, setSharedExtraData] = useState(null);
@@ -59,7 +57,6 @@ export function AccordionView ({navigation}) {
       const sourcePath = `${DocumentDirectoryPath}/_chat.txt`
       readFile(sourcePath)
       .then((contents) => {
-        //console.log("text2");
         metadata = returner(0, contents);
         setFileData(metadata);
         setUrls(returner(1, contents));
@@ -101,13 +98,8 @@ export function AccordionView ({navigation}) {
                // log the file contents
                //console.log(JSON.stringify(contents));
                //console.log(contents);
-               //console.log(contents);
                metadata = returner(0, contents);
                setFileData(metadata);
-
-               //console.log("item:", item);
-
-               //console.log(fileData);
                setUrls(returner(1, contents));
                navigation.navigate("chat-info", {fileDat: metadata});
              })
@@ -142,12 +134,8 @@ export function AccordionView ({navigation}) {
            .then((contents) => {
              // log the file contents
              //console.log(JSON.stringify(contents));
-             //console.log(contents);
              metadata = returner(0, contents);
              setFileData(metadata);
-
-             //console.log("item:", item);
-
              setUrls(returner(1, contents));
              navigation.navigate("chat-info", {fileDat: metadata});
            })
@@ -173,14 +161,12 @@ export function AccordionView ({navigation}) {
 
     const [activeSections, setActiveSections] = useState([]);
     const [randomnum, setRandomnum] = useState(0.2);
-    //AsyncStorage.clear();
     const unsubscribe = navigation.addListener('focus', () => {
       // do something
       AsyncStorage.getItem('sections')
       .then((item) => {
         //console.log('async item',item);
         //console.log('parsed item', JSON.parse(item));
-
         item=JSON.parse(item);
         if(global.SECTIONS.length===0 && item!=null){
           for(let i=0; i<item.length; i++){
@@ -196,9 +182,6 @@ export function AccordionView ({navigation}) {
       .then((item)=>{
         global.count=parseInt(count);
       })
-      //setRandomnum(Math.random());
-      //console.log(sect);
-
     });
 
 
@@ -216,7 +199,6 @@ export function AccordionView ({navigation}) {
           console.log('FILE WRITTEN!');
           console.log(JSON.stringify(global.SECTIONS));
           console.log(path);
-
         })
         .catch((err) => {
           console.log(err.message);

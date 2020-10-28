@@ -14,7 +14,6 @@ import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { SendScreen } from'./SendScreen';
 import { styles } from './styles';
 import { AccordionView } from './accordianview';
-//import {SECTIONS} from '../global';
 
 
 type SharedItem = {
