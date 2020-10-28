@@ -67,7 +67,8 @@ export const styles = StyleSheet.create({
      borderColor: 'black',
      borderWidth: 2,
      height: 30,
-     width: '80%'
+     width: '80%',
+     //textAlign: 'center',
    },
    checkBox: {
     flexDirection: 'row',

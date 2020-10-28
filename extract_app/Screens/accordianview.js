@@ -239,8 +239,6 @@ export function AccordionView ({navigation}) {
     }
 
     function _renderContent(section){
-      //("section",SECTIONS[0].content);
-
       return (
         <View style={{flex: 0.4}}>
         {editing ?

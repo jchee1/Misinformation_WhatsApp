@@ -107,7 +107,7 @@ export class SendScreen extends Component {
               selected={this.state.termsAccepted}
               onPress={this.handleCheckBox}
               style={{color:'red'}}
-              text='Send to Research Team (airlabstudy@mailman.cs.uchicago.edu)'
+              text='Send to Research Team'
             />
             <Text style={{fontSize: 14, fontWeight: 'bold', paddingTop: 8,}}>Please enter your MTurk ID below:</Text>
             <TextInput
@@ -115,7 +115,6 @@ export class SendScreen extends Component {
               autoCapitalize='none'
               value={this.state.mturk}
               onChangeText={(newId)=> this.setState({mturk: newId})}
-              placeholder="Put an MTURK example id"
             />
 
             <TouchableOpacity style={[styles.button, { position: "absolute", bottom: 30,}]}
