@@ -96,7 +96,7 @@ export class SendScreen extends Component {
               email with a semicolon. Click the checkbox to automatically add our email.
             </Text>
             <TextInput
-              style={styles.input}
+              style={[styles.input, {height: Platform.OS == 'android' ? 42 : 30}]}
               keyboardType="email-address"
               autoCapitalize='none'
               value={this.state.email}
@@ -111,7 +111,7 @@ export class SendScreen extends Component {
             />
             <Text style={{fontSize: 14, fontWeight: 'bold', paddingTop: 8,}}>Please enter your MTurk ID below:</Text>
             <TextInput
-              style={styles.input}
+              style={[styles.input, {height: Platform.OS == 'android' ? 42 : 30}]}
               autoCapitalize='none'
               value={this.state.mturk}
               onChangeText={(newId)=> this.setState({mturk: newId})}
