@@ -87,6 +87,8 @@ export class SendScreen extends Component {
       return (
         <SafeAreaView style={styles.container}>
           <View style={styles.header}>
+          <Button title="Back" style={{position: 'absolute', left: 0, top: 0}} 
+          onPress={() => this.props.navigation.navigate('AccordianView')} />
             <Text style={styles.headerText}>EMAIL EXTRACTIONS</Text>
           </View>
           <View style={styles.contentContainer}>
