@@ -292,11 +292,10 @@ export function AccordionView ({navigation}) {
             </View>
 
             <View style={styles.fsImageContainer}>
-              {global.SECTIONS==[] ?
-              <Image
+            <Image
                 style={styles.fullScreenImage}
                 source={require('../assets/start-graphic.png')}
-              /> : <View></View>}
+              />
             </View>
 
             <Text style={{paddingBottom: 15,}}>(Link to privacy policy)</Text>

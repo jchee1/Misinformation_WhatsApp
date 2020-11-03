@@ -87,12 +87,11 @@ export class SendScreen extends Component {
       return (
         <SafeAreaView style={styles.container}>
           <View style={styles.header}>
-          <Button title="Back" style={{position: 'absolute', left: 0, top: 0}} 
+          <Button title="Back" style={{position: 'absolute', left: 0, top: 0}}
           onPress={() => this.props.navigation.navigate('AccordianView')} />
-            <Text style={styles.headerText}>EMAIL EXTRACTIONS</Text>
+            <Text style={{flexDirection: 'row'}, styles.headerText}>EMAIL EXTRACTIONS</Text>
           </View>
           <View style={styles.contentContainer}>
-
             <Text style={{fontSize: 15, padding: 20, paddingBottom: 5}}> Enter Email addresses to which you
               would like to send the extracted data. Separate each
               email with a semicolon. Click the checkbox to automatically add our email.
