@@ -21,7 +21,7 @@
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>HostAppBundleIdentifier</key>
-	<string>com.uchicago.extract-app</string>
+	<string>com.airlab.whatsappextractor</string>
 	<key>HostAppURLScheme</key>
 	<string>ExtractorApp://</string>
 	<key>NSExtension</key>

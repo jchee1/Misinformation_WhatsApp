@@ -60,7 +60,7 @@ export function Chat_info({ navigation, route }) {
         <Text style={{textAlign:'center', marginTop:30}}>
         Look like you shared the correct chat?
         Click the "Continue to Edit URLs" button below! </Text>
-        <TouchableOpacity style={[styles.button, { position: "absolute", bottom: 30,}]}
+        <TouchableOpacity style={[styles.button, { position: "absolute", bottom: 15,}]}
              onPress={() => navigation.navigate('Urls-extract', {file: fileDat})}>
                <Text style={styles.buttonText}>Continue to Edit URLs</Text>
         </TouchableOpacity>

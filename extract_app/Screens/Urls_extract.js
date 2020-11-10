@@ -106,7 +106,7 @@ export function Urls_extract({ navigation, route }) {
         </View>}
         />}
         </View>
-        <TouchableOpacity style={[styles.button, { position: "absolute", bottom: 30,}]}
+        <TouchableOpacity style={[styles.button, { position: "absolute", bottom: 15,}]}
               onPress={() => navigation.navigate('AccordianView')}>
                 <Text style={styles.buttonText}>Return to Home Page</Text>
         </TouchableOpacity>

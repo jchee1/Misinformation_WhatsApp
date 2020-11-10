@@ -118,7 +118,7 @@ export class SendScreen extends Component {
               onChangeText={(newId)=> this.setState({mturk: newId})}
             />
 
-            <TouchableOpacity style={[styles.button, { position: "absolute", bottom: 30,}]}
+            <TouchableOpacity style={[styles.button, { position: "absolute", bottom: 15,}]}
             onPress={this.handleEmail}>
               <Text style={styles.buttonText}>Send</Text>
             </TouchableOpacity>
