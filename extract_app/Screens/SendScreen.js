@@ -29,7 +29,7 @@ export class SendScreen extends Component {
       var research;
       var recips;
       if (this.state.termsAccepted === true) {
-         research = ("airlabstudy@mailman.cs.uchicago.edu");
+         research = ("airlabapps@gmail.com");
       }
       var filepath;
       if (Platform.OS === 'ios') {
