@@ -314,7 +314,7 @@ export function AccordionView ({navigation}) {
 
 
              <TouchableOpacity style={[styles.button, { position: "absolute", bottom: 15,}]}
-             onPress={() => navigation.navigate('SendScreen')}>
+             onPress={() => {_writeTo() ; navigation.navigate('SendScreen')}}>
                <Text style={styles.buttonText}>Send Chats</Text>
              </TouchableOpacity>
 

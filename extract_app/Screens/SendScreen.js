@@ -58,11 +58,11 @@ export class SendScreen extends Component {
       }
 
       Mailer.mail({
-        subject: 'need help',
+        subject: "WhatsApp Extractor "+this.state.mturk+" Data",
         recipients: recips,
         ccRecipients: [],
         bccRecipients: [],
-        body: '<b>A Bold Body</b>',
+        body: "",
         isHTML: true,
         attachments: [{
           path: filepath,  // The absolute path of the file from which to read data.
