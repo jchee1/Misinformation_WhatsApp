@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback, Component, componentDidMount} from 'react';
-import {StyleSheet, Text, View, Image, Platform, FlatList, Button, Alert, TouchableOpacity, TextInput, PermissionsAndroid, SafeAreaView} from 'react-native';
+import {StyleSheet, Text, View, Image, Platform, FlatList, Linking, Button, Alert, TouchableOpacity, TextInput, PermissionsAndroid, SafeAreaView} from 'react-native';
 import ShareMenu from 'react-native-share-menu';
 import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
 import { MainBundlePath, DocumentDirectoryPath, ExternalDirectoryPath, DownloadDirectoryPath, TemporaryDirectoryPath, readFile, readDir, exists, stat, copyFile, unlink, writeFile } from 'react-native-fs'
@@ -298,7 +298,9 @@ export function AccordionView ({navigation}) {
               />
             </View>
 
-            <Text style={{paddingBottom: 15,}}>(Link to privacy policy)</Text>
+            <TouchableOpacity onPress={()=> Linking.openURL("https://airlab.cs.uchicago.edu/whatsapp-extractor-privacy-policy-faq/")}>
+              <Text style={{paddingBottom: 15, textDecorationLine: 'underline', color: 'blue',}}>(Link to privacy policy)</Text>
+            </TouchableOpacity>
             <TouchableOpacity onPress={()=> {AsyncStorage.clear(); global.SECTIONS=[]; global.count=1; setRandomnum(Math.random())}}>
               <Text style={{color: '#a10000',}}>Clear All Chats</Text>
             </TouchableOpacity>
