@@ -193,10 +193,10 @@ export function AccordionView ({navigation}) {
         path = `${DownloadDirectoryPath}/test1.txt`;
       }
       // write the file
-      writeFile(path, JSON.stringify(global.SECTIONS), 'utf8')
+      writeFile(path, JSON.stringify(global.SECTIONS, null, 4), 'utf8')
         .then((success) => {
           console.log('FILE WRITTEN!');
-          console.log(JSON.stringify(global.SECTIONS));
+          console.log(JSON.stringify(global.SECTIONS, null, 4));
           console.log(path);
         })
         .catch((err) => {
