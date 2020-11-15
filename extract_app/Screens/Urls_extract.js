@@ -26,10 +26,14 @@ export function Urls_extract({ navigation, route }) {
   const [urls, setUrls] = useState(file.url_list);
   const [sent, setSent] = useState(false);
   const [editing, setEditing] = useState(false);
+  const [edited, setEdited] = useState(false);
 
 
   function deleter (val){
     let temp=urls;
+    if(edited===false){
+      setEdited(true)
+    }
     temp=temp.filter(function (j){
       return j!=val;
       });
@@ -45,7 +49,7 @@ export function Urls_extract({ navigation, route }) {
     else{
       let temp=file;
       temp.url_list=urls;
-      global.SECTIONS.push({title: `Chat ${global.count}`, content: temp});
+      global.SECTIONS.push({title: `Chat ${global.count}`, content: temp, edit: edited});
       global.count++;
       console.log(global.SECTIONS);
       AsyncStorage.setItem("sections", JSON.stringify(global.SECTIONS))

@@ -21,7 +21,7 @@ import DocumentPicker from 'react-native-document-picker';
       data: string,
     };
 
-export function AccordionView ({navigation}) {
+export function AccordionView ({navigation, route}) {
 
   const [sharedData, setSharedData] = useState('');
   const [sharedMimeType, setSharedMimeType] = useState('');
@@ -160,8 +160,13 @@ export function AccordionView ({navigation}) {
 
     const [activeSections, setActiveSections] = useState([]);
     const [randomnum, setRandomnum] = useState(0.2);
+    const [edit, setEdit] = useState(false)
     const unsubscribe = navigation.addListener('focus', () => {
       // do something
+      if(route.params != undefined){
+        setEdit(route.params.edit)
+      }
+      
       AsyncStorage.getItem('sections')
       .then((item) => {
         //console.log('async item',item);
@@ -186,6 +191,7 @@ export function AccordionView ({navigation}) {
 
     function _writeTo(){
       var path;
+      console.log(edit)
       if (Platform.OS === 'ios') {
         path = `${DocumentDirectoryPath}/test1.txt`;
       }
