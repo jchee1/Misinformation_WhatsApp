@@ -14,6 +14,9 @@ export function getContacts(file) {
   });
 
   let line;
+  let names={};
+  let ncount=0;
+  
 
   for (let i=0; i<lines.length; i++) {
     // Each line in input.txt will be successively available here as `line`.
@@ -21,10 +24,19 @@ export function getContacts(file) {
     let split = line.split("]");
     let nmsplit = split[1].split(":");
     let name = nmsplit[0];
-    if (name in contacts) {
-      contacts[name] += 1;
+    let new_name;
+    if (name in names){
+      new_name = names[name]
+    }
+    else{
+      new_name = "User"+ncount.toString();
+      ncount += 1
+      names[name] = new_name
+    }
+    if (new_name in contacts) {
+      contacts[new_name] += 1;
     } else {
-      contacts[name] = 1;
+      contacts[new_name] = 1;
     }
   }
   const num_contacts = Object.keys(contacts).length;
@@ -55,7 +67,7 @@ export function readData(file) {
 
   let date;
   let time;
-  let name;
+  let name, nam;
   let nmsplit;
 
   var url_list = [];
@@ -67,6 +79,8 @@ export function readData(file) {
 
   let line;
   //console.log(lines);
+  let names={};
+  let ncount=0;
   for (let i=0; i<lines.length; i++) {
     // Each line in input.txt will be successively available here as `line`.
     line=lines[i];
@@ -78,16 +92,24 @@ export function readData(file) {
       time = msgs[msgs.length-1].time
       nmsplit = split[0].split(/: /);
       //console.log(nmsplit);
-      name = nmsplit[0];
+      nam = nmsplit[0];
     }
     else{
       let dtsplit = split[0].split(",");
       date = dtsplit[0].replace('[', '');
       time = dtsplit[1];
       nmsplit = split[1].split(/: /);
-      name = nmsplit[0];
+      nam = nmsplit[0];
     }
 
+    if (nam in names){
+      name = names[nam]
+    }
+    else{
+      name = "User"+ncount.toString();
+      ncount += 1
+      names[nam] = name
+    }
 
     if (total_num === 0) {
       start_date = date;
