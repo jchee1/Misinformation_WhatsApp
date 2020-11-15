@@ -237,8 +237,13 @@ export function AccordionView ({navigation, route}) {
     };
 
     function deleteURL(link){
+      let l;
       for(let i=0; i<global.SECTIONS.length; i++){
+        l = global.SECTIONS[i].content.url_list.length
         global.SECTIONS[i].content.url_list=global.SECTIONS[i].content.url_list.filter(function(value, index, arr){ return value!=link;})
+        if(l != global.SECTIONS[i].content.url_list.length){
+          global.SECTIONS[i].edit=true
+        }
       }
       setRandomnum(Math.random())
     }
@@ -296,12 +301,12 @@ export function AccordionView ({navigation, route}) {
               <Text style={styles.buttonText}>Import Files</Text>
             </TouchableOpacity>
             </View>
-
             <View style={styles.fsImageContainer}>
-            <Image
+              {global.SECTIONS.length===0 ?
+              <Image
                 style={styles.fullScreenImage}
                 source={require('../assets/start-graphic.png')}
-              />
+              /> : <View></View>}
             </View>
 
             <TouchableOpacity onPress={()=> Linking.openURL("https://airlab.cs.uchicago.edu/whatsapp-extractor-privacy-policy-faq/")}>
