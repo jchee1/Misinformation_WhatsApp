@@ -95,7 +95,7 @@ export function Urls_extract({ navigation, route }) {
         <View style={styles.item}>
         <TouchableOpacity
         onPress={() => Linking.openURL(item)}>
-          <Text style={{textDecorationLine: 'underline'}}>{item.length>45 ? item.substr(0,42)+"..." : item}</Text>
+          <Text style={{textDecorationLine: 'underline'}}>{item.length>40 ? item.substr(0,40)+"..." : item}</Text>
         </TouchableOpacity>
         <EntypoIcon name="cross" size={30} color="red" onPress={() => deleter(item)}/>
         </View>}
