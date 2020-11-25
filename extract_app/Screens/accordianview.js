@@ -290,7 +290,7 @@ export function AccordionView ({navigation, route}) {
       return (
         <SafeAreaView style={styles.container}>
           <View style={styles.header}>
-            <Text style={styles.headerText}>WHATSAPP EXTRACTOR</Text>
+            <Text style={styles.headerText}>AIRLAB URL EXTRACTOR</Text>
           </View>
           <View style={styles.contentContainer}>
             <View style={styles.header2}>

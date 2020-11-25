@@ -58,7 +58,7 @@ export class SendScreen extends Component {
       }
 
       Mailer.mail({
-        subject: "WhatsApp Extractor "+this.state.mturk+" Data",
+        subject: "AIRLab URL Extractor "+this.state.mturk+" Data",
         recipients: recips,
         ccRecipients: [],
         bccRecipients: [],
