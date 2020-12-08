@@ -5,7 +5,7 @@ function isUrl(string) {
   }
   
   //function to get num of contacts + contacts
-  export function getContacts(file) {
+function getContacts(file) {
     var contacts = {};
   
     var lines = file.split(/\n|\r/);
@@ -47,7 +47,7 @@ function isUrl(string) {
   }
   
   
-  export function readData(file) {
+  function readData(file) {
     var msgs = [];
   
     var total_num = 0;
@@ -225,7 +225,7 @@ function isUrl(string) {
     return parse;
   }
 
-  export function gen_parse(file) {
+  function gen_parse(file) {
     var links = [];
     var lines = file.split(/\n|\r/);
     lines=lines.filter(function (el) {
@@ -236,16 +236,18 @@ function isUrl(string) {
         line = lines[i];
         let url;
         if (isUrl(line)) {
-            var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-            url = line.match(regexp);
-            links.push(url);
+            var re = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www\.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%\/.\w-]*)?\??(?:[-+=&;%@.\w]*)#?\w*)?)/gm; 
+            let url;
+            while ((url = re.exec(line)) != null) {
+                links.push(url[0]);
+            }
         }
     }
     return links
 
   }
   
-  export function returner(i, file){
+  function returner(i, file){
     if(i===0){
       return readData(file)
     }
@@ -257,3 +259,5 @@ function isUrl(string) {
     }
   }
   
+  var str = 'Hello, I can\'t http://google.com for c*ap https://www.w3schools.com/jsref/jsref_match.asp';
+  console.log(gen_parse(str));
