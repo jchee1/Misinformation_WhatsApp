@@ -49,7 +49,12 @@ export function Urls_extract({ navigation, route }) {
     else{
       let temp=file;
       temp.url_list=urls;
-      global.SECTIONS.push({title: `Chat ${global.count}`, content: temp, edit: edited});
+      if ("info" in temp) {
+        global.SECTIONS.push({title: `Chat ${global.count}`, content: temp, edit: edited});
+      }
+      else {
+        global.SECTIONS.push({title: `File ${global.count}`, content: temp, edit: edited});
+      }
       global.count++;
       console.log(global.SECTIONS);
       AsyncStorage.setItem("sections", JSON.stringify(global.SECTIONS))

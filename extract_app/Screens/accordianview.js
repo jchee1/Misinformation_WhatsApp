@@ -3,7 +3,7 @@ import {StyleSheet, Text, View, Image, Platform, FlatList, Linking, Button, Aler
 import ShareMenu from 'react-native-share-menu';
 import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
 import { MainBundlePath, DocumentDirectoryPath, ExternalDirectoryPath, DownloadDirectoryPath, TemporaryDirectoryPath, readFile, readDir, exists, stat, copyFile, unlink, writeFile } from 'react-native-fs'
-import {returner} from "../parser.js";
+import {returner} from "../parser2.js";
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -274,16 +274,30 @@ export function AccordionView ({navigation, route}) {
       .then((res) => {
         console.log("result:")
         console.log(res)
-        return readFile(res.uri)
-      .then((contents) => {
-        let metadata = returner(0, contents);
-        setFileData(metadata);
-        setUrls(returner(1, contents));
-        navigation.navigate("chat-info", {fileDat: metadata});
-        })
-      })
-      .catch((err) => {
-        console.log("picker error:", err)
+        if (res.name == "_chat.txt") {
+          readFile(res.uri)
+          .then((contents) => {
+            let metadata = returner(0, contents);
+            setFileData(metadata);
+            setUrls(returner(3, contents));
+            navigation.navigate("chat-info", {fileDat: metadata});
+            })
+          .catch((err) => {
+            console.log("picker error:", err)
+          })
+        }
+        else {
+          readFile(res.uri)
+          .then((contents) => {
+            let metadata = returner(1, contents);
+            setFileData(metadata);
+            setUrls(returner(2, contents));
+            navigation.navigate("Urls-extract", {file: metadata});
+            })
+          .catch((err) => {
+            console.log("picker error:", err)
+          })
+        }
       })
     }
 
@@ -308,7 +322,7 @@ export function AccordionView ({navigation, route}) {
               /> : <View></View>}
             </View>
 
-            <TouchableOpacity onPress={()=> Linking.openURL("https://airlab.cs.uchicago.edu/whatsapp-extractor-privacy-policy-faq/")}>
+            <TouchableOpacity onPress={()=> Linking.openURL("https://airlab.cs.uchicago.edu/airlab-url-extractor-privacy-policy-faq/")}>
               <Text style={{paddingBottom: 15, textDecorationLine: 'underline', color: 'blue',}}>(Link to privacy policy)</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={()=> {AsyncStorage.clear(); global.SECTIONS=[]; global.count=1; setRandomnum(Math.random())}}>

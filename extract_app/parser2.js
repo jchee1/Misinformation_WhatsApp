@@ -5,7 +5,7 @@ function isUrl(string) {
   }
   
   //function to get num of contacts + contacts
-function getContacts(file) {
+export function getContacts(file) {
     var contacts = {};
   
     var lines = file.split(/\n|\r/);
@@ -47,7 +47,7 @@ function getContacts(file) {
   }
   
   
-  function readData(file) {
+  export function readData(file) {
     var msgs = [];
   
     var total_num = 0;
@@ -225,7 +225,7 @@ function getContacts(file) {
     return parse;
   }
 
-  function gen_parse(file) {
+  export function gen_parse(file) {
     var links = [];
     var lines = file.split(/\n|\r/);
     lines=lines.filter(function (el) {
@@ -243,16 +243,22 @@ function getContacts(file) {
             }
         }
     }
-    return links
+    var dict = {
+        url_list: links
+    }
+    return dict
 
   }
   
-  function returner(i, file){
+  export function returner(i, file){
     if(i===0){
       return readData(file)
     }
     else if(i == 1) {
         return gen_parse(file)
+    }
+    else if (i == 2) {
+        return gen_parse(file).url_list
     }
     else{
       return readData(file).url_list
