@@ -318,7 +318,7 @@ export function AccordionView ({navigation, route}) {
               {global.SECTIONS.length===0 ?
               <Image
                 style={styles.fullScreenImage}
-                source={require('../assets/start-graphic.png')}
+                source={require('../assets/start-graphic-new.png')}
               /> : <View></View>}
             </View>
 
