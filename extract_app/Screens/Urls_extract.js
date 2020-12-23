@@ -114,6 +114,8 @@ export function Urls_extract({ navigation, route }) {
           </TouchableOpacity>
         </View>}
         />}
+        {urls.length==0 && <Text style={{alignItems: 'center', paddingBottom: 180, fontFamily: 'Montserrat-Bold',
+    fontSize: 18,}}>Data parsed!</Text>}
         </View>
         <TouchableOpacity style={[styles.button, { position: "absolute", bottom: 15,}]}
               onPress={() => navigation.navigate('AccordianView')}>
