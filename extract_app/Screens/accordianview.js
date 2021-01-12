@@ -88,7 +88,7 @@ export function AccordionView ({navigation, route}) {
              readDir(DocumentDirectoryPath)
              .then((result) => {
                var i = 0;
-               while(result[i]["name"]!="_chat.txt"){
+               while(result[i]["name"]!="_chat.txt" || result[i]["name"].includes("WhatsApp Chat")){
                  i = i+1;
                }
                console.log("result:" , result[i]["path"]);
@@ -124,7 +124,7 @@ export function AccordionView ({navigation, route}) {
            readDir(DocumentDirectoryPath)
            .then((result) => {
              var i = 0;
-             while(result[i]["name"]!="_chat.txt"){
+             while(result[i]["name"]!="_chat.txt" || result[i]["name"].includes("WhatsApp Chat") == false){
                i = i+1;
              }
              console.log("result:" , result[i]["path"]);
@@ -274,7 +274,7 @@ export function AccordionView ({navigation, route}) {
       .then((res) => {
         console.log("result:")
         console.log(res)
-        if (res.name == "_chat.txt") {
+        if (res.name == "_chat.txt" || result[i]["name"].includes("WhatsApp Chat")) {
           readFile(res.uri)
           .then((contents) => {
             let metadata = returner(0, contents);
