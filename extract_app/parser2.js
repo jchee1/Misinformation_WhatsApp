@@ -81,7 +81,7 @@ export function getContacts(file) {
     //console.log(lines);
     let names={};
     let ncount=0;
-    for (let i=0; i<lines.length; i++) {
+    for (let i=1; i<lines.length; i++) {
       // Each line in input.txt will be successively available here as `line`.
       line=lines[i];
       //console.log(line);
@@ -133,6 +133,11 @@ export function getContacts(file) {
   
       let msg = nmsplit[1];
       let classification;
+
+      if (msg.includes("security code changed") 
+        || msg.includes("Messages and calls are end-to-end encrypted")) {
+            continue;
+        }
   
       if (date in user_per_day) {
         if (name in user_per_day[date]) {
