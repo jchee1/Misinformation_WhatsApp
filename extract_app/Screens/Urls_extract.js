@@ -115,7 +115,7 @@ export function Urls_extract({ navigation, route }) {
         </View>}
         />}
         {urls.length==0 && <Text style={{alignItems: 'center', paddingBottom: 180, fontFamily: 'Montserrat-Bold',
-    fontSize: 18,}}>Data parsed!</Text>}
+    fontSize: 18,}}>No URLs found in chat</Text>}
         </View>
         <TouchableOpacity style={[styles.button, { position: "absolute", bottom: 15,}]}
               onPress={() => navigation.navigate('AccordianView')}>

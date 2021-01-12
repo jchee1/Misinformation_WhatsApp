@@ -265,5 +265,5 @@ export function getContacts(file) {
     }
   }
   
-  var str = 'Hello, I can\'t http://google.com for c*ap https://www.w3schools.com/jsref/jsref_match.asp';
-  console.log(gen_parse(str));
+  //var str = 'Hello, I can\'t http://google.com for c*ap https://www.w3schools.com/jsref/jsref_match.asp';
+  //console.log(gen_parse(str));
