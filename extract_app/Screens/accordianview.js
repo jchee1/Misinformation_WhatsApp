@@ -88,7 +88,7 @@ export function AccordionView ({navigation, route}) {
              readDir(DocumentDirectoryPath)
              .then((result) => {
                var i = 0;
-               while(result[i]["name"]!="_chat.txt" || result[i]["name"].includes("WhatsApp Chat")){
+               while(result[i]["name"]!="_chat.txt"){
                  i = i+1;
                }
                console.log("result:" , result[i]["path"]);
@@ -124,7 +124,7 @@ export function AccordionView ({navigation, route}) {
            readDir(DocumentDirectoryPath)
            .then((result) => {
              var i = 0;
-             while(result[i]["name"]!="_chat.txt" || result[i]["name"].includes("WhatsApp Chat") == false){
+             while(result[i]["name"]!="_chat.txt"){
                i = i+1;
              }
              console.log("result:" , result[i]["path"]);
