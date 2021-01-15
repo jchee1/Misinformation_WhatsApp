@@ -41,7 +41,7 @@ export class SendScreen extends Component {
 
       if (research != null) {
         recips = this.state.email.split(/;| /);
-        recips.push(research);
+        recips.push(research); 
         //remove empty strings
         recips = recips.filter(el => {
           return el != null && el != '';

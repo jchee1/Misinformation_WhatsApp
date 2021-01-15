@@ -274,8 +274,8 @@ export function AccordionView ({navigation, route}) {
       .then((res) => {
         console.log("result:")
         console.log(res)
-        if (res.name == "_chat.txt" || result[i]["name"].includes("WhatsApp Chat")) {
-          readFile(res.uri)
+        if (res.name == "_chat.txt" || res.name.includes("WhatsApp")) {
+          readFile(decodeURI(res.uri))
           .then((contents) => {
             let metadata = returner(0, contents);
             setFileData(metadata);
