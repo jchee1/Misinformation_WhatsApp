@@ -269,6 +269,7 @@ export function AccordionView ({navigation, route}) {
     function _updateSections(activeSections){
       setActiveSections(activeSections);
     };
+    const [errorData, seterrorData] = useState('errorPlaceHolder');
     function picker(){
       DocumentPicker.pick()
       .then((res) => {
@@ -277,13 +278,22 @@ export function AccordionView ({navigation, route}) {
         if (res.name == "_chat.txt" || res.name.includes("WhatsApp")) {
           readFile(decodeURI(res.uri))
           .then((contents) => {
-            let metadata = returner(0, contents);
-            setFileData(metadata);
-            setUrls(returner(3, contents));
+            let metadata;
+            if (Platform.OS == "ios") {
+              metadata = returner(0, contents);
+              setFileData(metadata);
+              setUrls(returner(3, contents));
+            }
+            else if (Platform.OS == "android") {
+              metadata = returner(4, contents);
+              setFileData(metadata);
+              setUrls(returner(5, contents));
+            }
             navigation.navigate("chat-info", {fileDat: metadata});
             })
           .catch((err) => {
             console.log("picker error:", err)
+            //seterrorData(err)
           })
         }
         else {
@@ -301,6 +311,57 @@ export function AccordionView ({navigation, route}) {
       })
     }
 
+    function WhatsApp_picker() {
+      DocumentPicker.pick()
+      .then((res) => {
+        console.log("result:")
+        console.log(res)
+        readFile(res.uri)
+        .then((contents) => {
+          let metadata = returner(0, contents);
+          setFileData(metadata);
+          setUrls(returner(3, contents));
+          navigation.navigate("chat-info", {fileDat: metadata});
+          })
+        .catch((err) => {
+          console.log("picker error:", err)
+          seterrorData(err)
+        })
+      })
+    }
+    
+    function nav_picker() {
+      DocumentPicker.pick()
+      .then((res) => {
+        console.log("result:")
+        console.log(res)
+        var info = {
+          startdate: "start_date",
+          enddate: "end_date",
+          Total_messages: 0,
+          Contacts: 0,
+          Msgs2020: 0,
+          Before_2020: 0,
+          URLs: 0,
+          Images: 0,
+          Text: 0,
+        };
+      
+        var parse = {};
+        parse.info=info;
+        parse.user_per_day={};
+        parse.source={};
+        parse.msgs=[];
+        parse.url_list=[];
+
+        navigation.navigate("chat-info", {fileDat: parse});
+      })
+      .catch((err) => {
+        console.log("picker error:", err)
+        seterrorData(err)
+        })
+    }
+
       return (
         <SafeAreaView style={styles.container}>
           <View style={styles.header}>
@@ -313,6 +374,15 @@ export function AccordionView ({navigation, route}) {
             <TouchableOpacity style={styles.chatHeader} onPress={() => picker()}>
               <Text style={styles.buttonText}>Import Files</Text>
             </TouchableOpacity>
+            </View>
+            <View>
+            <TouchableOpacity style={styles.chatHeader} onPress={() => WhatsApp_picker()}>
+              <Text style={styles.buttonText}>Import WhatsApp</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.chatHeader} onPress={() => nav_picker()}>
+              <Text style={styles.buttonText}>nav picker test</Text>
+            </TouchableOpacity>
+            <Text>{errorData}</Text>
             </View>
             <View style={styles.fsImageContainer}>
               {global.SECTIONS.length===0 ?
