@@ -20,7 +20,7 @@ export class SendScreen extends Component {
     state = {
       email: '',
       termsAccepted: false,
-      mturk: '',
+      prolific: '',
     }
 
     handleCheckBox = () => this.setState({ termsAccepted: !this.state.termsAccepted })
@@ -58,7 +58,7 @@ export class SendScreen extends Component {
       }
 
       Mailer.mail({
-        subject: "AIRLab URL Extractor "+this.state.mturk+" Data",
+        subject: "AIRLab URL Extractor "+this.state.prolific+" Data",
         recipients: recips,
         ccRecipients: [],
         bccRecipients: [],
@@ -68,7 +68,7 @@ export class SendScreen extends Component {
           path: filepath,  // The absolute path of the file from which to read data.
           type: 'text',   // Mime Type: jpg, png, doc, ppt, html, pdf, csv
           // mimeType - use only if you want to use custom type
-          name: this.state.mturk+".txt",   // Optional: Custom filename for attachment
+          name: this.state.prolific+".txt",   // Optional: Custom filename for attachment
         }]
       }, (error, event) => {
         Alert.alert(
@@ -110,12 +110,12 @@ export class SendScreen extends Component {
               style={{color:'red'}}
               text='Send to Research Team'
             />
-            <Text style={{fontSize: 14, fontWeight: 'bold', paddingTop: 8,}}>If you are participating in our MTurk research study, please enter your MTurk ID below:</Text>
+            <Text style={{fontSize: 14, fontWeight: 'bold', paddingTop: 8,}}>If you are participating in our Prolific research study, please enter your Prolific ID below:</Text>
             <TextInput
               style={[styles.input, {height: Platform.OS == 'android' ? 42 : 30}]}
               autoCapitalize='none'
-              value={this.state.mturk}
-              onChangeText={(newId)=> this.setState({mturk: newId})}
+              value={this.state.prolific}
+              onChangeText={(newId)=> this.setState({prolific: newId})}
             />
 
             <TouchableOpacity style={[styles.button, { position: "absolute", bottom: 15,}]}

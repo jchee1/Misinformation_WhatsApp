@@ -455,5 +455,18 @@ function isUrl(string) {
     }
   }
   
+  /*
+  var str = "1/8/20, 02:29 - +1 (604) 561-3323: Hey Mauro! Also in north Tower :) \
+  1/8/20, 02:29 - +65 8244 8532: Hi Mauro! Welcome - I'm Solomon from the South Tower \
+  1/8/20, 02:33 - +61 411 868 217 joined using this group's invite link \
+  1/8/20, 02:33 - +82 10-8827-2859 joined using this group's invite link \
+  1/8/20, 02:33 - +82 10-8827-2859: Hi \
+  1/8/20, 02:34 - +82 10-8827-2859: I’m Jenny from Korea! \
+  1/8/20, 02:34 - +45 20 42 72 18 joined using this group's invite link \
+  1/8/20, 02:34 - +65 9082 0421 joined using this group's invite link \
+  1/8/20, 02:37 - +91 87640 98777: Hey I am Akash, from India. Nice to meet you all.\
+  1/8/20, 02:38 - +65 8285 6315 joined using this group's invite link"
+*/
+  //console.log(gen_parse(5, str))
   //var str = 'Hello, I can\'t http://google.com for c*ap https://www.w3schools.com/jsref/jsref_match.asp';
   //console.log(gen_parse(str));
