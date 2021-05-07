@@ -80,6 +80,7 @@ function isUrl(string) {
     let line;
     //console.log(lines);
     let names={};
+    let msg;
     let ncount=0;
     for (let i=1; i<lines.length; i++) {
       // Each line in input.txt will be successively available here as `line`.
@@ -88,11 +89,16 @@ function isUrl(string) {
       //line = line.split("[");
       let split = line.split("]");
       if(split.length<2){
+        //console.log(msgs);
         date = msgs[msgs.length-1].date
         time = msgs[msgs.length-1].time
-        nmsplit = split[0].split(/: /);
+        msg = split[0]
+    
         //console.log(nmsplit);
-        nam = nmsplit[0];
+        //nam = nmsplit[0];
+        //let tmpNam = list(names.values()).index(msgs[msgs.length-1].sender);
+        //nam = list(names.keys())[tmpNam];
+        nam = msgs[msgs.length-1].sender;
       }
       else{
         let dtsplit = split[0].split(",");
@@ -100,17 +106,29 @@ function isUrl(string) {
         time = dtsplit[1];
         nmsplit = split[1].split(/: /);
         nam = nmsplit[0];
+        msg = nmsplit[1];
       }
-  
-      if (nam in names){
+      if (nam.includes("added") || nam.includes('removed') || nam.includes("created") || nam.includes("left")) {
+        continue;
+      }
+      //console.log(msg);
+
+      //console.log(nam);
+      //console.log(Object.values(names));
+      if (Object.values(names) != undefined && Object.values(names).includes(nam)) {
+        //console.log("line check");
+        name = nam;
+      }
+      else if (nam in names){
         name = names[nam]
       }
       else{
+        console.log('DDDD');
         name = "User"+ncount.toString();
         ncount += 1
         names[nam] = name
       }
-  
+      
       if (total_num === 0) {
         start_date = date;
       }
@@ -131,14 +149,15 @@ function isUrl(string) {
         contacts[name] = 1;
       }
   
-      let msg = nmsplit[1];
+      
       let classification;
 
+      
       if (msg.includes("security code changed") 
         || msg.includes("Messages and calls are end-to-end encrypted")) {
             continue;
         }
-  
+        
       if (date in user_per_day) {
         if (name in user_per_day[date]) {
           user_per_day[date][name]++;
@@ -157,7 +176,7 @@ function isUrl(string) {
       let url;
       if (isUrl(msg)) {
         classification = "url";
-        var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+        var regexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www\.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%\/.\w-]*)?\??(?:[-+=&;%@.\w]*)#?\w*)?)/gm; 
         url = msg.match(regexp)[0];
         num_urls++;
         url_list.push(url);
@@ -187,22 +206,22 @@ function isUrl(string) {
         }
       }
   
-      if (parseInt(year) === 20) {
-        msgs.push({
-          date: date,
-          time: time,
-          sender: name,
-          classification: classification,
-          message: url,
-        });
-      }
+      msgs.push({
+        date: date,
+        time: time,
+        sender: name,
+        classification: classification,
+        message: url,
+      });
+    
   
       total_num++;
   
     }
     num_contacts = Object.keys(contacts).length;
     end_date = date;
-  
+    let actual_urls = gen_parse(file).url_list;
+    num_urls = actual_urls.length;
     //console log everything but later maybe would want to create object
     //that would have each variables as an attribute
     //add everything to parse object
@@ -223,7 +242,8 @@ function isUrl(string) {
     parse.user_per_day=user_per_day;
     parse.source=source;
     parse.msgs=msgs;
-    parse.url_list=url_list;
+    parse.url_list = actual_urls;
+    //parse.url_list=url_list;
   
   
   
@@ -265,6 +285,7 @@ function isUrl(string) {
     let line;
     //console.log(lines);
     let names={};
+    let msg;
     let ncount=0;
     for (let i=1; i<lines.length; i++) {
       // Each line in input.txt will be successively available here as `line`.
@@ -272,16 +293,32 @@ function isUrl(string) {
       //console.log(line);
       //line = line.split("[");
       let split = line.split("-");
+      if(split.length<2){
+        //console.log(msgs);
+        date = msgs[msgs.length-1].date
+        time = msgs[msgs.length-1].time
+        msg = split[0];
+        //console.log(nmsplit);
+        nam = msgs[msgs.length-1].sender;        
+      }
+      else {
+        let dtsplit = split[0].split(",");
+        let rest = split.slice(1,).join();
+        date = dtsplit[0];
+        time = dtsplit[1];
+        nmsplit = rest.split(/: /);
+        nam = nmsplit[0];
+        msg = nmsplit[1]
+      }
+      if (nam.includes("added") || nam.includes('removed') || nam.includes("created") || nam.includes("left")) {
+        continue;
+      }
       
-      let dtsplit = split[0].split(",");
-      let rest = split.slice(1,).join();
-      date = dtsplit[0];
-      time = dtsplit[1];
-      nmsplit = rest.split(/: /);
-      nam = nmsplit[0];
-      
-  
-      if (nam in names){
+      if (Object.values(names) != undefined && Object.values(names).includes(nam)) {
+        //console.log("line check");
+        name = nam;
+      }
+      else if (nam in names){
         name = names[nam]
       }
       else{
@@ -310,14 +347,13 @@ function isUrl(string) {
         contacts[name] = 1;
       }
   
-      let msg = nmsplit.slice(1,).join();
       let classification;
-
+      
       if (msg.includes("security code changed") 
         || msg.includes("Messages and calls are end-to-end encrypted")) {
             continue;
         }
-  
+        
       if (date in user_per_day) {
         if (name in user_per_day[date]) {
           user_per_day[date][name]++;
@@ -336,10 +372,10 @@ function isUrl(string) {
       let url;
       if (isUrl(msg)) {
         classification = "url";
-        var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+        var regexp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www\.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%\/.\w-]*)?\??(?:[-+=&;%@.\w]*)#?\w*)?)/gm; ///(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
         url = msg.match(regexp)[0];
         num_urls++;
-        url_list.push(url);
+        //url_list.push(url);
       }
       if (msg === "<attached") {
         classification = "image";
@@ -366,22 +402,22 @@ function isUrl(string) {
         }
       }
   
-      if (parseInt(year) === 20) {
-        msgs.push({
-          date: date,
-          time: time,
-          sender: name,
-          classification: classification,
-          message: url,
-        });
-      }
+      msgs.push({
+        date: date,
+        time: time,
+        sender: name,
+        classification: classification,
+        message: url,
+      });
+      
   
       total_num++;
   
     }
     num_contacts = Object.keys(contacts).length;
     end_date = date;
-  
+    let actual_urls = gen_parse(file).url_list;
+    num_urls = actual_urls.length;
     //console log everything but later maybe would want to create object
     //that would have each variables as an attribute
     //add everything to parse object
@@ -402,8 +438,8 @@ function isUrl(string) {
     parse.user_per_day=user_per_day;
     parse.source=source;
     parse.msgs=msgs;
-    parse.url_list=url_list;
-  
+    //parse.url_list=url_list;
+    parse.url_list = actual_urls;
   
   
     return parse;
